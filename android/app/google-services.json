@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "124474813239",
+    "project_id": "zenith-af3c4",
+    "storage_bucket": "zenith-af3c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124474813239:android:3eca204e20dc674a5308b2",
+        "android_client_info": {
+          "package_name": "com.example.project_zenith"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "124474813239-2advrjrid2vq19fqbgb2t7apnlg1rs1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvbGbZEbFH4BMoTz653dJ9_iNeB55dHGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "124474813239-2advrjrid2vq19fqbgb2t7apnlg1rs1i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
