@@ -8,6 +8,8 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Authentication page!");
+
     return Scaffold(
       body: FirebaseAuth.instance.isSignedIn
           ? const HomePage()
