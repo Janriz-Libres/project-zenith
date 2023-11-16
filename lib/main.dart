@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:project_zenith/db_util.dart';
-// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
-// import 'package:firebase_core/firebase_core.'dart';
-// import 'firebase_options.dart';
-
 import 'package:firedart/firedart.dart';
 import 'pages/auth_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // sqfliteFfiInit();
-  // databaseFactory = databaseFactoryFfi;
-  // await Firebase.initializeApp();
   FirebaseAuth.initialize(
       'AIzaSyBoCBbW-wmUlBDZ7dUblzEpsbAJwpYP6rU', VolatileStore());
   Firestore.initialize('zenith-af3c4');
