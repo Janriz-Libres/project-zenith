@@ -208,12 +208,3 @@ class Task {
     required this.list,
   });
 }
-
-void main() async {
-  FirebaseAuth.initialize(
-      'AIzaSyBoCBbW-wmUlBDZ7dUblzEpsbAJwpYP6rU', VolatileStore());
-  Firestore.initialize('zenith-af3c4');
-
-  User user = await Authenticator.signUp('jan@gmail.com', 'just_pw');
-  print(user.authId);
-}
