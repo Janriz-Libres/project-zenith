@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/welcome_page.dart';
 // import 'package:project_zenith/utils.dart';
+import 'package:window_size/window_size.dart';
+import 'dart:io';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,6 +12,12 @@ void main() async {
   //     'AIzaSyBoCBbW-wmUlBDZ7dUblzEpsbAJwpYP6rU', VolatileStore());
   // Firestore.initialize('zenith-af3c4');
   // await Authenticator.signIn('test_user@gmail.com', 'test_pw');
+
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    setWindowTitle('Zenith');
+    setWindowMinSize(const Size(1335, 685));
+  }
+
   runApp(const MyApp());
 }
 
