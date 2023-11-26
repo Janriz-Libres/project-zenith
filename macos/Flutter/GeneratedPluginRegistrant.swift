@@ -5,8 +5,8 @@
 import FlutterMacOS
 import Foundation
 
-import window_size
+import bitsdojo_window_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  WindowSizePlugin.register(with: registry.registrar(forPlugin: "WindowSizePlugin"))
+  BitsdojoWindowPlugin.register(with: registry.registrar(forPlugin: "BitsdojoWindowPlugin"))
 }

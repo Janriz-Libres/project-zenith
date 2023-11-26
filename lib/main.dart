@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/pages/landing_page.dart';
-// import 'package:project_zenith/pages/auth_page.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:project_zenith/pages/auth_page.dart';
 // import 'package:firedart/firedart.dart';
-// import 'package:project_zenith/pages/auth_page.dart';
-// import 'package:project_zenith/pages/landing_page.dart';
-// import 'package:project_zenith/pages/signup_page.dart';
-// import 'package:project_zenith/pages/welcome_page.dart';
-// import 'package:project_zenith/utils.dart';
-import 'package:window_size/window_size.dart';
-import 'dart:io';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,12 +10,16 @@ void main() async {
   // Firestore.initialize('zenith-af3c4');
   // await Authenticator.signIn('test_user@gmail.com', 'test_pw');
 
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    setWindowTitle('Zenith');
-    setWindowMinSize(const Size(1335, 685));
-  }
-
   runApp(const MyApp());
+
+  doWhenWindowReady(() {
+    const initialSize = Size(1335, 700);
+    appWindow.minSize = initialSize;
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.title = "Zenith";
+    appWindow.show();
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -34,7 +31,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Zenith',
       debugShowCheckedModeBanner: false,
-      home: LandingPage(),
+      home: AuthPage(),
     );
   }
 }

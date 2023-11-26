@@ -1,4 +1,5 @@
 {
     "cmake.configureOnOpen": true,
-    "cmake.sourceDirectory": "C:/dev/flutter-projects/project_zenith/windows"
+    "cmake.sourceDirectory": "C:/dev/flutter-projects/project_zenith/windows",
+    "C_Cpp.errorSquiggles": "disabled"
 }
