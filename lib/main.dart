@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:firedart/firedart.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/pages/welcome_page.dart';
 // import 'package:project_zenith/utils.dart';
 
 void main() async {
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Zenith',
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      home: WelcomePage(),
     );
   }
 }
