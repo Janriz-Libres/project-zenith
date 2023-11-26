@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 
-class BuildWorkspace extends StatelessWidget {
-  const BuildWorkspace({super.key});
+class BuildWorkspacePage extends StatelessWidget {
+  const BuildWorkspacePage({super.key});
 
   @override
   Widget build(BuildContext context) {

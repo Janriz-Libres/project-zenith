@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 
-class JoinWorkspace extends StatelessWidget {
-  const JoinWorkspace({super.key});
+class JoinWorkspacePage extends StatelessWidget {
+  const JoinWorkspacePage({super.key});
 
   @override
   Widget build(BuildContext context) {
