@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:firedart/firedart.dart';
+// import 'package:firedart/firedart.dart';
 import 'package:project_zenith/pages/auth_page.dart';
-import 'package:project_zenith/utils.dart';
+// import 'package:project_zenith/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseAuth.initialize(
-      'AIzaSyBoCBbW-wmUlBDZ7dUblzEpsbAJwpYP6rU', VolatileStore());
-  Firestore.initialize('zenith-af3c4');
-  await Authenticator.signIn('test_user@gmail.com', 'test_pw');
+  // FirebaseAuth.initialize(
+  //     'AIzaSyBoCBbW-wmUlBDZ7dUblzEpsbAJwpYP6rU', VolatileStore());
+  // Firestore.initialize('zenith-af3c4');
+  // await Authenticator.signIn('test_user@gmail.com', 'test_pw');
   runApp(const MyApp());
 }
 

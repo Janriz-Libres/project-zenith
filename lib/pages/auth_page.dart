@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/pages/signup_page.dart';
+import 'package:project_zenith/pages/login_page.dart';
+// import 'package:project_zenith/pages/signup_page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -8,46 +9,63 @@ class AuthPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Column(children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(30),
-            margin: const EdgeInsets.all(25),
-            decoration: const ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        margin: const EdgeInsets.all(25),
+        decoration: const ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
               width: 3,
               strokeAlign: BorderSide.strokeAlignCenter,
               color: Colors.white,
-            ))),
-            child: Stack(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/signup_image.png'),
-                    const LeftPane(),
-                  ],
-                ),
-                Container(
-                  alignment: Alignment.bottomLeft,
-                  child: const Text(
-                    "Crusader Yearbook ©️ 2023",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
-                  ),
-                )
-              ],
             ),
           ),
         ),
-      ]),
+        child: Stack(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 13.5, top: 13.5, bottom: 13.5),
+                    child: Image.asset('assets/signup_image.png'),
+                  ),
+                ),
+                const Expanded(
+                  child: LeftPane(),
+                ),
+              ],
+            ),
+            const Copyright(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Copyright extends StatelessWidget {
+  const Copyright({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.bottomLeft,
+      margin: const EdgeInsets.only(left: 45, bottom: 30),
+      child: const Text(
+        "Crusader Yearbook ©️ 2023",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontFamily: 'DM Sans',
+          fontWeight: FontWeight.w400,
+          height: 0,
+        ),
+      ),
     );
   }
 }
@@ -59,45 +77,42 @@ class LeftPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          right: 0,
-          child: Image.asset(
-            'assets/signup_ellipse_cropped.png',
+    return Padding(
+      padding: const EdgeInsets.only(top: 13.5, right: 13.5, bottom: 30),
+      child: Stack(
+        children: [
+          Align(
             alignment: Alignment.topRight,
+            child: Image.asset('assets/signup_ellipse_cropped.png'),
           ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 53, right: 53),
-          child: Row(
-            children: [
-              Container(
-                width: 26.67,
-                margin: const EdgeInsets.only(right: 6),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.only(top: 55.5, right: 55.5),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  width: 26.67,
+                  margin: const EdgeInsets.only(right: 6),
+                  decoration: const BoxDecoration(color: Colors.white),
                 ),
-              ),
-              Container(
-                width: 13.33,
-                margin: const EdgeInsets.only(right: 6),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                Container(
+                  width: 13.33,
+                  margin: const EdgeInsets.only(right: 6),
+                  decoration: const BoxDecoration(color: Colors.white),
                 ),
-              ),
-              Container(
-                width: 6.67,
-                margin: const EdgeInsets.only(right: 6),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                Container(
+                  width: 6.67,
+                  margin: const EdgeInsets.only(right: 6),
+                  decoration: const BoxDecoration(color: Colors.white),
                 ),
-              ),
-              const InputContainer(),
-            ],
+                const Expanded(
+                  child: InputContainer(),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -110,16 +125,207 @@ class InputContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 42, right: 42, top: 20, bottom: 30),
+      padding: const EdgeInsets.only(left: 42, right: 42),
       decoration: const ShapeDecoration(
-          color: Colors.black,
-          shape: RoundedRectangleBorder(
-              side: BorderSide(width: 4, color: Colors.white),
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(15),
-                bottomRight: Radius.circular(15),
-              ))),
-      child: const SignupPage(),
+        color: Colors.black,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 4,
+            color: Colors.white,
+          ),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(15),
+            bottomRight: Radius.circular(15),
+          ),
+        ),
+      ),
+      child: const LoginPage(),
+    );
+  }
+}
+
+class AuthTitle extends StatelessWidget {
+  final String title;
+
+  const AuthTitle({
+    super.key,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 60,
+            fontFamily: 'Work Sans',
+            fontWeight: FontWeight.w700,
+            height: 0,
+          ),
+        ),
+        Transform.translate(
+          offset: const Offset(0, -10),
+          child: const Text(
+            "Crusader Yearbook",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+              fontFamily: 'DM Sans',
+              fontWeight: FontWeight.w400,
+              height: 0,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class InputWidget extends StatelessWidget {
+  final Color circleColor;
+
+  const InputWidget({
+    super.key,
+    required this.circleColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: ShapeDecoration(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 25,
+            height: 25,
+            margin:
+                const EdgeInsets.only(top: 13, bottom: 13, left: 20, right: 11),
+            decoration: ShapeDecoration(
+              color: circleColor,
+              shape: const OvalBorder(),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              height: 25 + 26,
+              decoration: ShapeDecoration(
+                color: Colors.black,
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(
+                    width: 4,
+                    color: Colors.white,
+                  ),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CheckWidget extends StatelessWidget {
+  final MainAxisAlignment alignment;
+  final String text;
+
+  const CheckWidget({
+    super.key,
+    required this.alignment,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: alignment,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 20,
+          height: 20,
+          margin: const EdgeInsets.only(right: 10),
+          decoration: ShapeDecoration(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(width: 1, color: Color(0xFFC2C2C2)),
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          child: Checkbox(
+            value: false,
+            side: BorderSide.none,
+            onChanged: (value) {},
+          ),
+        ),
+        Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontFamily: 'DM Sans',
+            fontWeight: FontWeight.w500,
+            height: 0,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SubmitButton extends StatelessWidget {
+  final String text;
+  final double hPadding;
+
+  const SubmitButton({
+    super.key,
+    required this.text,
+    required this.hPadding,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 12),
+      decoration: ShapeDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment(0, -1),
+          end: Alignment(0, 1),
+          colors: [
+            Color(0xFF06BCC1),
+            Color(0xFF047679),
+          ],
+        ),
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(
+            width: 4,
+            strokeAlign: BorderSide.strokeAlignCenter,
+            color: Color(0xFF06BCC1),
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontFamily: 'DM Sans',
+          fontWeight: FontWeight.w700,
+          height: 0,
+        ),
+      ),
     );
   }
 }
