@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/pages/login_page.dart';
-// import 'package:project_zenith/pages/signup_page.dart';
+import 'package:project_zenith/pages/signup_page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -29,12 +28,13 @@ class AuthPage extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(
-                        left: 13.5, top: 13.5, bottom: 13.5),
-                    child: Image.asset('assets/signup_image.png'),
+                        left: 70, right: 80, top: 13.5, bottom: 13.5),
+                    child: Image.asset('assets/signup_image.png',
+                        fit: BoxFit.fitWidth),
                   ),
                 ),
                 const Expanded(
-                  child: LeftPane(),
+                  child: RightPane(),
                 ),
               ],
             ),
@@ -74,8 +74,8 @@ class Copyright extends StatelessWidget {
   }
 }
 
-class LeftPane extends StatelessWidget {
-  const LeftPane({
+class RightPane extends StatelessWidget {
+  const RightPane({
     super.key,
   });
 
@@ -143,7 +143,7 @@ class InputContainer extends StatelessWidget {
           ),
         ),
       ),
-      child: const LoginPage(),
+      child: const SignupPage(),
     );
   }
 }
@@ -206,31 +206,37 @@ class InputWidget extends StatelessWidget {
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
       ),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            width: 25,
-            height: 25,
-            margin:
-                const EdgeInsets.only(top: 13, bottom: 13, left: 20, right: 11),
-            decoration: ShapeDecoration(
-              color: circleColor,
-              shape: const OvalBorder(),
-            ),
-          ),
           Expanded(
-            child: Container(
-              height: 25 + 26,
-              decoration: ShapeDecoration(
-                color: Colors.black,
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(
-                    width: 4,
-                    color: Colors.white,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: 0.04 * MediaQuery.of(context).size.width,
+                    height: 0.04 * MediaQuery.of(context).size.height,
+                    decoration: ShapeDecoration(
+                      color: circleColor,
+                      shape: const CircleBorder(),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(50),
                 ),
-              ),
+                Expanded(
+                  flex: 7,
+                  child: Container(
+                    decoration: ShapeDecoration(
+                      color: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          width: 4,
+                          color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -290,46 +296,88 @@ class CheckWidget extends StatelessWidget {
 class SubmitButton extends StatelessWidget {
   final String text;
   final double hPadding;
+  final double vPadding;
 
   const SubmitButton({
     super.key,
     required this.text,
     required this.hPadding,
+    required this.vPadding,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 12),
-      decoration: ShapeDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment(0, -1),
-          end: Alignment(0, 1),
-          colors: [
-            Color(0xFF06BCC1),
-            Color(0xFF047679),
-          ],
+    return ElevatedButton(
+      onPressed: () {},
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          EdgeInsets.symmetric(horizontal: hPadding, vertical: 12),
         ),
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            width: 4,
-            strokeAlign: BorderSide.strokeAlignCenter,
-            color: Color(0xFF06BCC1),
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          const RoundedRectangleBorder(
+            side: BorderSide(
+              width: 4,
+              strokeAlign: BorderSide.strokeAlignCenter,
+              color: Color(0xFF06BCC1),
+            ),
           ),
-          borderRadius: BorderRadius.circular(8),
         ),
       ),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontFamily: 'DM Sans',
-          fontWeight: FontWeight.w700,
-          height: 0,
+      child: Ink(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment(0, -1),
+            end: Alignment(0, 1),
+            colors: [Color(0xFF06BCC1), Color(0xFF047679)],
+          ),
+        ),
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontFamily: 'DM Sans',
+            fontWeight: FontWeight.w700,
+            height: 0,
+          ),
         ),
       ),
     );
+
+    // return Container(
+    //   padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 12),
+    //   decoration: ShapeDecoration(
+    //     gradient: const LinearGradient(
+    //       begin: Alignment(0, -1),
+    //       end: Alignment(0, 1),
+    //       colors: [
+    //         Color(0xFF06BCC1),
+    //         Color(0xFF047679),
+    //       ],
+    //     ),
+    //     shape: RoundedRectangleBorder(
+    //       side: const BorderSide(
+    //         width: 4,
+    //         strokeAlign: BorderSide.strokeAlignCenter,
+    //         color: Color(0xFF06BCC1),
+    //       ),
+    //       borderRadius: BorderRadius.circular(8),
+    //     ),
+    //   ),
+    // child: Text(
+    //   text,
+    //   textAlign: TextAlign.center,
+    //   style: const TextStyle(
+    //     color: Colors.white,
+    //     fontSize: 20,
+    //     fontFamily: 'DM Sans',
+    //     fontWeight: FontWeight.w700,
+    //     height: 0,
+    //   ),
+    // ),
+    // );
   }
 }

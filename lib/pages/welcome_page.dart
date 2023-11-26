@@ -21,9 +21,9 @@ class WelcomePage extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 65),
+            padding: const EdgeInsets.only(top: 35),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -55,9 +55,7 @@ class WelcomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                Expanded(child: Container()),
                 const Expanded(
                   flex: 4,
                   child: Column(
@@ -81,9 +79,7 @@ class WelcomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                Expanded(child: Container()),
               ],
             ),
           ),
