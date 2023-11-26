@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 
-class Workspace extends StatelessWidget {
-  const Workspace({super.key});
+class BuildWorkspace extends StatelessWidget {
+  const BuildWorkspace({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class Workspace extends StatelessWidget {
           const Padding(
             padding:
                 EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
-            child: BuildWorkspace(),
+            child: Content(),
           ),
           const Copyright(mLeft: 85, mBot: 30),
         ],
@@ -30,8 +30,8 @@ class Workspace extends StatelessWidget {
   }
 }
 
-class BuildWorkspace extends StatelessWidget {
-  const BuildWorkspace({super.key});
+class Content extends StatelessWidget {
+  const Content({super.key});
 
   @override
   Widget build(BuildContext context) {
