@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/pages/login_page.dart';
 import 'package:project_zenith/pages/signup_page.dart';
 
 class AuthPage extends StatelessWidget {
