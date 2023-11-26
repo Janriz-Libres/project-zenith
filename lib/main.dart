@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:firedart/firedart.dart';
-import 'package:project_zenith/pages/auth_page.dart';
-import 'package:project_zenith/pages/welcome_page.dart';
+// import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/pages/landing_page.dart';
 // import 'package:project_zenith/utils.dart';
 import 'package:window_size/window_size.dart';
 import 'dart:io';
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Zenith',
       debugShowCheckedModeBanner: false,
-      home: WelcomePage(),
+      home: LandingPage(),
     );
   }
 }
