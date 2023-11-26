@@ -79,12 +79,16 @@ class BuildWorkspace extends StatelessWidget {
                       children: [
                         const Expanded(
                           flex: 6,
-                          child: WorkspaceField(),
+                          child: WorkspaceField(
+                            label: "Workspace Name:"
+                          ),
                         ),
                         const Spacer(),
                         const Expanded(
                           flex: 7,
-                          child: LongInputField(),
+                          child: LongInputField(
+                            label: "Workspace Description (Optional):"
+                          ),
                         ),
                         const Spacer(flex: 2),
                         Expanded(
@@ -154,8 +158,11 @@ class BuildWorkspace extends StatelessWidget {
 }
 
 class WorkspaceField extends StatelessWidget {
+  final String label;
+
   const WorkspaceField({
-    super.key
+    super.key,
+    required this.label
   });
 
   @override
@@ -166,11 +173,11 @@ class WorkspaceField extends StatelessWidget {
           flex: 2,
           child: Container(
             alignment: Alignment.topLeft,
-            child: const FittedBox(
+            child: FittedBox(
               child: Text(
-                "Workspace Name:",
+                label,
                 textAlign: TextAlign.left,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color(0xFFFFE66D),
                   fontSize: 30,
                   fontFamily: 'DM Sans',
@@ -211,7 +218,7 @@ class WorkspaceField extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               side: const BorderSide(
                                 width: 4,
-                                color: Colors.white,
+                                color: Color(0xFFFFE66D),
                               ),
                               borderRadius: BorderRadius.circular(50),
                             ),
@@ -231,8 +238,11 @@ class WorkspaceField extends StatelessWidget {
 }
 
 class LongInputField extends StatelessWidget {
+  final String label;
+
   const LongInputField({
-    super.key
+    super.key,
+    required this.label
   });
 
   @override
@@ -243,11 +253,11 @@ class LongInputField extends StatelessWidget {
           flex: 2,
           child: Container(
             alignment: Alignment.topLeft,
-            child: const FittedBox(
+            child: FittedBox(
               child: Text(
-                "Workspace Description (Optional):",
+                label,
                 textAlign: TextAlign.left,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 30,
                   fontFamily: 'DM Sans',
