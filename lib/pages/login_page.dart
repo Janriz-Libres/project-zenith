@@ -10,19 +10,38 @@ class LoginPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         const Expanded(
-          flex: 2,
+          flex: 5,
           child: AuthTitle(title: "LOG IN"),
         ),
+        const Spacer(),
         const Expanded(
-          flex: 3,
+          flex: 5,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              InputWidget(circleColor: Color(0xFFD4515D)),
-              InputWidget(circleColor: Color(0xFFFFE66D)),
-              Row(
+              Expanded(
+                flex: 4,
+                child: InputWidget(circleColor: Color(0xFFD4515D))),
+              Spacer(),
+              Expanded(
+                flex: 4,
+                child: InputWidget(circleColor: Color(0xFFFFE66D))),
+            ],
+          ),
+        ),
+        const Spacer(),
+        Expanded(
+          flex: 5,
+          child: Column(
+            children: [
+              const Row(
                 children: [
-                  Expanded(child: SubmitButton(text: "Log In", hPadding: 10)),
+                  Expanded(
+                    child: SubmitButton(
+                      text: "Log In", 
+                      hPadding: 10
+                    )
+                  ),
                   Expanded(
                     child: Text(
                       "Forgot Password?",
@@ -38,15 +57,17 @@ class LoginPage extends StatelessWidget {
                   ),
                 ],
               ),
+              Transform.translate(
+                offset: const Offset(0, 15),
+                child: const CheckWidget(
+                  alignment: MainAxisAlignment.start,
+                  text: "Keep me signed in",
+                ),
+              ),
             ],
           ),
         ),
-        const Expanded(
-          child: CheckWidget(
-            alignment: MainAxisAlignment.start,
-            text: "Keep me signed in",
-          ),
-        ),
+        const Spacer(),
         Row(
           children: [
             Expanded(

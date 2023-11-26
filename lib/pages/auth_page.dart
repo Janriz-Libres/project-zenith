@@ -29,8 +29,9 @@ class AuthPage extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(
-                        left: 13.5, top: 13.5, bottom: 13.5),
-                    child: Image.asset('assets/signup_image.png'),
+                        left: 70, right: 80, top: 13.5, bottom: 13.5),
+                    child: Image.asset('assets/signup_image.png',
+                      fit: BoxFit.fitWidth),
                   ),
                 ),
                 const Expanded(
@@ -206,31 +207,37 @@ class InputWidget extends StatelessWidget {
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
       ),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            width: 25,
-            height: 25,
-            margin:
-                const EdgeInsets.only(top: 13, bottom: 13, left: 20, right: 11),
-            decoration: ShapeDecoration(
-              color: circleColor,
-              shape: const OvalBorder(),
-            ),
-          ),
           Expanded(
-            child: Container(
-              height: 25 + 26,
-              decoration: ShapeDecoration(
-                color: Colors.black,
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(
-                    width: 4,
-                    color: Colors.white,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: 0.04*MediaQuery.of(context).size.width,
+                    height: 0.04*MediaQuery.of(context).size.height,
+                    decoration: ShapeDecoration(
+                      color: circleColor,
+                      shape: const CircleBorder(),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(50),
                 ),
-              ),
+                Expanded(
+                  flex: 7,
+                  child: Container(
+                    decoration: ShapeDecoration(
+                      color: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          width: 4,
+                          color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -300,7 +307,7 @@ class SubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 20),
       decoration: ShapeDecoration(
         gradient: const LinearGradient(
           begin: Alignment(0, -1),
