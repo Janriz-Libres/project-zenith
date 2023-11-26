@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/login_page.dart';
-import 'package:project_zenith/pages/signup_page.dart';
+// import 'package:project_zenith/pages/signup_page.dart';
 // import 'package:project_zenith/pages/signup_page.dart';
 
 class AuthPage extends StatelessWidget {
@@ -32,7 +32,7 @@ class AuthPage extends StatelessWidget {
                     padding: const EdgeInsets.only(
                         left: 70, right: 80, top: 13.5, bottom: 13.5),
                     child: Image.asset('assets/signup_image.png',
-                      fit: BoxFit.fitWidth),
+                        fit: BoxFit.fitWidth),
                   ),
                 ),
                 const Expanded(
@@ -215,8 +215,8 @@ class InputWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
-                    width: 0.04*MediaQuery.of(context).size.width,
-                    height: 0.04*MediaQuery.of(context).size.height,
+                    width: 0.04 * MediaQuery.of(context).size.width,
+                    height: 0.04 * MediaQuery.of(context).size.height,
                     decoration: ShapeDecoration(
                       color: circleColor,
                       shape: const CircleBorder(),
