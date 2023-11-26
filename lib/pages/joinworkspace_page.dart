@@ -58,7 +58,7 @@ class Content extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 100, right: 100),
+                    padding: const EdgeInsets.only(left: 100, right: 100),
                     child: Column(
                       children: [
                         const Expanded(
@@ -99,10 +99,7 @@ class Content extends StatelessWidget {
                     ),
                   )
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Container()
-                ),
+                const Spacer(),
                 Expanded(
                   flex: 6,
                   child: Padding(
@@ -159,7 +156,8 @@ class Content extends StatelessWidget {
                       ]
                     ),
                   )
-                )
+                ),
+                const Spacer(flex: 2),
               ],
             ),
           ),

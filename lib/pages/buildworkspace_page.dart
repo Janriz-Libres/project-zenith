@@ -51,7 +51,7 @@ class Content extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 65, bottom: 65),
+            padding: const EdgeInsets.only(top: 65),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -99,10 +99,7 @@ class Content extends StatelessWidget {
                     ),
                   )
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Container()
-                ),
+                const Spacer(),
                 Expanded(
                   flex: 6,
                   child: Padding(
@@ -176,7 +173,8 @@ class Content extends StatelessWidget {
                       ]
                     ),
                   )
-                )
+                ),
+                const Spacer(flex: 2)
               ],
             ),
           ),

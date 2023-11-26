@@ -99,10 +99,7 @@ class Content extends StatelessWidget {
                     ),
                   )
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Container()
-                ),
+                const Spacer(),
                 Expanded(
                   flex: 6,
                   child: Padding(
@@ -111,14 +108,14 @@ class Content extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         const Expanded(
-                          flex: 6,
+                          flex: 7,
                           child: WorkspaceField(
                             label: "Workspace Members:"
                           ),
                         ),
                         const Spacer(),
                         const Expanded(
-                          flex: 7,
+                          flex: 6,
                           child: LongInputField(
                             label: "Or invite them with one code:"
                           ),
@@ -176,7 +173,8 @@ class Content extends StatelessWidget {
                       ]
                     ),
                   )
-                )
+                ),
+                const Spacer(),
               ],
             ),
           ),
