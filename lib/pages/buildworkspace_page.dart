@@ -55,13 +55,13 @@ class Content extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Expanded(
+                Expanded(
                   flex: 2,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 100, right: 100),
+                    padding: const EdgeInsets.only(left: 100, right: 100),
                     child: Column(
                       children: [
-                        Expanded(
+                        const Expanded(
                           flex: 3,
                           child: FittedBox(
                             child: Text(
@@ -79,15 +79,18 @@ class Content extends StatelessWidget {
                         ),
                         Expanded(
                           child: FittedBox(
-                            child: Text(
-                              'Crusader Yearbook',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontFamily: 'DM Sans',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
+                            child: Transform.translate(
+                              offset: const Offset(0, -5),
+                              child: const Text(
+                                'Crusader Yearbook',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontFamily: 'DM Sans',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
                               ),
                             )
                           )
