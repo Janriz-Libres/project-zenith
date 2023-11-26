@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,6 +10,15 @@ void main() async {
   // await Authenticator.signIn('test_user@gmail.com', 'test_pw');
 
   runApp(const MyApp());
+
+  doWhenWindowReady(() {
+    const initialSize = Size(1335, 700);
+    appWindow.minSize = initialSize;
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.title = "Zenith";
+    appWindow.show();
+  });
 }
 
 class MyApp extends StatelessWidget {
