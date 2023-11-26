@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/welcome_page.dart';
 
 class LandingPage extends StatelessWidget {
@@ -23,6 +24,7 @@ class LandingPage extends StatelessWidget {
                 EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
             child: WelcomePage(),
           ),
+          const Copyright(mLeft: 85, mBot: 30),
         ],
       ),
     );

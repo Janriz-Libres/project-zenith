@@ -38,7 +38,7 @@ class AuthPage extends StatelessWidget {
                 ),
               ],
             ),
-            const Copyright(),
+            const Copyright(mLeft: 45, mBot: 30),
           ],
         ),
       ),
@@ -47,15 +47,19 @@ class AuthPage extends StatelessWidget {
 }
 
 class Copyright extends StatelessWidget {
+  final double mLeft, mBot;
+
   const Copyright({
     super.key,
+    required this.mLeft,
+    required this.mBot,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.bottomLeft,
-      margin: const EdgeInsets.only(left: 45, bottom: 30),
+      margin: EdgeInsets.only(left: mLeft, bottom: mBot),
       child: const Text(
         "Crusader Yearbook ©️ 2023",
         style: TextStyle(
