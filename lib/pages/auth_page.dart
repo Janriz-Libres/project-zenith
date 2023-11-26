@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/login_page.dart';
+import 'package:project_zenith/pages/signup_page.dart';
 // import 'package:project_zenith/pages/signup_page.dart';
 
 class AuthPage extends StatelessWidget {
@@ -297,17 +298,19 @@ class CheckWidget extends StatelessWidget {
 class SubmitButton extends StatelessWidget {
   final String text;
   final double hPadding;
+  final double vPadding;
 
   const SubmitButton({
     super.key,
     required this.text,
     required this.hPadding,
+    required this.vPadding,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: vPadding),
       decoration: ShapeDecoration(
         gradient: const LinearGradient(
           begin: Alignment(0, -1),

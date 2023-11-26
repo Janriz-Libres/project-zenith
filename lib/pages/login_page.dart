@@ -39,7 +39,8 @@ class LoginPage extends StatelessWidget {
                   Expanded(
                     child: SubmitButton(
                       text: "Log In", 
-                      hPadding: 10
+                      hPadding: 10,
+                      vPadding: 30
                     )
                   ),
                   Expanded(

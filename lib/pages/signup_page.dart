@@ -8,32 +8,54 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Expanded(child: AuthTitle(title: "SIGN UP")),
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              InputWidget(circleColor: Color(0xFF06BCC1)),
-              InputWidget(circleColor: Color(0xFFD4515D)),
-              InputWidget(circleColor: Color(0xFFFFE66D)),
-            ],
+        const Expanded(
+          flex: 5,
+          child: AuthTitle(
+            title: "SIGN UP"
+            )
           ),
-        ),
-        Expanded(
+        const Expanded(
+          flex: 5,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              CheckWidget(
-                alignment: MainAxisAlignment.center,
-                text: "I've read and agree to\nTerms & Conditions",
-              ),
-              SubmitButton(text: "Create Account", hPadding: 30),
+              Expanded(
+                flex: 4,
+                child: InputWidget(circleColor: Color(0xFF06BCC1))),
+              Spacer(),
+              Expanded(
+                flex: 4,
+                child: InputWidget(circleColor: Color(0xFFD4515D))),
+              Spacer(),
+              Expanded(
+                flex: 4,
+                child: InputWidget(circleColor: Color(0xFFFFE66D))),
             ],
           ),
         ),
+        const Spacer(),
+        Expanded(
+          flex: 3,
+          child: Column(
+            children: [
+              const CheckWidget(
+                alignment: MainAxisAlignment.center,
+                text: "I've read and agree to\nTerms & Conditions",
+              ),
+              Transform.translate(
+                offset: const Offset(0, 10),
+                child: const SubmitButton(
+                  text: "Create Account", 
+                  hPadding: 50, 
+                  vPadding: 10),
+              ),
+            ],
+          ),
+        ),
+        const Spacer()
       ],
     );
   }
