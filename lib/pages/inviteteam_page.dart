@@ -133,6 +133,7 @@ class Content extends StatelessWidget {
                                     Expanded(
                                       child: SubmitButton(
                                         text: "Continue",
+                                        gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
                                       )
                                     ),
                                     Expanded(

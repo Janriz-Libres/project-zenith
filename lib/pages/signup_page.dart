@@ -52,6 +52,7 @@ class SignupPage extends StatelessWidget {
                 child: const SizedBox(
                   child: SubmitButton(
                     text: "Create Account", 
+                    gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
                   ),
                 ),
               ),

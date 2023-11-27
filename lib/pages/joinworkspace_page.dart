@@ -120,6 +120,7 @@ class Content extends StatelessWidget {
                           flex: 3,
                           child: SubmitButton(
                             text: "Continue",
+                            gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
                           )
                         ),
                         Spacer(),
