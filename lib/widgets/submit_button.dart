@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class SubmitButton extends StatelessWidget {
   final String text;
   final List<Color> gradient;
+  final Function function;
 
   const SubmitButton({
     super.key,
     required this.text,
-    required this.gradient
+    required this.gradient,
+    required this.function
   });
 
   @override
@@ -22,7 +24,7 @@ class SubmitButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () => function,
         style: ElevatedButton.styleFrom(
           minimumSize: const Size(300, 70),
           backgroundColor: Colors.transparent,
