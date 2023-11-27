@@ -117,7 +117,7 @@ class InputContainer extends StatelessWidget {
           ),
         ),
       ),
-      child: const LoginPage(),
+      child: const SignupPage(),
     );
   }
 }
@@ -167,10 +167,12 @@ class AuthTitle extends StatelessWidget {
 
 class InputWidget extends StatelessWidget {
   final Color circleColor;
+  final String labelText;
 
   const InputWidget({
     super.key,
     required this.circleColor,
+    required this.labelText
   });
 
   @override
@@ -180,37 +182,57 @@ class InputWidget extends StatelessWidget {
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
       ),
-      child: Column(
+      child: Row(
         children: [
           Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    width: 0.04 * MediaQuery.of(context).size.width,
-                    height: 0.04 * MediaQuery.of(context).size.height,
-                    decoration: ShapeDecoration(
-                      color: circleColor,
-                      shape: const CircleBorder(),
-                    ),
+            child: Container(
+              width: 0.03 * MediaQuery.of(context).size.width,
+              height: 0.03 * MediaQuery.of(context).size.height,
+              decoration: ShapeDecoration(
+                color: circleColor,
+                shape: const CircleBorder(),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 8,
+            child: TextFormField(
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white
+              ),
+              maxLines: 1,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.black,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: const BorderSide(
+                    color: Colors.white,
+                    width: 2,
                   ),
                 ),
-                Expanded(
-                  flex: 7,
-                  child: Container(
-                    decoration: ShapeDecoration(
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          width: 4,
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF06BCC1),
+                    width: 2,
                   ),
                 ),
-              ],
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    width: 2,
+                    color: Colors.white,
+                  ),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                contentPadding: const EdgeInsets.only(left: 20, right: 20),
+                hintText: labelText,
+                hintStyle: const TextStyle(
+                  color: Color.fromARGB(255, 144, 142, 142),
+                  fontWeight: FontWeight.normal
+                )
+              ),
             ),
           ),
         ],
