@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:project_zenith/pages/buildworkspace_page.dart';
+import 'package:project_zenith/pages/joinworkspace_page.dart';
+import 'package:project_zenith/pages/landing_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
 
+  @override
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -22,43 +31,57 @@ class WelcomePage extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 35),
+            padding: const EdgeInsets.only(top: 65),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Welcome to Zenith",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 60,
-                        fontFamily: 'Work Sans',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
-                      ),
-                    ),
-                    Transform.translate(
-                      offset: const Offset(0, -5),
-                      child: const Text(
-                        "Crusader Yearbook",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontFamily: 'DM Sans',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Expanded(child: Container()),
                 Expanded(
-                  flex: 4,
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 100, right: 100),
+                    child: Column(
+                      children: [
+                        const Expanded(
+                          flex: 3,
+                          child: FittedBox(
+                            child: Text(
+                              'Welcome to Zenith',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 60,
+                                fontFamily: 'Work Sans',
+                                fontWeight: FontWeight.w700,
+                                height: 0,
+                              ),
+                            ),
+                          )
+                        ),
+                        Expanded(
+                          child: FittedBox(
+                            child: Transform.translate(
+                              offset: const Offset(0, -5),
+                              child: const Text(
+                                'Crusader Yearbook',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontFamily: 'DM Sans',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              ),
+                            )
+                          )
+                        )
+                      ],
+                    ),
+                  )
+                ),
+                const Spacer(),
+                Expanded(
+                  flex: 6,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -70,11 +93,17 @@ class WelcomePage extends StatelessWidget {
                             width: 60,
                             height: 60,
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
                             child: SubmitButton(
                               text: "Build a Workspace?", 
-                              gradient: [Color(0xFF06BCC1), Color(0xFF168285)]
+                              gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
+                              function : ()=> {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const BuildWorkspacePage())
+                                )
+                              }
                             ),
                           )
                         ],
@@ -87,11 +116,17 @@ class WelcomePage extends StatelessWidget {
                             width: 60,
                             height: 60,
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
                             child: SubmitButton(
                               text: "Join a Workspace?", 
-                              gradient: [Color(0xFFD4515D), Color(0xFFB12935)]
+                              gradient: const [Color(0xFFD4515D), Color(0xFFB12935)],
+                              function: ()=> {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const JoinWorkspacePage())
+                                )
+                              }
                             ),
                           )
                         ],
@@ -104,11 +139,17 @@ class WelcomePage extends StatelessWidget {
                             width: 60,
                             height: 60,
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
                             child: SubmitButton(
                               text: "I\'ll do this later", 
-                              gradient: [Color(0xFFFFE66D), Color(0xFF927E1D)]
+                              gradient: const [Color(0xFFFFE66D), Color(0xFF927E1D)],
+                              function: ()=> {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const LandingPage())
+                                )
+                              }
                             ),
                           ),
                         ],
@@ -130,6 +171,7 @@ class WelcomePage extends StatelessWidget {
   }
 }
 
+/*
 class WelcomeButton extends StatelessWidget {
   final String imgPath;
   final String text;
@@ -177,3 +219,4 @@ class WelcomeButton extends StatelessWidget {
     );
   }
 }
+*/

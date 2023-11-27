@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/pages/inviteteam_page.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:project_zenith/widgets/transparent_button.dart';
@@ -39,6 +40,7 @@ class Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        BackButton(onPressed: () {Navigator.pop(context);}),
         Container(
           alignment: Alignment.center,
           margin: const EdgeInsets.only(top: 62),
@@ -106,23 +108,23 @@ class Content extends StatelessWidget {
                   flex: 6,
                   child: Padding(
                     padding: EdgeInsets.only(left: 0.25*MediaQuery.of(context).size.width, right: 0.25*MediaQuery.of(context).size.width),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Expanded(
+                        const Expanded(
                           flex: 6,
                           child: WorkspaceField(
                             label: "Workspace Name:"
                           ),
                         ),
-                        Spacer(),
-                        Expanded(
+                        const Spacer(),
+                        const Expanded(
                           flex: 7,
                           child: LongInputField(
                             label: "Workspace Description (Optional):"
                           ),
                         ),
-                        Spacer(flex: 2),
+                        const Spacer(flex: 2),
                         Expanded(
                           flex: 4,
                           child: Column(
@@ -133,14 +135,20 @@ class Content extends StatelessWidget {
                                     Expanded(
                                       child: SubmitButton(
                                         text: "Continue",
-                                        gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
+                                        gradient: const [Color(0xFF06BCC1), Color(0xFF047679)],
+                                        function: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => const InviteTeamPage())
+                                          );
+                                        }
                                       )
                                     ),
-                                    Expanded(
+                                    const Expanded(
                                       child: Padding(
                                         padding: EdgeInsets.only(left: 30, right: 30),
                                         child: TransparentButton(
-                                          text: "I\'ll do this later",
+                                          text: "I'll do this later",
                                           hovered: Color.fromARGB(255, 6, 140, 145),
                                           flat: Color(0xFF06BCC1),
                                           lineColor: Color.fromARGB(255, 6, 140, 145),
@@ -300,4 +308,8 @@ class LongInputField extends StatelessWidget {
       ],
     );
   }
+}
+
+void test() {
+  
 }

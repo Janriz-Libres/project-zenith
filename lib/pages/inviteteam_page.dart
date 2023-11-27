@@ -39,6 +39,7 @@ class Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        BackButton(onPressed: () {Navigator.pop(context);}),
         Container(
           alignment: Alignment.center,
           margin: const EdgeInsets.only(top: 62),
@@ -134,6 +135,7 @@ class Content extends StatelessWidget {
                                       child: SubmitButton(
                                         text: "Continue",
                                         gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
+                                        function: test
                                       )
                                     ),
                                     Expanded(
@@ -300,4 +302,8 @@ class LongInputField extends StatelessWidget {
       ],
     );
   }
+}
+
+void test() {
+
 }

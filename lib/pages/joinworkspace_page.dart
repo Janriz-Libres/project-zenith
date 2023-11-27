@@ -39,6 +39,7 @@ class Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        BackButton(onPressed: () {Navigator.pop(context);}),
         Container(
           alignment: Alignment.center,
           margin: const EdgeInsets.only(top: 62),
@@ -101,9 +102,9 @@ class Content extends StatelessWidget {
                     ),
                   )
                 ),
-                const Spacer(flex:3),
+                const Spacer(),
                 Expanded(
-                  flex: 8,
+                  flex: 6,
                   child: Padding(
                     padding: EdgeInsets.only(left: 0.25*MediaQuery.of(context).size.width, right: 0.25*MediaQuery.of(context).size.width),
                     child: const Column(
@@ -121,6 +122,7 @@ class Content extends StatelessWidget {
                           child: SubmitButton(
                             text: "Continue",
                             gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
+                            function: test
                           )
                         ),
                         Spacer(),
@@ -140,7 +142,6 @@ class Content extends StatelessWidget {
                     ),
                   )
                 ),
-                const Spacer(flex: 2),
               ],
             ),
           ),
@@ -283,4 +284,8 @@ class LongInputField extends StatelessWidget {
       ],
     );
   }
+}
+
+void test() {
+
 }
