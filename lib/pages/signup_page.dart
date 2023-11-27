@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/widgets/submit_button.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({
@@ -38,7 +39,7 @@ class SignupPage extends StatelessWidget {
         ),
         const Spacer(),
         Expanded(
-          flex: 3,
+          flex: 4,
           child: Column(
             children: [
               const CheckWidget(
@@ -47,15 +48,16 @@ class SignupPage extends StatelessWidget {
               ),
               Transform.translate(
                 offset: const Offset(0, 10),
-                child: const SubmitButton(
-                  text: "Create Account", 
-                  hPadding: 50, 
-                  vPadding: 10),
+                child: const SizedBox(
+                  child: SubmitButton(
+                    text: "Create Account", 
+                  ),
+                ),
               ),
             ],
           ),
         ),
-        const Spacer()
+        const Spacer(flex: 2)
       ],
     );
   }

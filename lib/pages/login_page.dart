@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/widgets/submit_button.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -38,9 +39,7 @@ class LoginPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: SubmitButton(
-                      text: "Log In", 
-                      hPadding: 10,
-                      vPadding: 30
+                      text: "Log In",
                     )
                   ),
                   Expanded(

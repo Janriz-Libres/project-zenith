@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/pages/login_page.dart';
 import 'package:project_zenith/pages/signup_page.dart';
+import 'package:project_zenith/widgets/copyright_mark.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -40,34 +42,6 @@ class AuthPage extends StatelessWidget {
             ),
             const Copyright(mLeft: 45, mBot: 30),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class Copyright extends StatelessWidget {
-  final double mLeft, mBot;
-
-  const Copyright({
-    super.key,
-    required this.mLeft,
-    required this.mBot,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.bottomLeft,
-      margin: EdgeInsets.only(left: mLeft, bottom: mBot),
-      child: const Text(
-        "Crusader Yearbook ©️ 2023",
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-          fontFamily: 'DM Sans',
-          fontWeight: FontWeight.w400,
-          height: 0,
         ),
       ),
     );
@@ -143,7 +117,7 @@ class InputContainer extends StatelessWidget {
           ),
         ),
       ),
-      child: const SignupPage(),
+      child: const LoginPage(),
     );
   }
 }
@@ -293,60 +267,6 @@ class CheckWidget extends StatelessWidget {
   }
 }
 
-class SubmitButton extends StatelessWidget {
-  final String text;
-  final double hPadding;
-  final double vPadding;
-
-  const SubmitButton({
-    super.key,
-    required this.text,
-    required this.hPadding,
-    required this.vPadding,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-          EdgeInsets.symmetric(horizontal: hPadding, vertical: 12),
-        ),
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-        overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
-        shape: MaterialStateProperty.all<OutlinedBorder>(
-          const RoundedRectangleBorder(
-            side: BorderSide(
-              width: 4,
-              strokeAlign: BorderSide.strokeAlignCenter,
-              color: Color(0xFF06BCC1),
-            ),
-          ),
-        ),
-      ),
-      child: Ink(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment(0, -1),
-            end: Alignment(0, 1),
-            colors: [Color(0xFF06BCC1), Color(0xFF047679)],
-          ),
-        ),
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontFamily: 'DM Sans',
-            fontWeight: FontWeight.w700,
-            height: 0,
-          ),
-        ),
-      ),
-    );
-
     // return Container(
     //   padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 12),
     //   decoration: ShapeDecoration(
@@ -379,5 +299,4 @@ class SubmitButton extends StatelessWidget {
     //   ),
     // ),
     // );
-  }
-}
+
