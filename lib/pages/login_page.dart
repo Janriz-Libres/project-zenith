@@ -42,6 +42,7 @@ class LoginPage extends StatelessWidget {
                     child: SubmitButton(
                       text: "Log In",
                       gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
+                      function: test
                     )
                   ),
                   Expanded(
@@ -109,4 +110,8 @@ class LoginPage extends StatelessWidget {
       ],
     );
   }
+}
+
+void test() {
+
 }

@@ -53,6 +53,7 @@ class SignupPage extends StatelessWidget {
                   child: SubmitButton(
                     text: "Create Account", 
                     gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
+                    function: test
                   ),
                 ),
               ),
@@ -63,4 +64,8 @@ class SignupPage extends StatelessWidget {
       ],
     );
   }
+}
+
+void test() {
+
 }
