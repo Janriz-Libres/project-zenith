@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 
+
 class SignupPage extends StatelessWidget {
   const SignupPage({
     super.key,

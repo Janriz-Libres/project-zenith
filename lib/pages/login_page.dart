@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
+import 'package:project_zenith/widgets/transparent_button.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -43,17 +44,15 @@ class LoginPage extends StatelessWidget {
                     )
                   ),
                   Expanded(
-                    child: Text(
-                      "Forgot Password?",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xFF06BCC1),
-                        fontSize: 18,
-                        fontFamily: 'DM Sans',
-                        fontWeight: FontWeight.w700,
-                        height: 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 30, right: 30),
+                      child: TransparentButton(
+                        text: "Forgot Password",
+                        hovered: Color.fromARGB(255, 6, 140, 145),
+                        flat: Color(0xFF06BCC1),
+                        lineColor: Color.fromARGB(255, 6, 140, 145)
                       ),
-                    ),
+                    )
                   ),
                 ],
               ),
@@ -81,34 +80,27 @@ class LoginPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   ),
                 ),
-                child: const Text.rich(
-                  textAlign: TextAlign.center,
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Don't have an account? ",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: 'DM Sans',
-                          fontWeight: FontWeight.w500,
-                          height: 0,
-                        ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account? ",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'DM Sans',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
                       ),
-                      TextSpan(
-                        text: "Sign Up",
-                        style: TextStyle(
-                          color: Color(0xFFD4515D),
-                          fontSize: 18,
-                          fontFamily: 'DM Sans',
-                          fontWeight: FontWeight.w700,
-                          decoration: TextDecoration.underline,
-                          height: 0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                    TransparentButton(
+                      text: "Sign Up", 
+                      flat: Color(0xFFD4515D), 
+                      hovered: Color.fromARGB(255, 168, 40, 30), 
+                      lineColor: Color(0xFFD4515D),
+                    )
+                  ],
+                )
               ),
             ),
           ],

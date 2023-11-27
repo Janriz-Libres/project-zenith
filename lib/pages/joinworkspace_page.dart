@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/widgets/copyright_mark.dart';
+import 'package:project_zenith/widgets/submit_button.dart';
+import 'package:project_zenith/widgets/transparent_button.dart';
 
 class JoinWorkspacePage extends StatelessWidget {
   const JoinWorkspacePage({super.key});
@@ -99,57 +101,37 @@ class Content extends StatelessWidget {
                     ),
                   )
                 ),
-                const Spacer(),
+                const Spacer(flex:3),
                 Expanded(
-                  flex: 6,
+                  flex: 8,
                   child: Padding(
                     padding: EdgeInsets.only(left: 0.25*MediaQuery.of(context).size.width, right: 0.25*MediaQuery.of(context).size.width),
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        const Expanded(
+                        Expanded(
                           flex: 4,
                           child: WorkspaceField(
                             label: "Invited to a Workspace?"
                           ),
                         ),
-                        const Spacer(flex: 2),
+                        Spacer(flex: 2),
                         Expanded(
                           flex: 3,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
-                            decoration: ShapeDecoration(
-                              gradient: const LinearGradient(
-                                begin: Alignment(0.00, -1.00),
-                                end: Alignment(0, 1),
-                                colors: [Color(0xFF06BCC1), Color(0xFF047679)],
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 4,
-                                  strokeAlign: BorderSide.strokeAlignCenter,
-                                  color: Color(0xFF06BCC1),
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
+                          child: SubmitButton(
+                            text: "Continue",
                           )
                         ),
-                        const Spacer(),
-                        const Expanded(
+                        Spacer(),
+                        Expanded(
                           flex: 2,
-                          child: SizedBox(
-                            child: Text(
-                              'I\'ll do this later',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Color(0xFF06BCC1),
-                                fontSize: 18,
-                                fontFamily: 'DM Sans',
-                                fontWeight: FontWeight.w700,
-                                decoration: TextDecoration.underline,
-                                height: 0,
-                              ),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 30, right: 30),
+                            child: TransparentButton(
+                              text: "I'll do this later",
+                              hovered: Color.fromARGB(255, 6, 140, 145),
+                              flat: Color(0xFF06BCC1),
+                              lineColor: Color.fromARGB(255, 6, 140, 145),
                             ),
                           )
                         ),
