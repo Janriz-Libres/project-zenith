@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 
 class SubmitButton extends StatelessWidget {
   final String text;
+  final List<Color> gradient;
 
   const SubmitButton({
     super.key,
     required this.text,
+    required this.gradient
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment(0, -1),
-          end: Alignment(0, 1),
-          colors: [Color(0xFF06BCC1), Color(0xFF047679)],
+        gradient: LinearGradient(
+          begin: const Alignment(0, -1),
+          end: const Alignment(0, 1),
+          colors: gradient,
         ),
         borderRadius: BorderRadius.circular(10),
       ),
