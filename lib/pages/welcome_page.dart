@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/widgets/submit_button.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -56,25 +57,61 @@ class WelcomePage extends StatelessWidget {
                   ],
                 ),
                 Expanded(child: Container()),
-                const Expanded(
+                Expanded(
                   flex: 4,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      WelcomeButton(
-                        text: "Build a Workspace?",
-                        imgPath: "assets/build_icon.png",
-                        btnColors: [Color(0xFF06BCC1), Color(0xFF168285)],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/build_icon.png",
+                            width: 60,
+                            height: 60,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 20),
+                            child: SubmitButton(
+                              text: "Build a Workspace?", 
+                              gradient: [Color(0xFF06BCC1), Color(0xFF168285)]
+                            ),
+                          )
+                        ],
                       ),
-                      WelcomeButton(
-                        text: "Join a Workspace?",
-                        imgPath: "assets/join_icon.png",
-                        btnColors: [Color(0xFFD4515D), Color(0xFFB12935)],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/join_icon.png",
+                            width: 60,
+                            height: 60,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 20),
+                            child: SubmitButton(
+                              text: "Join a Workspace?", 
+                              gradient: [Color(0xFFD4515D), Color(0xFFB12935)]
+                            ),
+                          )
+                        ],
                       ),
-                      WelcomeButton(
-                        text: "I'll do this later!",
-                        imgPath: "assets/later_icon.png",
-                        btnColors: [Color(0xFFFFE66D), Color(0xFF927E1D)],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/later_icon.png",
+                            width: 60,
+                            height: 60,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 20),
+                            child: SubmitButton(
+                              text: "I\'ll do this later", 
+                              gradient: [Color(0xFFFFE66D), Color(0xFF927E1D)]
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -108,13 +145,8 @@ class WelcomeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(
-          imgPath,
-          width: 60,
-          height: 60,
-        ),
+        
         Container(
           width: 364,
           padding: const EdgeInsets.only(top: 12, bottom: 12),
