@@ -120,7 +120,7 @@ class Content extends StatelessWidget {
                         Expanded(
                           flex: 3,
                           child: SubmitButton(
-                            text: "Continue",
+                            text: "Join Workspace",
                             gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
                             function: test
                           )
