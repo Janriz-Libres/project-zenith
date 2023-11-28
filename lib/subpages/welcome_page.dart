@@ -145,19 +145,21 @@ class _WelcomePageState extends State<WelcomePage> {
                           Padding(
                             padding: const EdgeInsets.only(right: 20),
                             child: SubmitButton(
-                                text: "I'll do this later",
-                                gradient: const [
-                                  Color(0xFFFFE66D),
-                                  Color(0xFF927E1D)
-                                ],
-                                minSize: const Size(300, 70),
-                                function: () => {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const LandingPage()))
-                                    }),
+                              text: "I'll do this later",
+                              gradient: const [
+                                Color(0xFFFFE66D),
+                                Color(0xFF927E1D)
+                              ],
+                              minSize: const Size(300, 70),
+                              function: () => {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LandingPage(),
+                                  ),
+                                )
+                              },
+                            ),
                           ),
                         ],
                       ),

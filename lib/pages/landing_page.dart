@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/pages/welcome_page.dart';
+import 'package:project_zenith/subpages/welcome_page.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
 
 class LandingPage extends StatelessWidget {

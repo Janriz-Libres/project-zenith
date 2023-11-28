@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/pages/signup_page.dart';
+import 'package:project_zenith/subpages/signup_page.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
 
 class AuthPage extends StatelessWidget {
