@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:project_zenith/pages/buildworkspace_page.dart';
 import 'package:project_zenith/pages/joinworkspace_page.dart';
 import 'package:project_zenith/pages/landing_page.dart';
@@ -36,49 +35,45 @@ class _WelcomePageState extends State<WelcomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 100, right: 100),
-                    child: Column(
-                      children: [
-                        const Expanded(
-                          flex: 3,
-                          child: FittedBox(
-                            child: Text(
-                              'Welcome to Zenith',
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 100, right: 100),
+                      child: Column(
+                        children: [
+                          const Expanded(
+                              flex: 3,
+                              child: FittedBox(
+                                child: Text(
+                                  'Welcome to Zenith',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 60,
+                                    fontFamily: 'Work Sans',
+                                    fontWeight: FontWeight.w700,
+                                    height: 0,
+                                  ),
+                                ),
+                              )),
+                          Expanded(
+                              child: FittedBox(
+                                  child: Transform.translate(
+                            offset: const Offset(0, -5),
+                            child: const Text(
+                              'Crusader Yearbook',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 60,
-                                fontFamily: 'Work Sans',
-                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                                fontFamily: 'DM Sans',
+                                fontWeight: FontWeight.w400,
                                 height: 0,
                               ),
                             ),
-                          )
-                        ),
-                        Expanded(
-                          child: FittedBox(
-                            child: Transform.translate(
-                              offset: const Offset(0, -5),
-                              child: const Text(
-                                'Crusader Yearbook',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontFamily: 'DM Sans',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                            )
-                          )
-                        )
-                      ],
-                    ),
-                  )
-                ),
+                          )))
+                        ],
+                      ),
+                    )),
                 const Spacer(),
                 Expanded(
                   flex: 6,
@@ -96,15 +91,19 @@ class _WelcomePageState extends State<WelcomePage> {
                           Padding(
                             padding: const EdgeInsets.only(right: 20),
                             child: SubmitButton(
-                              text: "Build a Workspace?", 
-                              gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
-                              function : ()=> {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const BuildWorkspacePage())
-                                )
-                              }
-                            ),
+                                text: "Build a Workspace?",
+                                gradient: const [
+                                  Color(0xFF06BCC1),
+                                  Color(0xFF168285)
+                                ],
+                                minSize: const Size(300, 70),
+                                function: () => {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const BuildWorkspacePage()))
+                                    }),
                           )
                         ],
                       ),
@@ -119,15 +118,19 @@ class _WelcomePageState extends State<WelcomePage> {
                           Padding(
                             padding: const EdgeInsets.only(right: 20),
                             child: SubmitButton(
-                              text: "Join a Workspace?", 
-                              gradient: const [Color(0xFFD4515D), Color(0xFFB12935)],
-                              function: ()=> {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const JoinWorkspacePage())
-                                )
-                              }
-                            ),
+                                text: "Join a Workspace?",
+                                gradient: const [
+                                  Color(0xFFD4515D),
+                                  Color(0xFFB12935)
+                                ],
+                                minSize: const Size(300, 70),
+                                function: () => {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const JoinWorkspacePage()))
+                                    }),
                           )
                         ],
                       ),
@@ -142,15 +145,19 @@ class _WelcomePageState extends State<WelcomePage> {
                           Padding(
                             padding: const EdgeInsets.only(right: 20),
                             child: SubmitButton(
-                              text: "I\'ll do this later", 
-                              gradient: const [Color(0xFFFFE66D), Color(0xFF927E1D)],
-                              function: ()=> {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const LandingPage())
-                                )
-                              }
-                            ),
+                                text: "I'll do this later",
+                                gradient: const [
+                                  Color(0xFFFFE66D),
+                                  Color(0xFF927E1D)
+                                ],
+                                minSize: const Size(300, 70),
+                                function: () => {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const LandingPage()))
+                                    }),
                           ),
                         ],
                       ),

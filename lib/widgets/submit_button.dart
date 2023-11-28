@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 class SubmitButton extends StatelessWidget {
   final String text;
   final List<Color> gradient;
+  final Size minSize;
   final Function() function;
 
   const SubmitButton({
     super.key,
     required this.text,
     required this.gradient,
-    required this.function
+    required this.minSize,
+    required this.function,
   });
 
   @override
@@ -26,10 +28,10 @@ class SubmitButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: function,
         style: ElevatedButton.styleFrom(
-          minimumSize: const Size(300, 70),
-          backgroundColor: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
-        ),
+            minimumSize: minSize,
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10))),
         child: Text(
           text,
           textAlign: TextAlign.center,

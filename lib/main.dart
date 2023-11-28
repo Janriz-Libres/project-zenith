@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/pages/auth_page.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:project_zenith/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Zenith',
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      home: HomePage(),
     );
   }
 }

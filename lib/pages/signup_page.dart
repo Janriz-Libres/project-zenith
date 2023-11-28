@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 
-
 class SignupPage extends StatelessWidget {
   const SignupPage({
     super.key,
@@ -14,12 +13,7 @@ class SignupPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const Expanded(
-            flex: 5,
-            child: AuthTitle(
-              title: "SIGN UP"
-              )
-            ),
+          const Expanded(flex: 5, child: AuthTitle(title: "SIGN UP")),
           const Expanded(
             flex: 5,
             child: Column(
@@ -28,15 +22,15 @@ class SignupPage extends StatelessWidget {
                 InputWidget(
                   circleColor: Color(0xFF06BCC1),
                   labelText: "Email Address",
-                  ),
+                ),
                 InputWidget(
                   circleColor: Color(0xFFD4515D),
                   labelText: "Username",
-                  ),
+                ),
                 InputWidget(
                   circleColor: Color(0xFFFFE66D),
                   labelText: "Password",
-                  ),
+                ),
               ],
             ),
           ),
@@ -51,11 +45,12 @@ class SignupPage extends StatelessWidget {
                 ),
                 Transform.translate(
                   offset: const Offset(0, 10),
-                  child: const SizedBox(
+                  child: SizedBox(
                     child: SubmitButton(
-                      text: "Create Account", 
-                      gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
-                      function: test
+                      text: "Create Account",
+                      gradient: const [Color(0xFF06BCC1), Color(0xFF047679)],
+                      minSize: const Size(300, 70),
+                      function: () {},
                     ),
                   ),
                 ),
@@ -67,8 +62,4 @@ class SignupPage extends StatelessWidget {
       ),
     );
   }
-}
-
-void test() {
-
 }

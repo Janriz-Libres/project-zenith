@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/pages/login_page.dart';
 import 'package:project_zenith/pages/signup_page.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
 
@@ -169,11 +168,8 @@ class InputWidget extends StatelessWidget {
   final Color circleColor;
   final String labelText;
 
-  const InputWidget({
-    super.key,
-    required this.circleColor,
-    required this.labelText
-  });
+  const InputWidget(
+      {super.key, required this.circleColor, required this.labelText});
 
   @override
   Widget build(BuildContext context) {
@@ -197,42 +193,37 @@ class InputWidget extends StatelessWidget {
           Expanded(
             flex: 8,
             child: TextFormField(
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white
-              ),
+              style: const TextStyle(fontSize: 14, color: Colors.white),
               maxLines: 1,
               decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.black,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(
-                    color: Colors.white,
-                    width: 2,
+                  filled: true,
+                  fillColor: Colors.black,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: const BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF06BCC1),
-                    width: 2,
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF06BCC1),
+                      width: 2,
+                    ),
                   ),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    width: 2,
-                    color: Colors.white,
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 2,
+                      color: Colors.white,
+                    ),
+                    borderRadius: BorderRadius.circular(50),
                   ),
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                contentPadding: const EdgeInsets.only(left: 20, right: 20),
-                hintText: labelText,
-                hintStyle: const TextStyle(
-                  color: Color.fromARGB(255, 144, 142, 142),
-                  fontWeight: FontWeight.normal
-                )
-              ),
+                  contentPadding: const EdgeInsets.only(left: 20, right: 20),
+                  hintText: labelText,
+                  hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 144, 142, 142),
+                      fontWeight: FontWeight.normal)),
             ),
           ),
         ],
