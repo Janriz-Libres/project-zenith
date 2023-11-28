@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/subpages/login_page.dart';
 import 'package:project_zenith/subpages/signup_page.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
 
@@ -116,7 +117,7 @@ class InputContainer extends StatelessWidget {
           ),
         ),
       ),
-      child: const SignupPage(),
+      child: const Center(child: LoginPage()),
     );
   }
 }
@@ -167,9 +168,10 @@ class AuthTitle extends StatelessWidget {
 class InputWidget extends StatelessWidget {
   final Color circleColor;
   final String labelText;
+  final bool obscured;
 
   const InputWidget(
-      {super.key, required this.circleColor, required this.labelText});
+      {super.key, required this.circleColor, required this.labelText, required this.obscured});
 
   @override
   Widget build(BuildContext context) {
@@ -182,8 +184,8 @@ class InputWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              width: 0.03 * MediaQuery.of(context).size.width,
-              height: 0.03 * MediaQuery.of(context).size.height,
+              width: 17,
+              height: 17,
               decoration: ShapeDecoration(
                 color: circleColor,
                 shape: const CircleBorder(),
@@ -193,16 +195,20 @@ class InputWidget extends StatelessWidget {
           Expanded(
             flex: 8,
             child: TextFormField(
-              style: const TextStyle(fontSize: 14, color: Colors.white),
+              obscureText: obscured,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white
+              ),
               maxLines: 1,
               decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.black,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: const BorderSide(
-                      color: Colors.white,
-                      width: 2,
+                filled: true,
+                fillColor: Colors.black,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: const BorderSide(
+                    color: Colors.white,
+                    width: 2,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
