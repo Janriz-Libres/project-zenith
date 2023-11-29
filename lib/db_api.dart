@@ -25,12 +25,12 @@ class Authenticator {
     );
   }
 
-  /// Signs up an unregistered user using the provided email and password.
+  /// Signs up an unregistered user using the provided email, username and password.
   ///
   /// Returns the User when sign up is successful.
   ///
   /// Throws AuthException when user already exists, else void.
-  static Future<User> signUp(String email, String pw) async {
+  static Future<User> signUp(String email, String username, String pw) async {
     await FirebaseAuth.instance.signUp(email, pw);
 
     var reference = Firestore.instance.collection('users');
@@ -39,7 +39,7 @@ class Authenticator {
       'email': email,
       'password': pw,
       'auth_id': FirebaseAuth.instance.userId,
-      'username': '',
+      'username': username,
     });
     await docReference.reference.update({'id': docReference.id});
 

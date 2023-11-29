@@ -5,13 +5,15 @@ class TransparentButton extends StatelessWidget {
   final Color flat;
   final Color hovered;
   final Color lineColor;
+  final Function() function;
 
   const TransparentButton({
     super.key,
     required this.text,
     required this.flat,
     required this.hovered,
-    required this.lineColor
+    required this.lineColor,
+    required this.function
   });
 
   @override
@@ -26,7 +28,7 @@ class TransparentButton extends StatelessWidget {
         return flat; // null throus error in flutter 2.2+.
         }),
       ),
-      onPressed: () { },
+      onPressed: function,
       child: FittedBox(
         child: Text(
           text,

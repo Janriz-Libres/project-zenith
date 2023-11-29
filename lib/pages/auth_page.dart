@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/subpages/login_page.dart';
 import 'package:project_zenith/subpages/signup_page.dart';
 import 'package:project_zenith/widgets/aesthetic_border.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
@@ -48,21 +49,39 @@ class AuthPage extends StatelessWidget {
   }
 }
 
-class RightPane extends StatelessWidget {
+class RightPane extends StatefulWidget {
   const RightPane({
     super.key,
   });
 
   @override
+  State<RightPane> createState() => _RightPaneState();
+}
+
+class _RightPaneState extends State<RightPane> {
+  bool show = true; 
+
+  @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(top: 13.5, right: 13.5, bottom: 30),
+    return Padding(
+      padding: const EdgeInsets.only(top: 13.5, right: 13.5, bottom: 30),
       child: AestheticBorder(
         borderColor: Colors.white,
         mainColor: Colors.black,
-        child: SignupPage(),
+        child: Center(
+        child: show ? LoginPage(
+          function: () {_toggle();}) : 
+          SignupPage(
+            function: () {_toggle();}),
+        )
       ),
     );
+  }
+
+  void _toggle() {
+    setState(() {
+      show = !show;
+    });
   }
 }
 
@@ -105,74 +124,6 @@ class AuthTitle extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class InputWidget extends StatelessWidget {
-  final Color circleColor;
-  final String labelText;
-
-  const InputWidget(
-      {super.key, required this.circleColor, required this.labelText});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              width: 0.03 * MediaQuery.of(context).size.width,
-              height: 0.03 * MediaQuery.of(context).size.height,
-              decoration: ShapeDecoration(
-                color: circleColor,
-                shape: const CircleBorder(),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 8,
-            child: TextFormField(
-              style: const TextStyle(fontSize: 14, color: Colors.white),
-              maxLines: 1,
-              decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.black,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: const BorderSide(
-                      color: Colors.white,
-                      width: 2,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF06BCC1),
-                      width: 2,
-                    ),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      width: 2,
-                      color: Colors.white,
-                    ),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  contentPadding: const EdgeInsets.only(left: 20, right: 20),
-                  hintText: labelText,
-                  hintStyle: const TextStyle(
-                      color: Color.fromARGB(255, 144, 142, 142),
-                      fontWeight: FontWeight.normal)),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -258,3 +209,6 @@ class CheckWidget extends StatelessWidget {
     // ),
     // );
 
+changePage() {
+
+}
