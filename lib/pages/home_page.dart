@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/db_api.dart';
+import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/subpages/fresh_page.dart';
 import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -73,34 +76,52 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  const Expanded(
+                  Expanded(
                     flex: 10,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         DrawOption(
                           imgPath: "assets/white_logo.png",
-                          text: "Home",
+                          text: "Logout",
+                          func: () async {
+                            await Authenticator.logout();
+
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.clear();
+
+                            if (context.mounted) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AuthPage(),
+                                ),
+                              );
+                            }
+                          },
                         ),
                         DrawOption(
                           imgPath: "assets/build_icon.png",
                           text: "Profile",
+                          func: () {},
                         ),
                         DrawOption(
                           imgPath: "assets/later_icon.png",
                           text: "Attendance",
+                          func: () {},
                         ),
                       ],
                     ),
                   ),
                   const Spacer(),
-                  const Expanded(
+                  Expanded(
                     flex: 8,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(left: 24),
                           child: Text(
                             'WORKSPACE',
@@ -114,23 +135,26 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                         DrawOption(
-                            imgPath: "assets/join_icon.png",
-                            text: "Booth Department"),
+                          imgPath: "assets/join_icon.png",
+                          text: "Booth Department",
+                          func: () {},
+                        ),
                         DrawOption(
                           imgPath: "assets/extra_icon.png",
                           text: "Create new workspace",
+                          func: () {},
                         ),
                       ],
                     ),
                   ),
                   const Spacer(),
-                  const Expanded(
+                  Expanded(
                     flex: 8,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.only(left: 24),
                           child: Text(
                             'SHARED',
@@ -146,10 +170,12 @@ class HomePage extends StatelessWidget {
                         DrawOption(
                           imgPath: "assets/build_icon.png",
                           text: "Booth Department",
+                          func: () {},
                         ),
                         DrawOption(
                           imgPath: "assets/later_icon.png",
                           text: "Finance Department",
+                          func: () {},
                         ),
                       ],
                     ),

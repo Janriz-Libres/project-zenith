@@ -18,6 +18,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
+
   final emailController = TextEditingController();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -25,6 +26,96 @@ class _SignupPageState extends State<SignupPage> {
 
   bool validUsername = true;
   bool validEmailAddress = true;
+
+  void validateForm() async {
+    if (emailController.text.isEmpty ||
+        usernameController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        retypeController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Container(
+            padding: const EdgeInsets.only(top: 12, left: 15),
+            height: 50,
+            decoration: const BoxDecoration(
+              color: Color(0xFFC72C41),
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Oh snap! Please enter your credentials.",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'DM Sans',
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (!_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Container(
+            padding: const EdgeInsets.only(top: 12, left: 15),
+            height: 50,
+            decoration: const BoxDecoration(
+              color: Color(0xFFC72C41),
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Oh snap! Incorrect credentials.",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'DM Sans',
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Processing Data')),
+    );
+
+    currentUser = await Authenticator.signUp(
+      emailController.text,
+      usernameController.text,
+      passwordController.text,
+    );
+
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return const HomePage();
+          },
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,17 +144,13 @@ class _SignupPageState extends State<SignupPage> {
                     children: [
                       InputWidget(
                         validator: (value) {
-                          const pattern = r'\d{1,11}(@my.xu.edu.ph)';
+                          const pattern = r'\d{1,11}@my.xu.edu.ph';
                           final regex = RegExp(pattern);
 
-                          if (value!.isNotEmpty && !regex.hasMatch(value)) {
-                            setState(() {
-                              validEmailAddress = false;
-                            });
+                          if (!regex.hasMatch(value!)) {
+                            setState(() => validEmailAddress = false);
                           } else {
-                            setState(() {
-                              validEmailAddress = true;
-                            });
+                            setState(() => validEmailAddress = true);
                           }
                         },
                         controller: emailController,
@@ -83,17 +170,13 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       InputWidget(
                         validator: (value) {
-                          const pattern = r'[A-Z][a-z]+([][A-Z][a-z]+)*';
+                          const pattern = r'\w+';
                           final regex = RegExp(pattern);
 
-                          if (value!.isNotEmpty && !regex.hasMatch(value)) {
-                            setState(() {
-                              validUsername = false;
-                            });
+                          if (!regex.hasMatch(value!)) {
+                            setState(() => validUsername = false);
                           } else {
-                            setState(() {
-                              validUsername = true;
-                            });
+                            setState(() => validUsername = true);
                           }
                         },
                         controller: usernameController,
@@ -158,99 +241,13 @@ class _SignupPageState extends State<SignupPage> {
                       offset: const Offset(0, 10),
                       child: SizedBox(
                         child: SubmitButton(
-                          text: "Create Account",
-                          gradient: const [
-                            Color(0xFF06BCC1),
-                            Color(0xFF047679)
-                          ],
-                          minSize: const Size(300, 70),
-                          func: () async {
-                            if (emailController.text.isEmpty ||
-                                usernameController.text.isEmpty ||
-                                passwordController.text.isEmpty ||
-                                retypeController.text.isEmpty) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      content: Container(
-                                padding:
-                                    const EdgeInsets.only(top: 12, left: 15),
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                    color: Color(0xFFC72C41),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                child: const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "Oh snap! Please enter your credentials.",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'DM Sans',
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )));
-
-                              return;
-                            } else if (validEmailAddress || validUsername) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                      content: Container(
-                                padding:
-                                    const EdgeInsets.only(top: 12, left: 15),
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                    color: Color(0xFFC72C41),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                child: const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "Oh snap! Incorrect credentials.",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'DM Sans',
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )));
-
-                              return;
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Processing Data')),
-                              );
-
-                              currentUser = await Authenticator.signUp(
-                                emailController.text,
-                                usernameController.text,
-                                passwordController.text,
-                              );
-
-                              if (context.mounted) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return const HomePage();
-                                    },
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                        ),
+                            text: "Create Account",
+                            gradient: const [
+                              Color(0xFF06BCC1),
+                              Color(0xFF047679)
+                            ],
+                            minSize: const Size(300, 70),
+                            func: validateForm),
                       ),
                     ),
                   ],
