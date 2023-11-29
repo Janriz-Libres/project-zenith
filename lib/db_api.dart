@@ -55,11 +55,7 @@ class Authenticator {
   // Logs out the user.
   static Future<void> logout() async {
     FirebaseAuth.instance.signOut();
-    FirebaseAuth.instance.close();
-
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    Firestore.instance.close();
+    // await Future.delayed(const Duration(milliseconds: 100));
   }
 }
 
