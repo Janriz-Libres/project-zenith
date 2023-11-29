@@ -8,16 +8,14 @@ class ObscuredField extends StatefulWidget {
   final Color focusedColor;
   final TextEditingController controller;
 
-  const ObscuredField({
-    super.key, 
-    required this.labelText, 
-    required this.widget,
-    required this.borderColor,
-    required this.enabledColor,
-    required this.focusedColor,
-    required this.controller
-    }
-  );
+  const ObscuredField(
+      {super.key,
+      required this.labelText,
+      required this.widget,
+      required this.borderColor,
+      required this.enabledColor,
+      required this.focusedColor,
+      required this.controller});
 
   @override
   State<ObscuredField> createState() => _ObscuredFieldState();
@@ -41,18 +39,13 @@ class _ObscuredFieldState extends State<ObscuredField> {
       ),
       child: Row(
         children: [
-          Expanded(
-            child: widget.widget
-          ),
+          Expanded(child: widget.widget),
           Expanded(
             flex: 8,
             child: TextFormField(
               controller: widget.controller,
               obscureText: obscured,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white
-              ),
+              style: const TextStyle(fontSize: 14, color: Colors.white),
               maxLines: 1,
               decoration: InputDecoration(
                 filled: true,
@@ -82,20 +75,18 @@ class _ObscuredFieldState extends State<ObscuredField> {
                 hintText: widget.labelText,
                 hintStyle: const TextStyle(
                     color: Color.fromARGB(255, 144, 142, 142),
-                    fontWeight: FontWeight.normal
-                ),
+                    fontWeight: FontWeight.normal),
                 suffixIcon: Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: IconButton(
-                    icon: Icon(
-                      // Based on passwordVisible state choose the icon
-                      obscured
-                      ? Icons.visibility_off
-                      : Icons.visibility,
-                      color: Theme.of(context).dialogBackgroundColor,
+                      icon: Icon(
+                        // Based on passwordVisible state choose the icon
+                        obscured ? Icons.visibility_off : Icons.visibility,
+                        color: Theme.of(context).dialogBackgroundColor,
                       ),
-                    onPressed: () {_toggle();}
-                  ),
+                      onPressed: () {
+                        _toggle();
+                      }),
                 ),
               ),
             ),

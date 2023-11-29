@@ -15,6 +15,7 @@ void main() async {
   Firestore.initialize('zenith-af3c4');
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.clear();
   String? email = prefs.getString('email');
 
   if (email != null) {

@@ -101,8 +101,9 @@ class _LoginPageState extends State<LoginPage> {
               flex: 5,
               child: Padding(
                 padding: EdgeInsets.only(
-                    left: 0.02 * MediaQuery.of(context).size.width,
-                    right: 0.02 * MediaQuery.of(context).size.width),
+                  left: 0.02 * MediaQuery.of(context).size.width,
+                  right: 0.02 * MediaQuery.of(context).size.width,
+                ),
                 child: Column(
                   children: [
                     Row(
@@ -122,64 +123,70 @@ class _LoginPageState extends State<LoginPage> {
                                     if (usernameController.text.isEmpty ||
                                         passwordController.text.isEmpty) {
                                       ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 12, left: 15),
-                                        height: 50,
-                                        decoration: const BoxDecoration(
-                                            color: Color(0xFFC72C41),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))),
-                                        child: const Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                "Oh snap! Please enter your credentials.",
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontFamily: 'DM Sans',
-                                                    color: Colors.white),
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 12, left: 15),
+                                            height: 50,
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFFC72C41),
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(20),
                                               ),
                                             ),
-                                          ],
+                                            child: const Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "Oh snap! Please enter your credentials.",
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontFamily: 'DM Sans',
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      )));
-
-                                      return;
+                                      );
                                     } else if (!valid) {
                                       ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 12, left: 15),
-                                        height: 50,
-                                        decoration: const BoxDecoration(
-                                            color: Color(0xFFC72C41),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))),
-                                        child: const Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                "Oh snap! Incorrect credentials.",
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontFamily: 'DM Sans',
-                                                    color: Colors.white),
-                                              ),
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 12, left: 15),
+                                            height: 50,
+                                            decoration: const BoxDecoration(
+                                                color: Color(0xFFC72C41),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20))),
+                                            child: const Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    "Oh snap! Incorrect credentials.",
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontFamily: 'DM Sans',
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      )));
-
-                                      return;
+                                      );
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
@@ -209,16 +216,17 @@ class _LoginPageState extends State<LoginPage> {
                                   // }
                                 })),
                         Expanded(
-                            child: Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
-                          child: TransparentButton(
-                            text: "Forgot Password",
-                            hovered: const Color.fromARGB(255, 6, 140, 145),
-                            flat: const Color(0xFF06BCC1),
-                            lineColor: const Color.fromARGB(255, 6, 140, 145),
-                            function: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 30, right: 30),
+                            child: TransparentButton(
+                              text: "Forgot Password",
+                              hovered: const Color.fromARGB(255, 6, 140, 145),
+                              flat: const Color(0xFF06BCC1),
+                              lineColor: const Color.fromARGB(255, 6, 140, 145),
+                              function: () {},
+                            ),
                           ),
-                        )),
+                        ),
                       ],
                     ),
                     Transform.translate(

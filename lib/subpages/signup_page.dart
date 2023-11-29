@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/db_api.dart';
+import 'package:project_zenith/main.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/pages/home_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:project_zenith/widgets/authpage_textfield.dart';
 import 'package:project_zenith/widgets/authpage_obscuredfield.dart';
@@ -161,7 +164,7 @@ class _SignupPageState extends State<SignupPage> {
                             Color(0xFF047679)
                           ],
                           minSize: const Size(300, 70),
-                          func: () {
+                          func: () async {
                             if (emailController.text.isEmpty ||
                                 usernameController.text.isEmpty ||
                                 passwordController.text.isEmpty ||
@@ -228,6 +231,23 @@ class _SignupPageState extends State<SignupPage> {
                                 const SnackBar(
                                     content: Text('Processing Data')),
                               );
+
+                              currentUser = await Authenticator.signUp(
+                                emailController.text,
+                                usernameController.text,
+                                passwordController.text,
+                              );
+
+                              if (context.mounted) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return const HomePage();
+                                    },
+                                  ),
+                                );
+                              }
                             }
                           },
                         ),
