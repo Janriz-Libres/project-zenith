@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: LayoutBuilder(
         builder: (context, constraints) =>
-            currentUser != null ? const HomePage() : const AuthPage(),
+            currentUser != null ? HomePage(emailAddress: currentUser!.email, username: currentUser!.username,) : const AuthPage(),
       ),
     );
   }
