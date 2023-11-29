@@ -35,7 +35,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
       ConstrainedBox(
         constraints: const BoxConstraints(
-            minWidth: 500, minHeight: 510, maxWidth: 550, maxHeight: 510),
+            minWidth: 500, minHeight: 510, maxWidth: 650, maxHeight: 510),
         child: Form(
           key: _formKey,
           child: Column(
