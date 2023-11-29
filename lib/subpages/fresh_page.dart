@@ -50,7 +50,7 @@ class FreshPage extends StatelessWidget {
                                 Color(0xFF168285)
                               ],
                               minSize: const Size(200, 50),
-                              function: () {},
+                              func: () {},
                             ),
                           ),
                         ],
@@ -69,7 +69,7 @@ class FreshPage extends StatelessWidget {
                                 Color(0xFF168285)
                               ],
                               minSize: const Size(200, 50),
-                              function: () {},
+                              func: () {},
                             ),
                           ),
                         ],

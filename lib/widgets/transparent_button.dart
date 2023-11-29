@@ -6,27 +6,26 @@ class TransparentButton extends StatelessWidget {
   final Color hovered;
   final Color lineColor;
 
-  const TransparentButton({
-    super.key,
-    required this.text,
-    required this.flat,
-    required this.hovered,
-    required this.lineColor
-  });
+  const TransparentButton(
+      {super.key,
+      required this.text,
+      required this.flat,
+      required this.hovered,
+      required this.lineColor});
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.resolveWith<Color>(
-        (Set<MaterialState> states) {
-        if (states.contains(MaterialState.hovered)) {
-          return hovered;
-        }
-        return flat; // null throus error in flutter 2.2+.
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.hovered)) {
+            return hovered;
+          }
+          return flat; // null throus error in flutter 2.2+.
         }),
       ),
-      onPressed: () { },
+      onPressed: () {},
       child: FittedBox(
         child: Text(
           text,

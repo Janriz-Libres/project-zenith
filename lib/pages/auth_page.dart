@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/subpages/signup_page.dart';
+import 'package:project_zenith/subpages/login_page.dart';
 import 'package:project_zenith/widgets/aesthetic_border.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
 
@@ -55,12 +55,12 @@ class RightPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(top: 13.5, right: 13.5, bottom: 30),
+    return Padding(
+      padding: const EdgeInsets.only(top: 13.5, right: 13.5, bottom: 30),
       child: AestheticBorder(
         borderColor: Colors.white,
         mainColor: Colors.black,
-        child: SignupPage(),
+        child: LoginPage(),
       ),
     );
   }
@@ -112,9 +112,14 @@ class AuthTitle extends StatelessWidget {
 class InputWidget extends StatelessWidget {
   final Color circleColor;
   final String labelText;
+  final TextEditingController controller;
 
-  const InputWidget(
-      {super.key, required this.circleColor, required this.labelText});
+  const InputWidget({
+    super.key,
+    required this.circleColor,
+    required this.labelText,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +143,7 @@ class InputWidget extends StatelessWidget {
           Expanded(
             flex: 8,
             child: TextFormField(
+              controller: controller,
               style: const TextStyle(fontSize: 14, color: Colors.white),
               maxLines: 1,
               decoration: InputDecoration(

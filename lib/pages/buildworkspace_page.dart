@@ -136,7 +136,7 @@ class Content extends StatelessWidget {
                                                 Color(0xFF047679)
                                               ],
                                               minSize: const Size(300, 70),
-                                              function: () {
+                                              func: () {
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(

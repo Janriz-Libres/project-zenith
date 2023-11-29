@@ -16,22 +16,25 @@ class SignupPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             const Expanded(flex: 5, child: AuthTitle(title: "SIGN UP")),
-            const Expanded(
+            Expanded(
               flex: 5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InputWidget(
-                    circleColor: Color(0xFF06BCC1),
+                    circleColor: const Color(0xFF06BCC1),
                     labelText: "Email Address",
+                    controller: TextEditingController(),
                   ),
                   InputWidget(
-                    circleColor: Color(0xFFD4515D),
+                    circleColor: const Color(0xFFD4515D),
                     labelText: "Username",
+                    controller: TextEditingController(),
                   ),
                   InputWidget(
-                    circleColor: Color(0xFFFFE66D),
+                    circleColor: const Color(0xFFFFE66D),
                     labelText: "Password",
+                    controller: TextEditingController(),
                   ),
                 ],
               ),
@@ -52,7 +55,7 @@ class SignupPage extends StatelessWidget {
                         text: "Create Account",
                         gradient: const [Color(0xFF06BCC1), Color(0xFF047679)],
                         minSize: const Size(300, 70),
-                        function: () {},
+                        func: () {},
                       ),
                     ),
                   ),
