@@ -24,9 +24,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Flexible(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                minWidth: 330, maxWidth: 385
-              ),
+              constraints: const BoxConstraints(minWidth: 330, maxWidth: 385),
               child: Container(
                 padding: const EdgeInsets.only(top: 25),
                 decoration: const BoxDecoration(
@@ -41,6 +39,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 29),
@@ -86,9 +85,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     SizedBox(
                       width: double.maxFinite,
                       child: Column(
@@ -99,11 +96,11 @@ class _HomePageState extends State<HomePage> {
                             text: "Logout",
                             func: () async {
                               await Authenticator.logout();
-              
+
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               prefs.clear();
-              
+
                               if (context.mounted) {
                                 Navigator.pushReplacement(
                                   context,
@@ -127,103 +124,93 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    const Spacer(),
-                    Expanded(
-                      flex: 12,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 24),
-                            child: Row(children: [
-                              const Text(
-                                'WORKSPACE',
-                                style: TextStyle(
-                                  color: Color(0xFF959A9C),
-                                  fontSize: 16,
-                                  fontFamily: 'Rubik',
-                                  fontWeight: FontWeight.w700,
-                                  height: 0,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () {},
-                              )
-                            ]),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 24),
+                      child: Row(children: [
+                        const Text(
+                          'WORKSPACE',
+                          style: TextStyle(
+                            color: Color(0xFF959A9C),
+                            fontSize: 16,
+                            fontFamily: 'Rubik',
+                            fontWeight: FontWeight.w700,
+                            height: 0,
                           ),
-                          DrawOption(
-                            imgPath: "assets/join_icon.png",
-                            text: "Booth Department",
-                            func: () {},
-                          ),
-                          DrawOption(
-                            imgPath: "assets/extra_icon.png",
-                            text: "Create new workspace",
-                            func: () {},
-                          ),
-                        ],
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () {},
+                        )
+                      ]),
+                    ),
+                    Container(
+                      constraints: const BoxConstraints(maxHeight: 150),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            DrawOption(
+                              imgPath: "assets/join_icon.png",
+                              text: "Booth Department",
+                              func: () {},
+                            ),
+                            DrawOption(
+                              imgPath: "assets/extra_icon.png",
+                              text: "Create new workspace",
+                              func: () {},
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    const Spacer(),
-                    Expanded(
-                      flex: 12,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 24),
-                            child: Text(
-                              'SHARED',
-                              style: TextStyle(
-                                color: Color(0xFF959A9C),
-                                fontSize: 16,
-                                fontFamily: 'Rubik',
-                                fontWeight: FontWeight.w700,
-                                height: 0,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  DrawOption(
-                                    imgPath: "assets/build_icon.png",
-                                    text: "Booth Department",
-                                    func: () {},
-                                  ),
-                                  DrawOption(
-                                    imgPath: "assets/build_icon.png",
-                                    text: "Booth Department",
-                                    func: () {},
-                                  ),
-                                  DrawOption(
-                                    imgPath: "assets/build_icon.png",
-                                    text: "Booth Department",
-                                    func: () {},
-                                  ),
-                                  DrawOption(
-                                    imgPath: "assets/build_icon.png",
-                                    text: "Booth Department",
-                                    func: () {},
-                                  ),
-                                  DrawOption(
-                                    imgPath: "assets/later_icon.png",
-                                    text: "Finance Department",
-                                    func: () {},
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 24),
+                      child: Text(
+                        'SHARED',
+                        style: TextStyle(
+                          color: Color(0xFF959A9C),
+                          fontSize: 16,
+                          fontFamily: 'Rubik',
+                          fontWeight: FontWeight.w700,
+                          height: 0,
+                        ),
                       ),
                     ),
-                    const Spacer(flex: 8),
+                    Container(
+                      constraints: const BoxConstraints(maxHeight: 150),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            DrawOption(
+                              imgPath: "assets/build_icon.png",
+                              text: "Booth Department",
+                              func: () {},
+                            ),
+                            DrawOption(
+                              imgPath: "assets/build_icon.png",
+                              text: "Booth Department",
+                              func: () {},
+                            ),
+                            DrawOption(
+                              imgPath: "assets/build_icon.png",
+                              text: "Booth Department",
+                              func: () {},
+                            ),
+                            DrawOption(
+                              imgPath: "assets/build_icon.png",
+                              text: "Booth Department",
+                              func: () {},
+                            ),
+                            DrawOption(
+                              imgPath: "assets/later_icon.png",
+                              text: "Finance Department",
+                              func: () {},
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
