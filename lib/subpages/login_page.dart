@@ -2,9 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:project_zenith/widgets/transparent_button.dart';
+import 'package:project_zenith/widgets/authpage_textfield.dart';
+import 'package:project_zenith/widgets/authpage_obscuredfield.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  final Function() function;
+
+  const LoginPage({super.key, required this.function});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool valid = true;
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +28,7 @@ class LoginPage extends StatelessWidget {
         maxWidth:  550, maxHeight: 510
       ),
       child: Form(
+        key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -29,16 +44,52 @@ class LoginPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const InputWidget(
+                    InputWidget(
+                      validator: (value) {
+                        const pattern = r'\d{1,11}(@my.xu.edu.ph)';
+                        final regex = RegExp(pattern);
+
+                        if (value!.isNotEmpty && !regex.hasMatch(value)) {
+                          setState(() {
+                            valid = false;
+                          });
+                        }
+                        else {
+                          setState(() {
+                            valid = true;
+                          });
+                        }
+                      },
+                      controller: usernameController,
+                      widget: Container(
+                        width: 17,
+                        height: 17,
+                        decoration: const ShapeDecoration(
+                          color: Color(0xFFD4515D),
+                          shape: CircleBorder(),
+                        ),
+                      ),
+                      borderColor: Colors.white,
+                      enabledColor: Colors.white,
+                      focusedColor: const Color(0xFFD4515D),
                       obscured: false,
-                      circleColor: Color(0xFFD4515D),
-                      labelText: "Enter your username",
+                      labelText: "Enter your email address",
                       ),
                     SizedBox(height: 0.02*MediaQuery.of(context).size.height),
-                    const InputWidget(
-                      circleColor: Color(0xFFFFE66D),
+                    ObscuredField(
+                      controller: passwordController,
+                      widget: Container(
+                        width: 17,
+                        height: 17,
+                        decoration: const ShapeDecoration(
+                          color: Color(0xFFFFE66D),
+                          shape: CircleBorder(),
+                        ),
+                      ),
                       labelText: "Enter your password",
-                      obscured: true,
+                      borderColor: Colors.white,
+                      enabledColor: Colors.white,
+                      focusedColor: const Color(0xFFFFE66D),
                     ),
                   ],
                 ),
@@ -51,23 +102,91 @@ class LoginPage extends StatelessWidget {
                 padding: EdgeInsets.only(left:0.02*MediaQuery.of(context).size.width, right: 0.02*MediaQuery.of(context).size.width),
                 child: Column(
                   children: [
-                    const Row(
+                    Row(
                       children: [
                         Expanded(
                           child: SubmitButton(
-                              text: "Log In",
-                              gradient: [Color(0xFF06BCC1), Color(0xFF047679)],
-                              minSize: Size(300, 70),
-                              function: test)),
-                      Expanded(
-                          child: Padding(
-                        padding: EdgeInsets.only(left: 30, right: 30),
-                        child: TransparentButton(
-                            text: "Forgot Password",
-                            hovered: Color.fromARGB(255, 6, 140, 145),
-                            flat: Color(0xFF06BCC1),
-                            lineColor: Color.fromARGB(255, 6, 140, 145)),
-                      )),
+                            text: "Log In",
+                            gradient: const [Color(0xFF06BCC1), Color(0xFF047679)],
+                            minSize: const Size(300, 70),
+                            function: () {
+                              if (_formKey.currentState!.validate()) {
+                                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                                if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Container(
+                                      padding: const EdgeInsets.only(top: 12, left: 15),
+                                      height: 50,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFC72C41),
+                                        borderRadius: BorderRadius.all(Radius.circular(20))
+                                      ),
+                                      child: const Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              "Oh snap! Please enter your credentials.",
+                                              style: TextStyle(fontSize: 18, fontFamily: 'DM Sans', color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      )
+                                    )
+                                  );
+
+                                  return;
+                                } else if (!valid) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Container(
+                                      padding: const EdgeInsets.only(top: 12, left: 15),
+                                      height: 50,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFC72C41),
+                                        borderRadius: BorderRadius.all(Radius.circular(20))
+                                      ),
+                                      child: const Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              "Oh snap! Incorrect credentials.",
+                                              style: TextStyle(fontSize: 18, fontFamily: 'DM Sans', color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      )
+                                    )
+                                  );
+
+                                  return;
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Processing Data')),
+                                  );
+                                }
+                              }
+                            }
+                          )
+                        ),
+                        const Expanded(
+                            child: Padding(
+                          padding: EdgeInsets.only(left: 30, right: 30),
+                          child: TransparentButton(
+                              text: "Forgot Password",
+                              hovered: Color.fromARGB(255, 6, 140, 145),
+                              flat: Color(0xFF06BCC1),
+                              lineColor: Color.fromARGB(255, 6, 140, 145),
+                              function: test,
+                            ),
+                          )
+                        ),
                       ],
                     ),
                     Transform.translate(
@@ -96,10 +215,10 @@ class LoginPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(50),
                         ),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Don't have an account? ",
                             style: TextStyle(
                               color: Colors.white,
@@ -111,9 +230,10 @@ class LoginPage extends StatelessWidget {
                           ),
                           TransparentButton(
                             text: "Sign Up", 
-                            flat: Color(0xFFD4515D), 
-                            hovered: Color.fromARGB(255, 168, 40, 30), 
-                            lineColor: Color(0xFFD4515D),
+                            flat: const Color(0xFFD4515D), 
+                            hovered: const Color.fromARGB(255, 168, 40, 30), 
+                            lineColor: const Color(0xFFD4515D),
+                            function: widget.function,
                           )
                         ],
                       )

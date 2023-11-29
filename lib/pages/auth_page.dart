@@ -95,11 +95,18 @@ class RightPane extends StatelessWidget {
   }
 }
 
-class InputContainer extends StatelessWidget {
+class InputContainer extends StatefulWidget {
   const InputContainer({
     super.key,
   });
 
+  @override
+  State<InputContainer> createState() => _InputContainerState();
+}
+
+class _InputContainerState extends State<InputContainer> {
+  bool show = true;
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -117,8 +124,22 @@ class InputContainer extends StatelessWidget {
           ),
         ),
       ),
-      child: const Center(child: LoginPage()),
+      child: Center(
+        child: show ? LoginPage(
+          function: () {_toggle();}
+        ) 
+        : 
+        SignupPage(
+          function: () {_toggle();},
+        )
+      ),
     );
+  }
+
+  void _toggle() {
+    setState(() {
+      show = !show;
+    });
   }
 }
 
@@ -161,79 +182,6 @@ class AuthTitle extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class InputWidget extends StatelessWidget {
-  final Color circleColor;
-  final String labelText;
-  final bool obscured;
-
-  const InputWidget(
-      {super.key, required this.circleColor, required this.labelText, required this.obscured});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              width: 17,
-              height: 17,
-              decoration: ShapeDecoration(
-                color: circleColor,
-                shape: const CircleBorder(),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 8,
-            child: TextFormField(
-              obscureText: obscured,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white
-              ),
-              maxLines: 1,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.black,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                  borderSide: const BorderSide(
-                    color: Colors.white,
-                    width: 2,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF06BCC1),
-                      width: 2,
-                    ),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      width: 2,
-                      color: Colors.white,
-                    ),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  contentPadding: const EdgeInsets.only(left: 20, right: 20),
-                  hintText: labelText,
-                  hintStyle: const TextStyle(
-                      color: Color.fromARGB(255, 144, 142, 142),
-                      fontWeight: FontWeight.normal)),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -319,3 +267,6 @@ class CheckWidget extends StatelessWidget {
     // ),
     // );
 
+changePage() {
+
+}
