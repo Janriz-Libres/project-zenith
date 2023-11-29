@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 29),
@@ -84,9 +85,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     SizedBox(
                       width: double.maxFinite,
                       child: Column(
@@ -164,6 +163,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20),
                     const Padding(
                       padding: EdgeInsets.only(left: 24),
                       child: Text(
