@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/subpages/fresh_page.dart';
+import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
 
 class HomePage extends StatelessWidget {
@@ -8,6 +9,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF8F7F4),
       body: Row(
         children: [
           Expanded(
@@ -159,8 +161,8 @@ class HomePage extends StatelessWidget {
           ),
           const Expanded(
             flex: 3,
-            child: FreshPage(),
-          )
+            child: ProfilePage(),
+          ),
         ],
       ),
     );

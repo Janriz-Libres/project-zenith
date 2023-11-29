@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/subpages/login_page.dart';
 import 'package:project_zenith/subpages/signup_page.dart';
+import 'package:project_zenith/widgets/aesthetic_border.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
 
 class AuthPage extends StatelessWidget {
@@ -48,89 +49,30 @@ class AuthPage extends StatelessWidget {
   }
 }
 
-class RightPane extends StatelessWidget {
+class RightPane extends StatefulWidget {
   const RightPane({
     super.key,
   });
 
   @override
+  State<RightPane> createState() => _RightPaneState();
+}
+
+class _RightPaneState extends State<RightPane> {
+  bool show = true; 
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 13.5, right: 13.5, bottom: 30),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Image.asset('assets/signup_ellipse_cropped.png'),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 55.5, right: 55.5),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  width: 26.67,
-                  margin: const EdgeInsets.only(right: 6),
-                  decoration: const BoxDecoration(color: Colors.white),
-                ),
-                Container(
-                  width: 13.33,
-                  margin: const EdgeInsets.only(right: 6),
-                  decoration: const BoxDecoration(color: Colors.white),
-                ),
-                Container(
-                  width: 6.67,
-                  margin: const EdgeInsets.only(right: 6),
-                  decoration: const BoxDecoration(color: Colors.white),
-                ),
-                const Expanded(
-                  child: InputContainer(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class InputContainer extends StatefulWidget {
-  const InputContainer({
-    super.key,
-  });
-
-  @override
-  State<InputContainer> createState() => _InputContainerState();
-}
-
-class _InputContainerState extends State<InputContainer> {
-  bool show = true;
-  
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 42, right: 42),
-      decoration: const ShapeDecoration(
-        color: Colors.black,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 4,
-            color: Colors.white,
-          ),
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(15),
-            bottomRight: Radius.circular(15),
-          ),
-        ),
-      ),
-      child: Center(
+      child: AestheticBorder(
+        borderColor: Colors.white,
+        mainColor: Colors.black,
+        child: Center(
         child: show ? LoginPage(
-          function: () {_toggle();}
-        ) 
-        : 
-        SignupPage(
-          function: () {_toggle();},
+          function: () {_toggle();}) : 
+          SignupPage(
+            function: () {_toggle();}),
         )
       ),
     );

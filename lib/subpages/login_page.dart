@@ -59,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                             valid = true;
                           });
                         }
+                        return null;
                       },
                       controller: usernameController,
                       widget: Container(
