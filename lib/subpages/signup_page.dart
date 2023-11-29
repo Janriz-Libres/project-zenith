@@ -111,7 +111,7 @@ class _SignupPageState extends State<SignupPage> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const HomePage();
+            return HomePage(emailAddress: currentUser!.email, username: currentUser!.username,);
           },
         ),
       );

@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
             ScaffoldMessenger.of(context).removeCurrentSnackBar();
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => HomePage(emailAddress: currentUser!.email, username: currentUser!.username,)),
             );
           }
         } on AuthException {
