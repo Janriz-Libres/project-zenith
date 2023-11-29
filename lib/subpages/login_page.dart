@@ -103,6 +103,7 @@ class _LoginPageState extends State<LoginPage> {
           await prefs.setString('pw', currentUser!.password);
 
           if (context.mounted) {
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomePage()),
