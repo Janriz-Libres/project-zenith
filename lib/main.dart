@@ -1,13 +1,26 @@
+import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:project_zenith/db_api.dart';
+import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+User? currentUser;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // FirebaseAuth.initialize(
-  //     'AIzaSyBoCBbW-wmUlBDZ7dUblzEpsbAJwpYP6rU', VolatileStore());
-  // Firestore.initialize('zenith-af3c4');
-  // await Authenticator.signIn('test_user@gmail.com', 'test_pw');
+  FirebaseAuth.initialize(
+      'AIzaSyBoCBbW-wmUlBDZ7dUblzEpsbAJwpYP6rU', VolatileStore());
+  Firestore.initialize('zenith-af3c4');
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? email = prefs.getString('email');
+
+  if (email != null) {
+    currentUser =
+        await Authenticator.signIn(email, prefs.getString('pw') as String);
+  }
 
   runApp(const MyApp());
 
@@ -27,10 +40,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Zenith',
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: LayoutBuilder(
+        builder: (context, constraints) =>
+            currentUser != null ? const HomePage() : const AuthPage(),
+      ),
     );
   }
 }

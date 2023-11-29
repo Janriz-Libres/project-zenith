@@ -7,10 +7,7 @@ import 'package:project_zenith/widgets/authpage_obscuredfield.dart';
 class SignupPage extends StatefulWidget {
   final Function() function;
 
-  const SignupPage({
-    super.key,
-    required this.function
-  });
+  const SignupPage({super.key, required this.function});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
@@ -28,30 +25,26 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: BackButton(onPressed: widget.function),
-        ),
-        ConstrainedBox(
+    return Stack(children: [
+      Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: BackButton(onPressed: widget.function),
+      ),
+      ConstrainedBox(
         constraints: const BoxConstraints(
-          minWidth: 500, minHeight: 510,
-          maxWidth: 550, maxHeight:  510
-        ),
+            minWidth: 500, minHeight: 510, maxWidth: 550, maxHeight: 510),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Expanded(
-                flex: 4,
-                child: AuthTitle(title: "SIGN UP")
-              ),
+              const Expanded(flex: 4, child: AuthTitle(title: "SIGN UP")),
               Expanded(
                 flex: 8,
                 child: Padding(
-                  padding: EdgeInsets.only(left:0.02*MediaQuery.of(context).size.width, right: 0.02*MediaQuery.of(context).size.width),
+                  padding: EdgeInsets.only(
+                      left: 0.02 * MediaQuery.of(context).size.width,
+                      right: 0.02 * MediaQuery.of(context).size.width),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -64,8 +57,7 @@ class _SignupPageState extends State<SignupPage> {
                             setState(() {
                               validEmailAddress = false;
                             });
-                          }
-                          else {
+                          } else {
                             setState(() {
                               validEmailAddress = true;
                             });
@@ -85,7 +77,7 @@ class _SignupPageState extends State<SignupPage> {
                         focusedColor: const Color(0xFF06BCC1),
                         labelText: "Email Address",
                         obscured: false,
-                        ),
+                      ),
                       InputWidget(
                         validator: (value) {
                           const pattern = r'[A-Z][a-z]+([][A-Z][a-z]+)*';
@@ -95,8 +87,7 @@ class _SignupPageState extends State<SignupPage> {
                             setState(() {
                               validUsername = false;
                             });
-                          }
-                          else {
+                          } else {
                             setState(() {
                               validUsername = true;
                             });
@@ -116,7 +107,7 @@ class _SignupPageState extends State<SignupPage> {
                         focusedColor: const Color(0xFFD4515D),
                         labelText: "Username",
                         obscured: false,
-                        ),
+                      ),
                       ObscuredField(
                         controller: passwordController,
                         widget: Container(
@@ -164,71 +155,82 @@ class _SignupPageState extends State<SignupPage> {
                       offset: const Offset(0, 10),
                       child: SizedBox(
                         child: SubmitButton(
-                        text: "Create Account",
-                        gradient: const [Color(0xFF06BCC1), Color(0xFF047679)],
-                        minSize: const Size(300, 70),
-                        function: () {
-                          if (emailController.text.isEmpty || usernameController.text.isEmpty || passwordController.text.isEmpty || retypeController.text.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                          text: "Create Account",
+                          gradient: const [
+                            Color(0xFF06BCC1),
+                            Color(0xFF047679)
+                          ],
+                          minSize: const Size(300, 70),
+                          func: () {
+                            if (emailController.text.isEmpty ||
+                                usernameController.text.isEmpty ||
+                                passwordController.text.isEmpty ||
+                                retypeController.text.isEmpty) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                       content: Container(
-                                      padding: const EdgeInsets.only(top: 12, left: 15),
-                                      height: 50,
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xFFC72C41),
-                                        borderRadius: BorderRadius.all(Radius.circular(20))
+                                padding:
+                                    const EdgeInsets.only(top: 12, left: 15),
+                                height: 50,
+                                decoration: const BoxDecoration(
+                                    color: Color(0xFFC72C41),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                child: const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Oh snap! Please enter your credentials.",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: 'DM Sans',
+                                            color: Colors.white),
                                       ),
-                                      child: const Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              "Oh snap! Please enter your credentials.",
-                                              style: TextStyle(fontSize: 18, fontFamily: 'DM Sans', color: Colors.white),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      )
-                                    )
-                                  );
+                                    ),
+                                  ],
+                                ),
+                              )));
 
-                                  return;
-                                } else if (validEmailAddress || validUsername) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                              return;
+                            } else if (validEmailAddress || validUsername) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                       content: Container(
-                                      padding: const EdgeInsets.only(top: 12, left: 15),
-                                      height: 50,
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xFFC72C41),
-                                        borderRadius: BorderRadius.all(Radius.circular(20))
+                                padding:
+                                    const EdgeInsets.only(top: 12, left: 15),
+                                height: 50,
+                                decoration: const BoxDecoration(
+                                    color: Color(0xFFC72C41),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                child: const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Oh snap! Incorrect credentials.",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: 'DM Sans',
+                                            color: Colors.white),
                                       ),
-                                      child: const Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              "Oh snap! Incorrect credentials.",
-                                              style: TextStyle(fontSize: 18, fontFamily: 'DM Sans', color: Colors.white),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      )
-                                    )
-                                  );
+                                    ),
+                                  ],
+                                ),
+                              )));
 
-                                  return;
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Processing Data')),
-                                  );
-                                }
-                        },
-                      ),
+                              return;
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Processing Data')),
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -238,7 +240,6 @@ class _SignupPageState extends State<SignupPage> {
           ),
         ),
       ),
-      ]
-    );
+    ]);
   }
 }

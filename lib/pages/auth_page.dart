@@ -59,22 +59,24 @@ class RightPane extends StatefulWidget {
 }
 
 class _RightPaneState extends State<RightPane> {
-  bool show = true; 
+  bool show = true;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 13.5, right: 13.5, bottom: 30),
       child: AestheticBorder(
-        borderColor: Colors.white,
-        mainColor: Colors.black,
-        child: Center(
-        child: show ? LoginPage(
-          function: () {_toggle();}) : 
-          SignupPage(
-            function: () {_toggle();}),
-        )
-      ),
+          borderColor: Colors.white,
+          mainColor: Colors.black,
+          child: Center(
+            child: show
+                ? LoginPage(function: () {
+                    _toggle();
+                  })
+                : SignupPage(function: () {
+                    _toggle();
+                  }),
+          )),
     );
   }
 
@@ -176,39 +178,37 @@ class CheckWidget extends StatelessWidget {
   }
 }
 
-    // return Container(
-    //   padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 12),
-    //   decoration: ShapeDecoration(
-    //     gradient: const LinearGradient(
-    //       begin: Alignment(0, -1),
-    //       end: Alignment(0, 1),
-    //       colors: [
-    //         Color(0xFF06BCC1),
-    //         Color(0xFF047679),
-    //       ],
-    //     ),
-    //     shape: RoundedRectangleBorder(
-    //       side: const BorderSide(
-    //         width: 4,
-    //         strokeAlign: BorderSide.strokeAlignCenter,
-    //         color: Color(0xFF06BCC1),
-    //       ),
-    //       borderRadius: BorderRadius.circular(8),
-    //     ),
-    //   ),
-    // child: Text(
-    //   text,
-    //   textAlign: TextAlign.center,
-    //   style: const TextStyle(
-    //     color: Colors.white,
-    //     fontSize: 20,
-    //     fontFamily: 'DM Sans',
-    //     fontWeight: FontWeight.w700,
-    //     height: 0,
-    //   ),
-    // ),
-    // );
+// return Container(
+//   padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 12),
+//   decoration: ShapeDecoration(
+//     gradient: const LinearGradient(
+//       begin: Alignment(0, -1),
+//       end: Alignment(0, 1),
+//       colors: [
+//         Color(0xFF06BCC1),
+//         Color(0xFF047679),
+//       ],
+//     ),
+//     shape: RoundedRectangleBorder(
+//       side: const BorderSide(
+//         width: 4,
+//         strokeAlign: BorderSide.strokeAlignCenter,
+//         color: Color(0xFF06BCC1),
+//       ),
+//       borderRadius: BorderRadius.circular(8),
+//     ),
+//   ),
+// child: Text(
+//   text,
+//   textAlign: TextAlign.center,
+//   style: const TextStyle(
+//     color: Colors.white,
+//     fontSize: 20,
+//     fontFamily: 'DM Sans',
+//     fontWeight: FontWeight.w700,
+//     height: 0,
+//   ),
+// ),
+// );
 
-changePage() {
-
-}
+changePage() {}

@@ -22,8 +22,8 @@ class JoinWorkspacePage extends StatelessWidget {
             child: Image.asset("assets/right_bg.png"),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
+            padding: const EdgeInsets.only(
+                top: 18, bottom: 80, left: 120, right: 120),
             child: Content(),
           ),
           const Copyright(mLeft: 85, mBot: 30),
@@ -116,9 +116,8 @@ class Content extends StatelessWidget {
                             Expanded(
                               flex: 4,
                               child: WorkspaceField(
-                                controller: joinController,
-                                label: "Invited to a Workspace?"
-                              ),
+                                  controller: joinController,
+                                  label: "Invited to a Workspace?"),
                             ),
                             const SizedBox(height: 30),
                             const Expanded(
@@ -130,7 +129,7 @@ class Content extends StatelessWidget {
                                       Color(0xFF047679)
                                     ],
                                     minSize: Size(300, 70),
-                                    function: test)),
+                                    func: test)),
                             const SizedBox(height: 30),
                             const Expanded(
                                 flex: 2,

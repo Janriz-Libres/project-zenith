@@ -97,7 +97,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                   Color(0xFF168285)
                                 ],
                                 minSize: const Size(300, 70),
-                                function: () => {
+                                func: () => {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -124,7 +124,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                   Color(0xFFB12935)
                                 ],
                                 minSize: const Size(300, 70),
-                                function: () => {
+                                func: () => {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -151,7 +151,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                 Color(0xFF927E1D)
                               ],
                               minSize: const Size(300, 70),
-                              function: () => {
+                              func: () => {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

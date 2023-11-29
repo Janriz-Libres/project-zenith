@@ -4,14 +4,14 @@ class SubmitButton extends StatelessWidget {
   final String text;
   final List<Color> gradient;
   final Size minSize;
-  final Function() function;
+  final Function() func;
 
   const SubmitButton({
     super.key,
     required this.text,
     required this.gradient,
     required this.minSize,
-    required this.function,
+    required this.func,
   });
 
   @override
@@ -26,7 +26,7 @@ class SubmitButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: ElevatedButton(
-        onPressed: function,
+        onPressed: func,
         style: ElevatedButton.styleFrom(
             minimumSize: minSize,
             backgroundColor: Colors.transparent,

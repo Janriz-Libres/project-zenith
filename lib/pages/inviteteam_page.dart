@@ -144,7 +144,7 @@ class Content extends StatelessWidget {
                                                 Color(0xFF047679)
                                               ],
                                               minSize: Size(300, 70),
-                                              function: test)),
+                                              func: test)),
                                       Expanded(
                                           child: Padding(
                                         padding: EdgeInsets.only(
