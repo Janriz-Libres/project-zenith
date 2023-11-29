@@ -70,12 +70,16 @@ class _RightPaneState extends State<RightPane> {
           mainColor: Colors.black,
           child: Center(
             child: show
-                ? LoginPage(function: () {
-                    _toggle();
-                  })
-                : SignupPage(function: () {
-                    _toggle();
-                  }),
+                ? LoginPage(
+                    function: () {
+                      _toggle();
+                    },
+                  )
+                : SignupPage(
+                    function: () {
+                      _toggle();
+                    },
+                  ),
           )),
     );
   }

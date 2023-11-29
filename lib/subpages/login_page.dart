@@ -1,5 +1,9 @@
+import 'package:firedart/auth/exceptions.dart';
 import 'package:flutter/material.dart';
+import 'package:project_zenith/db_api.dart';
+import 'package:project_zenith/main.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/pages/home_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:project_zenith/widgets/transparent_button.dart';
 import 'package:project_zenith/widgets/authpage_textfield.dart';
@@ -19,7 +23,97 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+
   bool valid = true;
+
+  void validateForm() async {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Container(
+              padding: const EdgeInsets.only(top: 12, left: 15),
+              height: 50,
+              decoration: const BoxDecoration(
+                color: Color(0xFFC72C41),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Oh snap! Please enter your credentials.",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'DM Sans',
+                          color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      } else if (!valid) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Container(
+              padding: const EdgeInsets.only(top: 12, left: 15),
+              height: 50,
+              decoration: const BoxDecoration(
+                  color: Color(0xFFC72C41),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Oh snap! Incorrect credentials.",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'DM Sans',
+                          color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Processing Data')),
+        );
+
+        try {
+          currentUser = await Authenticator.signIn(
+            usernameController.text,
+            passwordController.text,
+          );
+
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          await prefs.setString('email', currentUser!.email);
+          await prefs.setString('pw', currentUser!.password);
+
+          if (context.mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            );
+          }
+        } on AuthException {
+          // TODO
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,112 +203,15 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       children: [
                         Expanded(
-                            child: SubmitButton(
-                                text: "Log In",
-                                gradient: const [
-                                  Color(0xFF06BCC1),
-                                  Color(0xFF047679)
-                                ],
-                                minSize: const Size(300, 70),
-                                func: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    ScaffoldMessenger.of(context)
-                                        .removeCurrentSnackBar();
-                                    if (usernameController.text.isEmpty ||
-                                        passwordController.text.isEmpty) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Container(
-                                            padding: const EdgeInsets.only(
-                                                top: 12, left: 15),
-                                            height: 50,
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFFC72C41),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(20),
-                                              ),
-                                            ),
-                                            child: const Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    "Oh snap! Please enter your credentials.",
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        fontFamily: 'DM Sans',
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    } else if (!valid) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Container(
-                                            padding: const EdgeInsets.only(
-                                                top: 12, left: 15),
-                                            height: 50,
-                                            decoration: const BoxDecoration(
-                                                color: Color(0xFFC72C41),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20))),
-                                            child: const Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                    "Oh snap! Incorrect credentials.",
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        fontFamily: 'DM Sans',
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text('Processing Data')),
-                                      );
-                                    }
-                                  }
-
-                                  // func: () async {
-                                  //   try {
-                                  //     currentUser = await Authenticator.signIn(
-                                  //       usernameController.text,
-                                  //       passwordController.text,
-                                  //     );
-
-                                  //     SharedPreferences prefs =
-                                  //         await SharedPreferences.getInstance();
-
-                                  //     await prefs.setString(
-                                  //         'email', currentUser!.email);
-                                  //     await prefs.setString(
-                                  //         'pw', currentUser!.password);
-                                  //   } on AuthException {
-                                  //     // TODO
-                                  //   }
-                                  // }
-                                })),
+                          child: SubmitButton(
+                              text: "Log In",
+                              gradient: const [
+                                Color(0xFF06BCC1),
+                                Color(0xFF047679)
+                              ],
+                              minSize: const Size(300, 70),
+                              func: validateForm),
+                        ),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 30, right: 30),
