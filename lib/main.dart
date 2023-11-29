@@ -7,6 +7,33 @@ import 'package:project_zenith/pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 User? currentUser;
+List<Workspace>? ownedWorkspaces;
+List<Workspace>? sharedWorkspaces;
+List<WorkList>? lists;
+List<Task>? tasks;
+
+void initializeModels() async {
+  ownedWorkspaces = await currentUser?.getOwnedWorkspaces();
+  sharedWorkspaces = await currentUser?.getSharedWorkspaces();
+
+  if (ownedWorkspaces != null) {
+    for (Workspace space in ownedWorkspaces!) {
+      lists?.addAll(await space.getLists());
+    }
+  }
+
+  if (sharedWorkspaces != null) {
+    for (Workspace space in sharedWorkspaces!) {
+      lists?.addAll(await space.getLists());
+    }
+  }
+
+  if (lists != null) {
+    for (WorkList list in lists!) {
+      tasks?.addAll(await list.getTasks());
+    }
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +47,8 @@ void main() async {
   if (email != null) {
     currentUser =
         await Authenticator.signIn(email, prefs.getString('pw') as String);
+
+    initializeModels();
   }
 
   runApp(const MyApp());

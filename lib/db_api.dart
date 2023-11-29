@@ -94,25 +94,10 @@ class User {
     );
   }
 
-  /// Returns a list of Workspace objects where the current user is an owner or a member of.
-  Future<List<Workspace>> getWorkspaces() async {
-    var userIsOwnerQuery = await Firestore.instance
-        .collection('workspaces')
-        .where('owner', isEqualTo: this)
-        .get();
-
-    var userIsMemberQuery = await Firestore.instance
-        .collection('workspaces')
-        .where('members', arrayContains: this)
-        .get();
-
-    List<Document> allQueries = [];
-    allQueries.addAll(userIsOwnerQuery);
-    allQueries.addAll(userIsMemberQuery);
-
+  Future<List<Workspace>> _getWorkspaces(List<Document> docs) async {
     List<Workspace> workspaces = [];
 
-    for (final Document workspace in allQueries) {
+    for (final Document workspace in docs) {
       Workspace newWorkspace = Workspace(
         id: workspace.id,
         title: workspace['title'],
@@ -124,6 +109,29 @@ class User {
     }
 
     return workspaces;
+  }
+
+  /// Returns a list of Workspace objects where the current user is an owner or a member of.
+  Future<List<Workspace>> getOwnedWorkspaces() async {
+    var userReference = Firestore.instance.collection('users').document(id);
+
+    var userQuery = await Firestore.instance
+        .collection('workspaces')
+        .where('owner', isEqualTo: userReference)
+        .get();
+
+    return await _getWorkspaces(userQuery);
+  }
+
+  Future<List<Workspace>> getSharedWorkspaces() async {
+    var userReference = Firestore.instance.collection('users').document(id);
+
+    var userQuery = await Firestore.instance
+        .collection('workspaces')
+        .where('members', arrayContains: userReference)
+        .get();
+
+    return await _getWorkspaces(userQuery);
   }
 }
 
@@ -153,6 +161,28 @@ class Workspace {
       name: name,
       workspace: this,
     );
+  }
+
+  Future<List<WorkList>> getLists() async {
+    var reference = Firestore.instance.collection('workspaces').document(id);
+
+    var query = await Firestore.instance
+        .collection('lists')
+        .where('workspace', isEqualTo: reference)
+        .get();
+
+    List<WorkList> lists = [];
+
+    for (final Document list in query) {
+      WorkList newWorkspace = WorkList(
+        id: list.id,
+        name: list['name'],
+        workspace: list['workspace'],
+      );
+      lists.add(newWorkspace);
+    }
+
+    return lists;
   }
 }
 
@@ -184,6 +214,31 @@ class WorkList {
       deadline: null,
       list: this,
     );
+  }
+
+  Future<List<Task>> getTasks() async {
+    var reference = Firestore.instance.collection('lists').document(id);
+
+    var query = await Firestore.instance
+        .collection('tasks')
+        .where('list', isEqualTo: reference)
+        .get();
+
+    List<Task> tasks = [];
+
+    for (final Document task in query) {
+      Task newWorkspace = Task(
+        id: task.id,
+        assigned: task['assigned'],
+        deadline: task['deadline'],
+        description: task['description'],
+        list: task['list'],
+        title: task['title'],
+      );
+      tasks.add(newWorkspace);
+    }
+
+    return tasks;
   }
 }
 

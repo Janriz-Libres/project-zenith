@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/pages/auth_page.dart';
-import 'package:project_zenith/subpages/fresh_page.dart';
 import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final String emailAddress;
   final String username;
-  const HomePage({super.key, required this.emailAddress, required this.username});
+  const HomePage(
+      {super.key, required this.emailAddress, required this.username});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +57,7 @@ class HomePage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                username,
+                                widget.username,
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 20,
@@ -62,7 +67,7 @@ class HomePage extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                emailAddress,
+                                widget.emailAddress,
                                 style: const TextStyle(
                                   color: Color(0xFF636769),
                                   fontSize: 15,
@@ -77,7 +82,9 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   SizedBox(
                     width: double.maxFinite,
                     height: 150,
@@ -126,24 +133,23 @@ class HomePage extends StatelessWidget {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(left: 24),
-                          child: Row(
-                            children: [
-                              const Text(
-                                'WORKSPACE',
-                                style: TextStyle(
-                                  color: Color(0xFF959A9C),
-                                  fontSize: 16,
-                                  fontFamily: 'Rubik',
-                                  fontWeight: FontWeight.w700,
-                                  height: 0,
-                                ),
+                          child: Row(children: [
+                            const Text(
+                              'WORKSPACE',
+                              style: TextStyle(
+                                color: Color(0xFF959A9C),
+                                fontSize: 16,
+                                fontFamily: 'Rubik',
+                                fontWeight: FontWeight.w700,
+                                height: 0,
                               ),
-                              const SizedBox(width: 10),
-                              IconButton(icon: const Icon(Icons.add), 
-                                onPressed: () {}, 
-                              )
-                            ]
-                          ),
+                            ),
+                            const SizedBox(width: 10),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () {},
+                            )
+                          ]),
                         ),
                         DrawOption(
                           imgPath: "assets/join_icon.png",
@@ -178,15 +184,38 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        DrawOption(
-                          imgPath: "assets/build_icon.png",
-                          text: "Booth Department",
-                          func: () {},
-                        ),
-                        DrawOption(
-                          imgPath: "assets/later_icon.png",
-                          text: "Finance Department",
-                          func: () {},
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                DrawOption(
+                                  imgPath: "assets/build_icon.png",
+                                  text: "Booth Department",
+                                  func: () {},
+                                ),
+                                DrawOption(
+                                  imgPath: "assets/build_icon.png",
+                                  text: "Booth Department",
+                                  func: () {},
+                                ),
+                                DrawOption(
+                                  imgPath: "assets/build_icon.png",
+                                  text: "Booth Department",
+                                  func: () {},
+                                ),
+                                DrawOption(
+                                  imgPath: "assets/build_icon.png",
+                                  text: "Booth Department",
+                                  func: () {},
+                                ),
+                                DrawOption(
+                                  imgPath: "assets/later_icon.png",
+                                  text: "Finance Department",
+                                  func: () {},
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -198,7 +227,10 @@ class HomePage extends StatelessWidget {
           ),
           Expanded(
             flex: 3,
-            child: ProfilePage(username: username, emailAddress: emailAddress,),
+            child: ProfilePage(
+              username: widget.username,
+              emailAddress: widget.emailAddress,
+            ),
           ),
         ],
       ),

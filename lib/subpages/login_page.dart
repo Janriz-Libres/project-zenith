@@ -102,6 +102,8 @@ class _LoginPageState extends State<LoginPage> {
           await prefs.setString('email', currentUser!.email);
           await prefs.setString('pw', currentUser!.password);
 
+          initializeModels();
+
           if (context.mounted) {
             ScaffoldMessenger.of(context).removeCurrentSnackBar();
             Navigator.pushReplacement(
