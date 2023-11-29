@@ -105,6 +105,8 @@ class _SignupPageState extends State<SignupPage> {
       passwordController.text,
     );
 
+    initializeModels();
+
     if (context.mounted) {
       Navigator.pushReplacement(
         context,
