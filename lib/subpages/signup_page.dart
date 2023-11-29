@@ -106,6 +106,7 @@ class _SignupPageState extends State<SignupPage> {
     );
 
     if (context.mounted) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -152,6 +153,7 @@ class _SignupPageState extends State<SignupPage> {
                           } else {
                             setState(() => validEmailAddress = true);
                           }
+                          return null;
                         },
                         controller: emailController,
                         widget: Container(
@@ -178,6 +180,7 @@ class _SignupPageState extends State<SignupPage> {
                           } else {
                             setState(() => validUsername = true);
                           }
+                          return null;
                         },
                         controller: usernameController,
                         widget: Container(
