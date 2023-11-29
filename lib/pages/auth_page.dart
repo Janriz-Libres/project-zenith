@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/subpages/signup_page.dart';
+import 'package:project_zenith/widgets/aesthetic_border.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
 
 class AuthPage extends StatelessWidget {
@@ -54,69 +55,13 @@ class RightPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 13.5, right: 13.5, bottom: 30),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Image.asset('assets/signup_ellipse_cropped.png'),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 55.5, right: 55.5),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  width: 26.67,
-                  margin: const EdgeInsets.only(right: 6),
-                  decoration: const BoxDecoration(color: Colors.white),
-                ),
-                Container(
-                  width: 13.33,
-                  margin: const EdgeInsets.only(right: 6),
-                  decoration: const BoxDecoration(color: Colors.white),
-                ),
-                Container(
-                  width: 6.67,
-                  margin: const EdgeInsets.only(right: 6),
-                  decoration: const BoxDecoration(color: Colors.white),
-                ),
-                const Expanded(
-                  child: InputContainer(),
-                ),
-              ],
-            ),
-          ),
-        ],
+    return const Padding(
+      padding: EdgeInsets.only(top: 13.5, right: 13.5, bottom: 30),
+      child: AestheticBorder(
+        borderColor: Colors.white,
+        mainColor: Colors.black,
+        child: SignupPage(),
       ),
-    );
-  }
-}
-
-class InputContainer extends StatelessWidget {
-  const InputContainer({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 42, right: 42),
-      decoration: const ShapeDecoration(
-        color: Colors.black,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 4,
-            color: Colors.white,
-          ),
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(15),
-            bottomRight: Radius.circular(15),
-          ),
-        ),
-      ),
-      child: const SignupPage(),
     );
   }
 }

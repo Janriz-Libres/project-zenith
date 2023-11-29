@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/pages/buildworkspace_page.dart';
 import 'package:project_zenith/pages/home_page.dart';
+import 'package:project_zenith/pages/landing_page.dart';
+import 'package:project_zenith/subpages/welcome_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
