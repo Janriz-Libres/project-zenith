@@ -6,7 +6,10 @@ import 'package:project_zenith/widgets/draw_option.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String emailAddress;
+  final String username;
+  const HomePage(
+      {super.key, required this.emailAddress, required this.username});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -48,14 +51,14 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         const Spacer(),
-                        const Expanded(
-                          flex: 10,
+                        Expanded(
+                          flex: 18,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "NAZIB DIMAL",
-                                style: TextStyle(
+                                widget.username,
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 20,
                                   fontFamily: 'Rubik',
@@ -64,8 +67,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Text(
-                                '20230000000@my.xu.edu.ph',
-                                style: TextStyle(
+                                widget.emailAddress,
+                                style: const TextStyle(
                                   color: Color(0xFF636769),
                                   fontSize: 15,
                                   fontFamily: 'Rubik',
@@ -79,11 +82,14 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  const Spacer(),
-                  Expanded(
-                    flex: 10,
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: double.maxFinite,
+                    height: 150,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         DrawOption(
                           imgPath: "assets/white_logo.png",
@@ -120,23 +126,30 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const Spacer(),
                   Expanded(
-                    flex: 8,
+                    flex: 12,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(left: 24),
-                          child: Text(
-                            'WORKSPACE',
-                            style: TextStyle(
-                              color: Color(0xFF959A9C),
-                              fontSize: 16,
-                              fontFamily: 'Rubik',
-                              fontWeight: FontWeight.w700,
-                              height: 0,
+                          child: Row(children: [
+                            const Text(
+                              'WORKSPACE',
+                              style: TextStyle(
+                                color: Color(0xFF959A9C),
+                                fontSize: 16,
+                                fontFamily: 'Rubik',
+                                fontWeight: FontWeight.w700,
+                                height: 0,
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 10),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () {},
+                            )
+                          ]),
                         ),
                         DrawOption(
                           imgPath: "assets/join_icon.png",
@@ -153,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const Spacer(),
                   Expanded(
-                    flex: 8,
+                    flex: 12,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,9 +225,12 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          const Expanded(
+          Expanded(
             flex: 3,
-            child: ProfilePage(),
+            child: ProfilePage(
+              username: widget.username,
+              emailAddress: widget.emailAddress,
+            ),
           ),
         ],
       ),

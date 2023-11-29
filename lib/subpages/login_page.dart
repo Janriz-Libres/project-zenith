@@ -105,9 +105,10 @@ class _LoginPageState extends State<LoginPage> {
           initializeModels();
 
           if (context.mounted) {
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => HomePage(emailAddress: currentUser!.email, username: currentUser!.username,)),
             );
           }
         } on AuthException {
@@ -121,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(
-          minWidth: 500, minHeight: 510, maxWidth: 550, maxHeight: 510),
+          minWidth: 500, minHeight: 510, maxWidth: 650, maxHeight: 510),
       child: Form(
         key: _formKey,
         child: Column(

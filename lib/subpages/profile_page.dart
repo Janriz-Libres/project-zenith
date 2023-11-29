@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:project_zenith/widgets/aesthetic_border.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  final String username;
+  final String emailAddress;
+  
+  const ProfilePage({super.key, required this.username, required this.emailAddress});
 
   @override
   Widget build(BuildContext context) {
-    return const FractionallySizedBox(
+    return FractionallySizedBox(
       heightFactor: 0.9,
       widthFactor: 0.6,
       child: Padding(
-        padding: EdgeInsets.only(bottom: 50),
+        padding: const EdgeInsets.only(bottom: 50),
         child: AestheticBorder(
           borderColor: Colors.black,
-          mainColor: Color(0xFFF8F7F4),
-          child: ProfileView(),
+          mainColor: const Color(0xFFF8F7F4),
+          child: ProfileView(username: username, emailAddress: emailAddress,),
         ),
       ),
     );
@@ -22,7 +25,10 @@ class ProfilePage extends StatelessWidget {
 }
 
 class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
+  final String username;
+  final String emailAddress;
+  
+  const ProfileView({super.key, required this.username, required this.emailAddress});
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +67,9 @@ class ProfileView extends StatelessWidget {
                           color: Color(0xFF06BCC1),
                           borderRadius: BorderRadius.all(Radius.circular(4)),
                         ),
-                        child: const Text(
-                          "20230000000",
-                          style: TextStyle(
+                        child: SelectableText(
+                          emailAddress.split('@')[0],
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 15,
                             fontFamily: 'Rubik',
@@ -83,9 +89,9 @@ class ProfileView extends StatelessWidget {
                       color: Color(0xFFD4515D),
                       borderRadius: BorderRadius.all(Radius.circular(4)),
                     ),
-                    child: const Text(
-                      'NAZIB DIMAL',
-                      style: TextStyle(
+                    child: SelectableText(
+                      username,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 15,
                         fontFamily: 'Rubik',
@@ -103,9 +109,9 @@ class ProfileView extends StatelessWidget {
                       color: Color(0xFFFFE66D),
                       borderRadius: BorderRadius.all(Radius.circular(4)),
                     ),
-                    child: const Text(
-                      '20230000000@my.xu.edu.ph',
-                      style: TextStyle(
+                    child: SelectableText(
+                      emailAddress,
+                      style: const TextStyle(
                         color: Color(0xFF646869),
                         fontSize: 15,
                         fontFamily: 'Rubik',

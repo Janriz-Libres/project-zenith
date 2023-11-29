@@ -108,11 +108,12 @@ class _SignupPageState extends State<SignupPage> {
     initializeModels();
 
     if (context.mounted) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) {
-            return const HomePage();
+            return HomePage(emailAddress: currentUser!.email, username: currentUser!.username,);
           },
         ),
       );
@@ -128,7 +129,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
       ConstrainedBox(
         constraints: const BoxConstraints(
-            minWidth: 500, minHeight: 510, maxWidth: 550, maxHeight: 510),
+            minWidth: 500, minHeight: 510, maxWidth: 650, maxHeight: 510),
         child: Form(
           key: _formKey,
           child: Column(
@@ -154,6 +155,7 @@ class _SignupPageState extends State<SignupPage> {
                           } else {
                             setState(() => validEmailAddress = true);
                           }
+                          return null;
                         },
                         controller: emailController,
                         widget: Container(
@@ -180,6 +182,7 @@ class _SignupPageState extends State<SignupPage> {
                           } else {
                             setState(() => validUsername = true);
                           }
+                          return null;
                         },
                         controller: usernameController,
                         widget: Container(
