@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:project_zenith/widgets/transparent_button.dart';
+import 'package:project_zenith/widgets/aftersignup_field.dart';
 
 class InviteTeamPage extends StatelessWidget {
   const InviteTeamPage({super.key});
@@ -20,9 +21,9 @@ class InviteTeamPage extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Image.asset("assets/right_bg.png"),
           ),
-          const Padding(
+          Padding(
             padding:
-                EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
+                const EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
             child: Content(),
           ),
           const Copyright(mLeft: 85, mBot: 30),
@@ -33,7 +34,9 @@ class InviteTeamPage extends StatelessWidget {
 }
 
 class Content extends StatelessWidget {
-  const Content({super.key});
+  final inviteController = TextEditingController();
+
+  Content({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,22 +110,27 @@ class Content extends StatelessWidget {
                       padding: EdgeInsets.only(
                           left: 0.25 * MediaQuery.of(context).size.width,
                           right: 0.25 * MediaQuery.of(context).size.width),
-                      child: const Column(
+                      child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Expanded(
                               flex: 7,
                               child:
-                                  WorkspaceField(label: "Workspace Members:"),
+                                  WorkspaceField(
+                                    controller: inviteController,
+                                    label: "Workspace Members:"
+                                  ),
                             ),
-                            Spacer(),
-                            Expanded(
+                            const SizedBox(height: 10),
+                            const Expanded(
                               flex: 6,
-                              child: LongInputField(
-                                  label: "Or invite them with one code:"),
+                              child: InviteCodeField(
+                                label: "Or invite them with one code:", 
+                                code: "12345",
+                              ),
                             ),
-                            Spacer(flex: 2),
-                            Expanded(
+                            const Spacer(flex: 2),
+                            const Expanded(
                               flex: 4,
                               child: Column(
                                 children: [
@@ -148,6 +156,7 @@ class Content extends StatelessWidget {
                                           flat: Color(0xFF06BCC1),
                                           lineColor:
                                               Color.fromARGB(255, 6, 140, 145),
+                                          function: test,
                                         ),
                                       ))
                                     ]),
@@ -171,89 +180,11 @@ class Content extends StatelessWidget {
   }
 }
 
-class WorkspaceField extends StatelessWidget {
+class InviteCodeField extends StatelessWidget {
   final String label;
+  final String code;
 
-  const WorkspaceField({super.key, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Container(
-            alignment: Alignment.topLeft,
-            child: FittedBox(
-              child: Text(
-                label,
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                  color: Color(0xFFFFE66D),
-                  fontSize: 30,
-                  fontFamily: 'DM Sans',
-                  height: 0,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const Spacer(),
-        Expanded(
-          flex: 5,
-          child: Container(
-            decoration: ShapeDecoration(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 13, bottom: 13, left: 5, right: 0),
-                          decoration: const ShapeDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/signup_ellipse.png")),
-                            shape: OvalBorder(),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 7,
-                        child: Container(
-                          decoration: ShapeDecoration(
-                            color: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                width: 4,
-                                color: Color(0xFFFFE66D),
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class LongInputField extends StatelessWidget {
-  final String label;
-
-  const LongInputField({super.key, required this.label});
+  const InviteCodeField({super.key, required this.label, required this.code});
 
   @override
   Widget build(BuildContext context) {
@@ -281,16 +212,49 @@ class LongInputField extends StatelessWidget {
         Expanded(
           flex: 7,
           child: Container(
-              height: 51,
-              decoration: ShapeDecoration(
-                color: Colors.black,
-                shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      width: 4,
-                      color: Colors.white,
+            height: 51,
+            decoration: ShapeDecoration(
+              color: Colors.black,
+              shape: RoundedRectangleBorder(
+                  side: const BorderSide(
+                    width: 4,
+                    color: Colors.white,
+                  ),
+                  borderRadius: BorderRadius.circular(5)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(left: 0.005*MediaQuery.of(context).size.width, top: 0.005*MediaQuery.of(context).size.height, bottom: 0.005*MediaQuery.of(context).size.height),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: FittedBox(
+                      child: Icon(
+                        Icons.link,
+                        color: Theme.of(context).dialogBackgroundColor
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(5)),
-              )),
+                  ),
+                  Expanded(
+                    flex: 6,
+                    child: FittedBox(
+                      child: Transform.translate(
+                        offset: const Offset(-20,0),
+                        child: SelectableText(
+                          code,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: 'DM Sans',
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
         )
       ],
     );

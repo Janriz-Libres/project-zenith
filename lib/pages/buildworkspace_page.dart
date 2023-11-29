@@ -3,6 +3,7 @@ import 'package:project_zenith/pages/inviteteam_page.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:project_zenith/widgets/transparent_button.dart';
+import 'package:project_zenith/widgets/aftersignup_field.dart';
 
 class BuildWorkspacePage extends StatelessWidget {
   const BuildWorkspacePage({super.key});
@@ -21,9 +22,9 @@ class BuildWorkspacePage extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Image.asset("assets/right_bg.png"),
           ),
-          const Padding(
+          Padding(
             padding:
-                EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
+                const EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
             child: Content(),
           ),
           const Copyright(mLeft: 85, mBot: 30),
@@ -34,7 +35,9 @@ class BuildWorkspacePage extends StatelessWidget {
 }
 
 class Content extends StatelessWidget {
-  const Content({super.key});
+  final buildController = TextEditingController();
+
+  Content({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -111,9 +114,12 @@ class Content extends StatelessWidget {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            const Expanded(
+                            Expanded(
                               flex: 6,
-                              child: WorkspaceField(label: "Workspace Name:"),
+                              child: WorkspaceField(
+                                controller: buildController,
+                                label: "Workspace Name:"
+                              ),
                             ),
                             const Spacer(),
                             const Expanded(
@@ -123,7 +129,7 @@ class Content extends StatelessWidget {
                             ),
                             const Spacer(flex: 2),
                             Expanded(
-                              flex: 4,
+                              flex: 3,
                               child: Column(
                                 children: [
                                   Expanded(
@@ -154,6 +160,7 @@ class Content extends StatelessWidget {
                                           flat: Color(0xFF06BCC1),
                                           lineColor:
                                               Color.fromARGB(255, 6, 140, 145),
+                                          function: test,
                                         ),
                                       ))
                                     ]),
@@ -163,7 +170,7 @@ class Content extends StatelessWidget {
                             ),
                           ]),
                     )),
-                const Spacer(flex: 2)
+                const Spacer()
               ],
             ),
           ),
@@ -172,85 +179,6 @@ class Content extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: Image.asset("assets/signup_ellipse.png"),
         )
-      ],
-    );
-  }
-}
-
-class WorkspaceField extends StatelessWidget {
-  final String label;
-
-  const WorkspaceField({super.key, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Container(
-            alignment: Alignment.topLeft,
-            child: FittedBox(
-              child: Text(
-                label,
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                  color: Color(0xFFFFE66D),
-                  fontSize: 30,
-                  fontFamily: 'DM Sans',
-                  height: 0,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const Spacer(),
-        Expanded(
-          flex: 5,
-          child: Container(
-            decoration: ShapeDecoration(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 13, bottom: 13, left: 5, right: 0),
-                          decoration: const ShapeDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/signup_ellipse.png")),
-                            shape: OvalBorder(),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 7,
-                        child: Container(
-                          decoration: ShapeDecoration(
-                            color: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                width: 4,
-                                color: Color(0xFFFFE66D),
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -286,21 +214,42 @@ class LongInputField extends StatelessWidget {
         const Spacer(),
         Expanded(
           flex: 7,
-          child: Container(
-              height: 51,
-              decoration: ShapeDecoration(
-                color: Colors.black,
-                shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      width: 4,
-                      color: Colors.white,
-                    ),
-                    borderRadius: BorderRadius.circular(5)),
-              )),
+          child: TextFormField(
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.white
+            ),
+            maxLines: 5,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.black,
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.white,
+                  width: 2,
+                  ),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFF06BCC1),
+                    width: 2,
+                  ),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    width: 2,
+                    color: Colors.white,
+                  ),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                contentPadding: const EdgeInsets.only(top: 40,left: 30, right: 30),
+                hintText: "Description",
+                hintStyle: const TextStyle(
+                    color: Color.fromARGB(255, 144, 142, 142),
+                    fontWeight: FontWeight.normal)),
+          ),
         )
       ],
     );
   }
 }
-
-void test() {}
