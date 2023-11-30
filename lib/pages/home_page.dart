@@ -129,6 +129,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             SizedBox(
                               child: Column(children: [
+                                const Divider(),
                                 DrawOption(
                                   imgPath: "assets/white_logo.png",
                                   text: "Logout",
@@ -146,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                                   },
                                 ),
                                 DrawOption(
-                                  imgPath: 'assets/join_icon.png',
+                                  imgPath: 'assets/later_icon.png',
                                   text: "Attendance",
                                   func: () {
                                     setState(() {

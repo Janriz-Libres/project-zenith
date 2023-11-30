@@ -47,20 +47,47 @@ class MembersPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     // This next line does the trick.
                     children: [
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
-                      MemberCard(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              "Owner",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontFamily: 'Rubik',
+                                fontWeight: FontWeight.w700,
+                                height: 0,
+                              )
+                            ),
+                          ),
+                          MemberCard(),
+                        ],
+                      ),
+                      SizedBox(height: 20,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              "Members",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontFamily: 'Rubik',
+                                fontWeight: FontWeight.w700,
+                                height: 0,
+                              )
+                            ),
+                          ),
+                          MemberCard(),
+                        ],
+                      )
                     ],
                   ),
                 ),

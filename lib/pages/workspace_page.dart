@@ -153,51 +153,6 @@ class _WorkspacePageState extends State<WorkspacePage> {
                                       text: "Booth Department",
                                       func: () {},
                                     ),
-                                    DrawOption(
-                                      imgPath: "assets/join_icon.png",
-                                      text: "Booth Department",
-                                      func: () {},
-                                    ),
-                                    DrawOption(
-                                      imgPath: "assets/join_icon.png",
-                                      text: "Booth Department",
-                                      func: () {},
-                                    ),
-                                    DrawOption(
-                                      imgPath: "assets/join_icon.png",
-                                      text: "Booth Department",
-                                      func: () {},
-                                    ),
-                                    DrawOption(
-                                      imgPath: "assets/join_icon.png",
-                                      text: "Booth Department",
-                                      func: () {},
-                                    ),
-                                    DrawOption(
-                                      imgPath: "assets/join_icon.png",
-                                      text: "Booth Department",
-                                      func: () {},
-                                    ),
-                                    DrawOption(
-                                      imgPath: "assets/join_icon.png",
-                                      text: "Booth Department",
-                                      func: () {},
-                                    ),
-                                    DrawOption(
-                                      imgPath: "assets/join_icon.png",
-                                      text: "Booth Department",
-                                      func: () {},
-                                    ),
-                                    DrawOption(
-                                      imgPath: "assets/join_icon.png",
-                                      text: "Booth Department",
-                                      func: () {},
-                                    ),
-                                    DrawOption(
-                                      imgPath: "assets/join_icon.png",
-                                      text: "Booth Department",
-                                      func: () {},
-                                    ),
                                   ]),
                                 ),
                               ),
