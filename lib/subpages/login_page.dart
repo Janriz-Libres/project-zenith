@@ -28,12 +28,13 @@ class _LoginPageState extends State<LoginPage> {
   bool valid = true;
 
   void validateForm() async {
-    // showDialog(
-    //   context: context, 
-    //   builder: (context) {
-    //     return const LoadingPage();
-    //   }
-    // );
+    showDialog(
+      context: context, 
+      builder: (context) {
+      return const LoadingPage();
+      }
+    );
+
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     SnackBar snackbar = SnackBar(
       backgroundColor: Colors.red.shade800,
@@ -61,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     if (!formKey.currentState!.validate()) {
+      Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     } else {
       try {
@@ -77,6 +79,33 @@ class _LoginPageState extends State<LoginPage> {
         await initializeModels();
 
         if (context.mounted) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green.shade400,
+              content: const Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: Icon(Icons.check_circle, color: Colors.white,),
+                  ),
+                  Text(
+                    'Log in successful.',
+                    style: TextStyle(
+                      fontSize: 16
+                    ),
+                  ),
+                ],
+              ),
+              action: SnackBarAction(
+                label: 'Hide',
+                textColor: Colors.white,
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+              ),
+            )
+          );
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -88,6 +117,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
       } on AuthException {
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
       }
     }
