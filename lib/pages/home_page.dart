@@ -3,13 +3,16 @@ import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/main.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/workspace_page.dart';
+import 'package:project_zenith/subpages/attendance_page.dart';
 import 'package:project_zenith/subpages/fresh_page.dart';
 import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
 import 'package:project_zenith/widgets/sidebar_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatelessWidget {
+List<User> checkedInUsers = <User>[];
+
+class HomePage extends StatefulWidget {
   final String emailAddress;
   final String username;
   const HomePage({
@@ -17,6 +20,13 @@ class HomePage extends StatelessWidget {
     required this.emailAddress,
     required this.username,
   });
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Widget initPage = FreshPage();
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +71,7 @@ class HomePage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  username,
+                                  widget.username,
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
@@ -71,7 +81,7 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  emailAddress,
+                                  widget.emailAddress,
                                   style: const TextStyle(
                                     color: Color(0xFF636769),
                                     fontSize: 15,
@@ -96,12 +106,20 @@ class HomePage extends StatelessWidget {
                                 DrawOption(
                                   imgPath: 'assets/join_icon.png',
                                   text: "Home",
-                                  func: () {},
+                                  func: () {
+                                    setState(() {
+                                      initPage = FreshPage();
+                                    });
+                                  },
                                 ),
                                 DrawOption(
                                   imgPath: 'assets/join_icon.png',
                                   text: "Attendance",
-                                  func: () {},
+                                  func: () {
+                                    setState(() {
+                                      initPage = const AttendancePage();
+                                    });
+                                  },
                                 )
                               ]),
                             ),
@@ -249,12 +267,12 @@ class HomePage extends StatelessWidget {
             flex: 3,
             child: LayoutBuilder(builder: (context, constraints) {
               if (currentUser?.id == 'rISCknyu5dlIrfGrKyCp') {
-                return const FreshPage();
+                return initPage;
               }
 
               return ProfilePage(
-                username: username,
-                emailAddress: emailAddress,
+                username: widget.username,
+                emailAddress: widget.emailAddress,
               );
             }),
           ),

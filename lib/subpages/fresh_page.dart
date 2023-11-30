@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/db_api.dart';
+import 'package:project_zenith/main.dart';
+import 'package:project_zenith/pages/home_page.dart';
+import 'package:project_zenith/widgets/authpage_textfield.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
+import 'package:firedart/firedart.dart';
 
 class FreshPage extends StatelessWidget {
-  const FreshPage({
-    super.key,
-  });
+  FreshPage({super.key});
+
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,26 +56,160 @@ class FreshPage extends StatelessWidget {
                                 Color(0xFF168285)
                               ],
                               minSize: const Size(200, 50),
-                              func: () {},
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    Expanded(
-                      flex: 4,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: SubmitButton(
-                              text: "Check Out",
-                              gradient: const [
-                                Color(0xFF06BCC1),
-                                Color(0xFF168285)
-                              ],
-                              minSize: const Size(200, 50),
-                              func: () {},
+                              func: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Column(
+                                        children: [
+                                          TextFormField(
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                            controller: emailController,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.black,
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.green,
+                                                  width: 2,
+                                                ),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.green,
+                                                  width: 2,
+                                                ),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  width: 2,
+                                                  color: Colors.green,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 20, right: 20),
+                                              hintText:
+                                                  "Enter your email address",
+                                              hintStyle: const TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 144, 142, 142),
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                          ),
+                                          TextFormField(
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.white),
+                                            controller: passController,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.black,
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.green,
+                                                  width: 2,
+                                                ),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                borderSide: const BorderSide(
+                                                  color: Colors.green,
+                                                  width: 2,
+                                                ),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  width: 2,
+                                                  color: Colors.green,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 20, right: 20),
+                                              hintText: "Enter your password",
+                                              hintStyle: const TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 144, 142, 142),
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                          ),
+                                          SubmitButton(
+                                            text: "Submit",
+                                            gradient: const [
+                                              Color(0xFF06BCC1),
+                                              Color(0xFF168285)
+                                            ],
+                                            minSize: const Size(200, 50),
+                                            func: () async {
+                                              List<Document> docs =
+                                                  await Firestore.instance
+                                                      .collection('users')
+                                                      .where('email',
+                                                          isEqualTo:
+                                                              emailController
+                                                                  .text)
+                                                      .where('password',
+                                                          isEqualTo:
+                                                              passController
+                                                                  .text)
+                                                      .get();
+
+                                              if (docs.isEmpty &&
+                                                  context.mounted) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                      content: Text(
+                                                          "OI that is wrong.")),
+                                                );
+                                                return;
+                                              }
+
+                                              Document thisUser = docs.first;
+
+                                              checkedInUsers.add(User(
+                                                authId: thisUser['auth_id'],
+                                                email: thisUser['email'],
+                                                id: thisUser['id'],
+                                                password: thisUser['password'],
+                                                username: thisUser['username'],
+                                              ));
+
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                      content: Text(
+                                                          "Nice ka wan pipty.")),
+                                                );
+
+                                                Navigator.pop(context);
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
                             ),
                           ),
                         ],
