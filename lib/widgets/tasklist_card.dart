@@ -26,12 +26,12 @@ class TaskList extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(left: 10, bottom: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        label,
+                        label.toUpperCase(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: "Rubik",

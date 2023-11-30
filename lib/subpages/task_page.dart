@@ -28,7 +28,7 @@ class TaskPage extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () {Navigator.pop(context);},
+              onPressed: () {},
             )
           ],
         ),
