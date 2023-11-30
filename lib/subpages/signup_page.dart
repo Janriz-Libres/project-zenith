@@ -3,8 +3,6 @@ import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/main.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/home_page.dart';
-import 'package:project_zenith/subpages/fresh_page.dart';
-import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:project_zenith/widgets/authpage_textfield.dart';
 import 'package:project_zenith/widgets/authpage_obscuredfield.dart';
@@ -30,68 +28,24 @@ class _SignupPageState extends State<SignupPage> {
   bool validEmailAddress = true;
 
   Future<void> validateForm() async {
-    if (emailController.text.isEmpty ||
-        usernameController.text.isEmpty ||
-        passwordController.text.isEmpty ||
-        retypeController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Container(
-            padding: const EdgeInsets.only(top: 12, left: 15),
-            height: 50,
-            decoration: const BoxDecoration(
-              color: Color(0xFFC72C41),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Oh snap! Please enter your credentials.",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'DM Sans',
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-      return;
-    }
-
     if (!_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Container(
-            padding: const EdgeInsets.only(top: 12, left: 15),
-            height: 50,
-            decoration: const BoxDecoration(
-              color: Color(0xFFC72C41),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Oh snap! Incorrect credentials.",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'DM Sans',
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          content: const Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(Icons.error_outline),
+              ),
+              Text('Oh snap! Sign up unsuccessful.'),
+            ],
           ),
+            action: SnackBarAction(
+              label: 'Hide',
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
         ),
       );
       return;
@@ -152,15 +106,16 @@ class _SignupPageState extends State<SignupPage> {
                     children: [
                       InputWidget(
                         validator: (value) {
-                          const pattern = r'\d{1,11}@my.xu.edu.ph';
+                          const pattern = r'\d{1,11}(@my.xu.edu.ph)';
                           final regex = RegExp(pattern);
 
                           if (!regex.hasMatch(value!)) {
                             setState(() => validEmailAddress = false);
+                            return;
                           } else {
                             setState(() => validEmailAddress = true);
+                            return null;
                           }
-                          return null;
                         },
                         controller: emailController,
                         widget: Container(
@@ -205,6 +160,13 @@ class _SignupPageState extends State<SignupPage> {
                         obscured: false,
                       ),
                       ObscuredField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return '';
+                          } else {
+                            return null;
+                          }
+                        },
                         controller: passwordController,
                         widget: Container(
                           width: 17,
@@ -220,6 +182,13 @@ class _SignupPageState extends State<SignupPage> {
                         focusedColor: const Color(0xFFFFE66D),
                       ),
                       ObscuredField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return '';
+                          } else {
+                            return null;
+                          }
+                        },
                         controller: retypeController,
                         widget: Container(
                           width: 17,
