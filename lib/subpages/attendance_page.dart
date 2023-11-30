@@ -40,7 +40,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       'has_checked_in': false,
                     });
                   },
-                  child: const Text("Check Oout"))
+                  child: const Text("Check Out"))
             ],
           ),
         );
