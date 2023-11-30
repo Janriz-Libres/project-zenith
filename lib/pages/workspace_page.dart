@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/subpages/members_page.dart';
 import 'package:project_zenith/subpages/task_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
 import 'package:project_zenith/widgets/sidebar_list.dart';
@@ -12,7 +13,25 @@ class WorkspacePage extends StatefulWidget {
   State<WorkspacePage> createState() => _WorkspacePageState();
 }
 
+
 class _WorkspacePageState extends State<WorkspacePage> {
+  bool showTask = true;
+  bool showMembers = false;
+
+  void _showTask() {
+    setState(() {
+      showTask = true;
+      showMembers = false;
+    });
+  }
+
+  void _showMembers() {
+    setState(() {
+      showTask = false;
+      showMembers = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,12 +110,12 @@ class _WorkspacePageState extends State<WorkspacePage> {
                         DrawOption(
                             imgPath: "assets/white_logo.png",
                             text: "Workspace",
-                            func: () {},
+                            func: () {_showTask();},
                           ),
                           DrawOption(
                             imgPath: "assets/build_icon.png",
                             text: "Members",
-                            func: () {},
+                            func: () {_showMembers();},
                           ),
                       ]
                     ),
@@ -184,7 +203,6 @@ class _WorkspacePageState extends State<WorkspacePage> {
                                         text: "Booth Department",
                                         func: () {},
                                       ),
-                                      
                                     ]
                                   ),
                                 ),
@@ -207,9 +225,17 @@ class _WorkspacePageState extends State<WorkspacePage> {
                  padding: const EdgeInsets.only(left: 20, top: 21),
                   child: BackButton(onPressed: () {Navigator.pop(context);}),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 30, right: 30, top: 70, bottom: 30),
-                  child: TaskPage(label: "Team Tasks",),
+                Padding(
+                  padding: const EdgeInsets.only(left: 30, right: 30, top: 70, bottom: 30),
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    if (showTask) {
+                      return const TaskPage(label: "Team Tasks",);
+                    } else if (showMembers) {
+                      return const MembersPage();
+                    } else {
+                      return const TaskPage(label: "Team Tasks",);
+                    }
+                  }),
                 )
               ]
             )

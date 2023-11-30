@@ -45,18 +45,10 @@ class TaskList extends StatelessWidget {
                     ],
                   ),
                 ),
-                Flexible(
+                const Flexible(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
                         TaskCard(),
                       ],
                     ),
