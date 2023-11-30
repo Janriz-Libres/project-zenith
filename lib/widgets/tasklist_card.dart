@@ -50,14 +50,6 @@ class TaskList extends StatelessWidget {
                     child: Column(
                       children: [
                         TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
-                        TaskCard(),
                       ],
                     ),
                   ),

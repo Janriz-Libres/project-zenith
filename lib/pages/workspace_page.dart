@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/subpages/members_page.dart';
 import 'package:project_zenith/subpages/task_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
 import 'package:project_zenith/widgets/sidebar_list.dart';
@@ -11,6 +12,23 @@ class WorkspacePage extends StatefulWidget {
 }
 
 class _WorkspacePageState extends State<WorkspacePage> {
+  bool showTask = true;
+  bool showMembers = false;
+
+  void _showTask() {
+    setState(() {
+      showTask = true;
+      showMembers = false;
+    });
+  }
+
+  void _showMembers() {
+    setState(() {
+      showTask = false;
+      showMembers = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,12 +104,16 @@ class _WorkspacePageState extends State<WorkspacePage> {
                       DrawOption(
                         imgPath: "assets/white_logo.png",
                         text: "Workspace",
-                        func: () {},
+                        func: () {
+                          _showTask();
+                        },
                       ),
                       DrawOption(
                         imgPath: "assets/build_icon.png",
                         text: "Members",
-                        func: () {},
+                        func: () {
+                          _showMembers();
+                        },
                       ),
                     ]),
                     const SizedBox(height: 10),
@@ -198,12 +220,22 @@ class _WorkspacePageState extends State<WorkspacePage> {
                     Navigator.pop(context);
                   }),
                 ),
-                const Padding(
-                  padding:
-                      EdgeInsets.only(left: 30, right: 30, top: 70, bottom: 30),
-                  child: TaskPage(
-                    label: "Team Tasks",
-                  ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 30, right: 30, top: 70, bottom: 30),
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    if (showTask) {
+                      return const TaskPage(
+                        label: "Team Tasks",
+                      );
+                    } else if (showMembers) {
+                      return const MembersPage();
+                    } else {
+                      return const TaskPage(
+                        label: "Team Tasks",
+                      );
+                    }
+                  }),
                 )
               ])),
         ],

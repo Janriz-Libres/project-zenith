@@ -46,6 +46,7 @@ class TaskPage extends StatelessWidget {
                 }),
                 child: const SizedBox(
                   height: double.maxFinite,
+                  width: double.maxFinite,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -55,9 +56,6 @@ class TaskPage extends StatelessWidget {
                         TaskList(label: "To Do"),
                         TaskList(label: "Doing"),
                         TaskList(label: "Done"),
-                        TaskList(label: "Personal"),
-                        TaskList(label: "Laag"),
-                        TaskList(label: "Others"), 
                       ],
                     ),
                   ),
