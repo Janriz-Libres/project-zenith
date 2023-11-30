@@ -42,13 +42,14 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Padding(
             padding: EdgeInsets.only(right: 8.0),
-            child: Icon(Icons.error_outline, color: Colors.white,),
+            child: Icon(
+              Icons.error_outline,
+              color: Colors.white,
+            ),
           ),
           Text(
             'Oh snap! Log in unsuccessful.',
-            style: TextStyle(
-              fontSize: 16
-            ),
+            style: TextStyle(fontSize: 16),
           ),
         ],
       ),

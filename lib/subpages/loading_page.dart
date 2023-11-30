@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/pages/inviteteam_page.dart';
 import 'package:project_zenith/widgets/copyright_mark.dart';
-import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:project_zenith/widgets/transparent_button.dart';
-import 'package:project_zenith/widgets/aftersignup_field.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});
@@ -24,7 +20,7 @@ class LoadingPage extends StatelessWidget {
           ),
           const Padding(
             padding:
-              EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
+                EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
             child: Content(),
           ),
           const Copyright(mLeft: 85, mBot: 30),
@@ -35,25 +31,23 @@ class LoadingPage extends StatelessWidget {
 }
 
 class Content extends StatelessWidget {
-
   const Content({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
-      margin: const EdgeInsets.only(top: 62),
-      decoration: const ShapeDecoration(
-        color: Colors.black,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 3,
-            strokeAlign: BorderSide.strokeAlignCenter,
-            color: Colors.white,
+        alignment: Alignment.center,
+        margin: const EdgeInsets.only(top: 62),
+        decoration: const ShapeDecoration(
+          color: Colors.black,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              width: 3,
+              strokeAlign: BorderSide.strokeAlignCenter,
+              color: Colors.white,
+            ),
           ),
         ),
-      ),
-      child: Image.asset("assets/landing_img.png")
-    );
+        child: Image.asset("assets/landing_img.png"));
   }
 }
