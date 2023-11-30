@@ -3,6 +3,8 @@ import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/main.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/home_page.dart';
+import 'package:project_zenith/subpages/fresh_page.dart';
+import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:project_zenith/widgets/authpage_textfield.dart';
 import 'package:project_zenith/widgets/authpage_obscuredfield.dart';
@@ -27,7 +29,7 @@ class _SignupPageState extends State<SignupPage> {
   bool validUsername = true;
   bool validEmailAddress = true;
 
-  void validateForm() async {
+  Future<void> validateForm() async {
     if (emailController.text.isEmpty ||
         usernameController.text.isEmpty ||
         passwordController.text.isEmpty ||
@@ -249,13 +251,14 @@ class _SignupPageState extends State<SignupPage> {
                       offset: const Offset(0, 10),
                       child: SizedBox(
                         child: SubmitButton(
-                            text: "Create Account",
-                            gradient: const [
-                              Color(0xFF06BCC1),
-                              Color(0xFF047679)
-                            ],
-                            minSize: const Size(300, 70),
-                            func: validateForm),
+                          text: "Create Account",
+                          gradient: const [
+                            Color(0xFF06BCC1),
+                            Color(0xFF047679)
+                          ],
+                          minSize: const Size(300, 70),
+                          func: () async => await validateForm(),
+                        ),
                       ),
                     ),
                   ],

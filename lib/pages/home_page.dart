@@ -26,7 +26,33 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Widget initPage = FreshPage();
+  Widget initAdminPage = FreshPage();
+  Widget initUserPage = ProfilePage(
+    username: currentUser!.username,
+    emailAddress: currentUser!.email,
+  );
+
+  Future<void> logoutFunc() async {
+    await Authenticator.logout();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+
+    ownedWorkspaces.clear();
+    sharedWorkspaces.clear();
+    lists.clear();
+    tasks.clear();
+    currentUser = null;
+
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AuthPage(),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,11 +130,18 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               child: Column(children: [
                                 DrawOption(
+                                  imgPath: "assets/white_logo.png",
+                                  text: "Logout",
+                                  func: () async {
+                                    await logoutFunc();
+                                  },
+                                ),
+                                DrawOption(
                                   imgPath: 'assets/join_icon.png',
                                   text: "Home",
                                   func: () {
                                     setState(() {
-                                      initPage = FreshPage();
+                                      initAdminPage = FreshPage();
                                     });
                                   },
                                 ),
@@ -117,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                                   text: "Attendance",
                                   func: () {
                                     setState(() {
-                                      initPage = const AttendancePage();
+                                      initAdminPage = const AttendancePage();
                                     });
                                   },
                                 )
@@ -136,34 +169,28 @@ class _HomePageState extends State<HomePage> {
                               DrawOption(
                                 imgPath: "assets/white_logo.png",
                                 text: "Logout",
-                                func: () async {
-                                  await Authenticator.logout();
-
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  prefs.clear();
-
-                                  ownedWorkspaces.clear();
-                                  sharedWorkspaces.clear();
-                                  lists.clear();
-                                  tasks.clear();
-                                  currentUser = null;
-
-                                  if (context.mounted) {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const AuthPage(),
-                                      ),
-                                    );
-                                  }
-                                },
+                                func: () async => await logoutFunc(),
                               ),
                               DrawOption(
                                 imgPath: "assets/build_icon.png",
                                 text: "Profile",
-                                func: () {},
+                                func: () {
+                                  initUserPage = ProfilePage(
+                                    username: widget.username,
+                                    emailAddress: widget.emailAddress,
+                                  );
+                                },
                               ),
+                              DrawOption(
+                                imgPath: 'assets/join_icon.png',
+                                text: "Attendance",
+                                func: () {
+                                  setState(() {
+                                    initAdminPage = const AttendancePage();
+                                    initUserPage = const AttendancePage();
+                                  });
+                                },
+                              )
                             ],
                           ),
                         ),
@@ -267,13 +294,10 @@ class _HomePageState extends State<HomePage> {
             flex: 3,
             child: LayoutBuilder(builder: (context, constraints) {
               if (currentUser?.id == 'rISCknyu5dlIrfGrKyCp') {
-                return initPage;
+                return initAdminPage;
               }
 
-              return ProfilePage(
-                username: widget.username,
-                emailAddress: widget.emailAddress,
-              );
+              return initUserPage;
             }),
           ),
         ],
