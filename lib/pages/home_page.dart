@@ -6,7 +6,9 @@ import 'package:project_zenith/main.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/workspace_page.dart';
 import 'package:project_zenith/subpages/attendance_page.dart';
+import 'package:project_zenith/subpages/createworkspace_dialog.dart';
 import 'package:project_zenith/subpages/fresh_page.dart';
+import 'package:project_zenith/subpages/joinworkspace_dialog.dart';
 import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
 import 'package:project_zenith/widgets/sidebar_list.dart';
@@ -26,6 +28,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final workspaceNameController = TextEditingController();
+  final workspaceDescriptionController = TextEditingController();
+  final codeController = TextEditingController();
   Widget initAdminPage = FreshPage();
   Widget initUserPage = ProfilePage(
     username: currentUser!.username,
@@ -183,10 +188,12 @@ class _HomePageState extends State<HomePage> {
                                 imgPath: "assets/build_icon.png",
                                 text: "Profile",
                                 func: () {
-                                  initUserPage = ProfilePage(
+                                  setState(() {
+                                    initUserPage = ProfilePage(
                                     username: widget.username,
                                     emailAddress: widget.emailAddress,
                                   );
+                                  });
                                 },
                               ),
                               DrawOption(
@@ -219,7 +226,18 @@ class _HomePageState extends State<HomePage> {
                             const SizedBox(width: 10),
                             IconButton(
                               icon: const Icon(Icons.add),
-                              onPressed: () {},
+                              onPressed: () async {
+                                await showDialog(
+                                  useSafeArea: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return CreateWorkspace(
+                                      workspaceNameController: workspaceNameController,
+                                      workspaceDescriptionController: workspaceDescriptionController,
+                                    );
+                                  },
+                                );
+                              },
                             )
                           ]),
                         ),
@@ -260,7 +278,17 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(width: 10),
                               IconButton(
                                 icon: const Icon(Icons.add),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await showDialog(
+                                  useSafeArea: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return JoinWorkspace(
+                                      codeController: workspaceNameController,
+                                    );
+                                  },
+                                );
+                                },
                               )
                             ],
                           ),
