@@ -233,13 +233,21 @@ class _HomePageState extends State<HomePage> {
                                   shrinkWrap: true,
                                   itemCount: ownedWorkspaces.length,
                                   itemBuilder: (context, index) {
+                                    Workspace thisSpace =
+                                        ownedWorkspaces.elementAt(index);
+
                                     return DrawOption(
                                       imgPath: "assets/build_icon.png",
-                                      text: ownedWorkspaces
-                                          .elementAt(index)
-                                          .title
-                                          .toString(),
-                                      func: () {},
+                                      text: thisSpace.title.toString(),
+                                      func: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => WorkspacePage(
+                                                workspace: thisSpace),
+                                          ),
+                                        );
+                                      },
                                     );
                                   },
                                 ),
@@ -275,18 +283,20 @@ class _HomePageState extends State<HomePage> {
                                   shrinkWrap: true,
                                   itemCount: sharedWorkspaces.length,
                                   itemBuilder: (context, index) {
+                                    Workspace thisSpace =
+                                        sharedWorkspaces.elementAt(index);
+
                                     return DrawOption(
                                       imgPath: "assets/later_icon.png",
-                                      text: sharedWorkspaces
-                                          .elementAt(index)
-                                          .title
-                                          .toString(),
+                                      text: thisSpace.title.toString(),
                                       func: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const WorkspacePage()),
+                                            builder: (context) => WorkspacePage(
+                                              workspace: thisSpace,
+                                            ),
+                                          ),
                                         );
                                       },
                                     );

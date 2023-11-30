@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/subpages/members_page.dart';
 import 'package:project_zenith/subpages/task_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
 import 'package:project_zenith/widgets/sidebar_list.dart';
 
 class WorkspacePage extends StatefulWidget {
-  const WorkspacePage({super.key});
+  final Workspace workspace;
+
+  const WorkspacePage({
+    super.key,
+    required this.workspace,
+  });
 
   @override
   State<WorkspacePage> createState() => _WorkspacePageState();
