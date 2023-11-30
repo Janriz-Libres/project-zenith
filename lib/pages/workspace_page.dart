@@ -205,7 +205,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
               children: [
                 Padding(
                  padding: const EdgeInsets.only(left: 20, top: 21),
-                  child: BackButton(onPressed: () {}),
+                  child: BackButton(onPressed: () {Navigator.pop(context);}),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(left: 30, right: 30, top: 70, bottom: 30),
