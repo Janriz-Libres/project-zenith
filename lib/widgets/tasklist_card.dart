@@ -5,7 +5,8 @@ class TaskList extends StatelessWidget {
   final String label;
 
   const TaskList({
-    super.key, required this.label,
+    super.key,
+    required this.label,
   });
 
   @override
@@ -18,10 +19,11 @@ class TaskList extends StatelessWidget {
           color: Colors.black87,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
-              //set border radius more than 50% of height and width to make circle
+            //set border radius more than 50% of height and width to make circle
           ),
           child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 15),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 15),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -33,19 +35,17 @@ class TaskList extends StatelessWidget {
                       Text(
                         label.toUpperCase(),
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: "Rubik",
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18
-                        ),
+                            color: Colors.white,
+                            fontFamily: "Rubik",
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.more_horiz), 
-                        onPressed: (){})
+                          icon: const Icon(Icons.more_horiz), onPressed: () {})
                     ],
                   ),
                 ),
-                Flexible(
+                const Flexible(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -65,25 +65,21 @@ class TaskList extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      foregroundColor: Colors.white,
-                      shadowColor: Colors.transparent,
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.add),
-                        Text(
-                          "Add a card",
-                          style: TextStyle(
-                            fontFamily: "Rubik",
-                            fontSize: 16
-                          ),
-                        )
-                      ],
-                    ), 
-                    onPressed: () {}
-                  ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        shadowColor: Colors.transparent,
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.add),
+                          Text(
+                            "Add a card",
+                            style: TextStyle(fontFamily: "Rubik", fontSize: 16),
+                          )
+                        ],
+                      ),
+                      onPressed: () {}),
                 )
               ],
             ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/main.dart';
@@ -9,8 +11,6 @@ import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
 import 'package:project_zenith/widgets/sidebar_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-List<User> checkedInUsers = <User>[];
 
 class HomePage extends StatefulWidget {
   final String emailAddress;
@@ -151,6 +151,13 @@ class _HomePageState extends State<HomePage> {
                                   func: () {
                                     setState(() {
                                       initAdminPage = const AttendancePage();
+                                      checkedInUsers.forEach((key, value) {
+                                        Duration interval = DateTime.now()
+                                            .toUtc()
+                                            .difference(
+                                                key.timeStarted.toUtc());
+                                        checkedInUsers[key] = interval;
+                                      });
                                     });
                                   },
                                 )

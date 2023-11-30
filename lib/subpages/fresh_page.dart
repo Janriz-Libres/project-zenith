@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/main.dart';
-import 'package:project_zenith/pages/home_page.dart';
-import 'package:project_zenith/widgets/authpage_textfield.dart';
+import 'package:project_zenith/subpages/attendance_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:firedart/firedart.dart';
 
@@ -167,7 +165,7 @@ class CheckInDialog extends StatelessWidget {
             ),
           ),
           SubmitButton(
-            text: "Submit",
+            text: "Enter",
             gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
             minSize: const Size(200, 50),
             func: () async {
@@ -186,19 +184,22 @@ class CheckInDialog extends StatelessWidget {
 
               Document thisUser = docs.first;
               await thisUser.reference.update({
-                'time_started': DateTime.now(),
+                'time_started': DateTime.now().toUtc(),
                 'has_checked_in': true,
               });
 
-              checkedInUsers.add(User(
+              User u = User(
                 authId: thisUser['auth_id'],
                 email: thisUser['email'],
                 id: thisUser['id'],
                 password: thisUser['password'],
                 username: thisUser['username'],
-                timeStarted: thisUser['time_started'],
+                timeStarted: DateTime.now().toUtc(),
                 hasCheckedIn: thisUser['has_checked_in'],
-              ));
+                totalMinutes: thisUser['total_minutes'],
+              );
+
+              checkedInUsers[u] = Duration.zero;
 
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
