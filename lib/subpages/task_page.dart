@@ -32,6 +32,7 @@ class TaskPage extends StatelessWidget {
             )
           ],
         ),
+        const Divider(),
         Flexible(
           child: ConstrainedBox(
             constraints: const BoxConstraints(

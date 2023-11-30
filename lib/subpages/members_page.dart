@@ -33,6 +33,7 @@ class MembersPage extends StatelessWidget {
               func: () {})
           ],
         ),
+        const Divider(),
         Flexible(
           child: ConstrainedBox(
             constraints: const BoxConstraints(
