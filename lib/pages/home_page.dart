@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/main.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/pages/workspace_page.dart';
 import 'package:project_zenith/subpages/fresh_page.dart';
 import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
@@ -227,7 +228,14 @@ class HomePage extends StatelessWidget {
                                           .elementAt(index)
                                           .title
                                           .toString(),
-                                      func: () {},
+                                      func: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const WorkspacePage()),
+                                        );
+                                      },
                                     );
                                   },
                                 ),

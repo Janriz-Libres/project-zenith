@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/widgets/task_card.dart';
 
 class TaskList extends StatelessWidget {
   final String label;
@@ -9,83 +10,83 @@ class TaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 325,
-      child: Card(
-        color: Colors.black87,
-        shadowColor: Colors.black45,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 25),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      label,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Rubik",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.more_horiz), 
-                      onPressed: (){})
-                  ],
-                ),
-              ),
-              Flexible(
-                child: SingleChildScrollView(
-                  child: Column(
+    return Padding(
+      padding: const EdgeInsets.only(left: 5, right: 5),
+      child: SizedBox(
+        width: 375,
+        child: Card(
+          color: Colors.black87,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+              //set border radius more than 50% of height and width to make circle
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Container(height: 75, color: Colors.red,),
+                      Text(
+                        label,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Rubik",
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18
+                        ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Container(height: 75, color: Colors.blue,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Container(height: 75, color: Colors.red,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Container(height: 75, color: Colors.blue,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Container(height: 75, color: Colors.red,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Container(height: 75, color: Colors.blue,),
-                      ),
+                      IconButton(
+                        icon: const Icon(Icons.more_horiz), 
+                        onPressed: (){})
                     ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: ElevatedButton(
-                  child: const Row(
-                    children: [
-                      Icon(Icons.add),
-                      Text(
-                        "Add a card"
-                      )
-                    ],
-                  ), 
-                  onPressed: () {}
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        TaskCard(),
+                        TaskCard(),
+                        TaskCard(),
+                        TaskCard(),
+                        TaskCard(),
+                        TaskCard(),
+                        TaskCard(),
+                        TaskCard(),
+                        TaskCard(),
+                      ],
+                    ),
+                  ),
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.white,
+                      shadowColor: Colors.transparent,
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.add),
+                        Text(
+                          "Add a card",
+                          style: TextStyle(
+                            fontFamily: "Rubik",
+                            fontSize: 16
+                          ),
+                        )
+                      ],
+                    ), 
+                    onPressed: () {}
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
