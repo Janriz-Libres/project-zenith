@@ -3,6 +3,7 @@ import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/subpages/task_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
+import 'package:project_zenith/widgets/sidebar_list.dart';
 
 class WorkspacePage extends StatefulWidget {
   const WorkspacePage({super.key});
@@ -85,12 +86,9 @@ class _WorkspacePageState extends State<WorkspacePage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    SizedBox(
-                      width: double.maxFinite,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          DrawOption(
+                    SidebarList(
+                      children: [
+                        DrawOption(
                             imgPath: "assets/white_logo.png",
                             text: "Workspace",
                             func: () {},
@@ -100,45 +98,102 @@ class _WorkspacePageState extends State<WorkspacePage> {
                             text: "Members",
                             func: () {},
                           ),
-                        ],
-                      ),
+                      ]
                     ),
-                    const Spacer(),
+                    const SizedBox(height: 10),
                     Expanded(
-                      flex: 12,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 24),
-                            child: Row(children: [
-                              const Text(
-                                'BOARDS',
-                                style: TextStyle(
-                                  color: Color(0xFF959A9C),
-                                  fontSize: 16,
-                                  fontFamily: 'Rubik',
-                                  fontWeight: FontWeight.w700,
-                                  height: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 50),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 24),
+                              child: Row(children: [
+                                const Text(
+                                  'BOARDS',
+                                  style: TextStyle(
+                                    color: Color(0xFF959A9C),
+                                    fontSize: 16,
+                                    fontFamily: 'Rubik',
+                                    fontWeight: FontWeight.w700,
+                                    height: 0,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                IconButton(
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () {},
+                                )
+                              ]),
+                            ),
+                            Flexible(
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  minHeight: 375, maxHeight: 750
+                                ),
+                                child: SingleChildScrollView(
+                                  child: SidebarList(
+                                    children: [
+                                      DrawOption(
+                                        imgPath: "assets/join_icon.png",
+                                        text: "Booth Department",
+                                        func: () {},
+                                      ),
+                                      DrawOption(
+                                        imgPath: "assets/join_icon.png",
+                                        text: "Booth Department",
+                                        func: () {},
+                                      ),
+                                      DrawOption(
+                                        imgPath: "assets/join_icon.png",
+                                        text: "Booth Department",
+                                        func: () {},
+                                      ),
+                                      DrawOption(
+                                        imgPath: "assets/join_icon.png",
+                                        text: "Booth Department",
+                                        func: () {},
+                                      ),
+                                      DrawOption(
+                                        imgPath: "assets/join_icon.png",
+                                        text: "Booth Department",
+                                        func: () {},
+                                      ),
+                                      DrawOption(
+                                        imgPath: "assets/join_icon.png",
+                                        text: "Booth Department",
+                                        func: () {},
+                                      ),
+                                      DrawOption(
+                                        imgPath: "assets/join_icon.png",
+                                        text: "Booth Department",
+                                        func: () {},
+                                      ),
+                                      DrawOption(
+                                        imgPath: "assets/join_icon.png",
+                                        text: "Booth Department",
+                                        func: () {},
+                                      ),
+                                      DrawOption(
+                                        imgPath: "assets/join_icon.png",
+                                        text: "Booth Department",
+                                        func: () {},
+                                      ),
+                                      DrawOption(
+                                        imgPath: "assets/join_icon.png",
+                                        text: "Booth Department",
+                                        func: () {},
+                                      ),
+                                      
+                                    ]
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () {},
-                              )
-                            ]),
-                          ),
-                          DrawOption(
-                            imgPath: "assets/join_icon.png",
-                            text: "Booth Department",
-                            func: () {},
-                          ),
-                        ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    const Spacer(flex: 8),
                   ],
                 ),
               ),

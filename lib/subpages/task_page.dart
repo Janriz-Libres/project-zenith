@@ -10,17 +10,6 @@ class TaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TaskView(label: label,);
-  }
-}
-
-class TaskView extends StatelessWidget {
-  final String label;
-  
-  const TaskView({super.key, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -39,7 +28,7 @@ class TaskView extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () {},
+              onPressed: () {Navigator.pop(context);},
             )
           ],
         ),
@@ -56,37 +45,19 @@ class TaskView extends StatelessWidget {
                   PointerDeviceKind.mouse,
                 }),
                 child: const SizedBox(
-                  height: 500,
+                  height: double.maxFinite,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       // This next line does the trick.
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: TaskList(label: "To Do")
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: TaskList(label: "Doing")
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: TaskList(label: "Done")
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: TaskList(label: "Personal")
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: TaskList(label: "Laag")
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: TaskList(label: "Others")
-                        ), 
+                        TaskList(label: "To Do"),
+                        TaskList(label: "Doing"),
+                        TaskList(label: "Done"),
+                        TaskList(label: "Personal"),
+                        TaskList(label: "Laag"),
+                        TaskList(label: "Others"), 
                       ],
                     ),
                   ),
