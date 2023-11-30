@@ -18,12 +18,13 @@ class Authenticator {
 
     return User(
       id: user.id,
-      email: user['email'],
-      password: user['password'],
-      authId: user['auth_id'],
-      username: user['username'],
-      timeStarted: user['time_started'],
-      hasCheckedIn: user['has_checked_in'],
+      email: await user['email'],
+      password: await user['password'],
+      authId: await user['auth_id'],
+      username: await user['username'],
+      timeStarted: await user['time_started'],
+      hasCheckedIn: await user['has_checked_in'],
+      totalMinutes: await user['total_minutes'],
     );
   }
 
@@ -42,6 +43,9 @@ class Authenticator {
       'password': pw,
       'auth_id': FirebaseAuth.instance.userId,
       'username': username,
+      'time_started': DateTime.now(),
+      'has_checked_in': false,
+      'total_minutes': 0,
     });
     await docReference.reference.update({'id': docReference.id});
 
@@ -53,6 +57,7 @@ class Authenticator {
       username: '',
       timeStarted: DateTime.now(),
       hasCheckedIn: false,
+      totalMinutes: 0,
     );
   }
 
@@ -71,6 +76,7 @@ class User {
   final String username;
   final DateTime timeStarted;
   final bool hasCheckedIn;
+  final int totalMinutes;
 
   const User({
     required this.id,
@@ -80,6 +86,7 @@ class User {
     required this.username,
     required this.timeStarted,
     required this.hasCheckedIn,
+    required this.totalMinutes,
   });
 
   /// Adds a workspace for the user.
@@ -113,13 +120,14 @@ class User {
         Document userDoc = await ref.get();
 
         members.add(User(
-          authId: userDoc['auth_id'],
-          email: userDoc['email'],
-          id: userDoc['id'],
-          password: userDoc['password'],
-          username: userDoc['username'],
-          timeStarted: userDoc['time_started'],
-          hasCheckedIn: userDoc['has_checked_in'],
+          authId: await userDoc['auth_id'],
+          email: await userDoc['email'],
+          id: await userDoc['id'],
+          password: await userDoc['password'],
+          username: await userDoc['username'],
+          timeStarted: await userDoc['time_started'],
+          hasCheckedIn: await userDoc['has_checked_in'],
+          totalMinutes: await userDoc['total_minutes'],
         ));
       }
 
@@ -258,13 +266,14 @@ class WorkList {
       for (DocumentReference ref in refs) {
         Document realDoc = await ref.get();
         assignedUsers.add(User(
-          authId: realDoc['auth_id'],
-          email: realDoc['email'],
-          id: realDoc['id'],
-          password: realDoc['password'],
-          username: realDoc['username'],
-          timeStarted: realDoc['time_started'],
-          hasCheckedIn: realDoc['has_checked_in'],
+          authId: await realDoc['auth_id'],
+          email: await realDoc['email'],
+          id: await realDoc['id'],
+          password: await realDoc['password'],
+          username: await realDoc['username'],
+          timeStarted: await realDoc['time_started'],
+          hasCheckedIn: await realDoc['has_checked_in'],
+          totalMinutes: await realDoc['total_minutes'],
         ));
       }
 

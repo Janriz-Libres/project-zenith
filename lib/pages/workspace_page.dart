@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/subpages/members_page.dart';
 import 'package:project_zenith/subpages/task_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
@@ -12,7 +10,6 @@ class WorkspacePage extends StatefulWidget {
   @override
   State<WorkspacePage> createState() => _WorkspacePageState();
 }
-
 
 class _WorkspacePageState extends State<WorkspacePage> {
   bool showTask = true;
@@ -40,9 +37,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
         children: [
           Flexible(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                minWidth: 330, maxWidth: 385
-              ),
+              constraints: const BoxConstraints(minWidth: 330, maxWidth: 385),
               child: Container(
                 padding: const EdgeInsets.only(top: 25),
                 decoration: const BoxDecoration(
@@ -105,20 +100,22 @@ class _WorkspacePageState extends State<WorkspacePage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    SidebarList(
-                      children: [
-                        DrawOption(
-                            imgPath: "assets/white_logo.png",
-                            text: "Workspace",
-                            func: () {_showTask();},
-                          ),
-                          DrawOption(
-                            imgPath: "assets/build_icon.png",
-                            text: "Members",
-                            func: () {_showMembers();},
-                          ),
-                      ]
-                    ),
+                    SidebarList(children: [
+                      DrawOption(
+                        imgPath: "assets/white_logo.png",
+                        text: "Workspace",
+                        func: () {
+                          _showTask();
+                        },
+                      ),
+                      DrawOption(
+                        imgPath: "assets/build_icon.png",
+                        text: "Members",
+                        func: () {
+                          _showMembers();
+                        },
+                      ),
+                    ]),
                     const SizedBox(height: 10),
                     Expanded(
                       child: Padding(
@@ -148,63 +145,60 @@ class _WorkspacePageState extends State<WorkspacePage> {
                             Flexible(
                               child: ConstrainedBox(
                                 constraints: const BoxConstraints(
-                                  minHeight: 375, maxHeight: 750
-                                ),
+                                    minHeight: 375, maxHeight: 750),
                                 child: SingleChildScrollView(
-                                  child: SidebarList(
-                                    children: [
-                                      DrawOption(
-                                        imgPath: "assets/join_icon.png",
-                                        text: "Booth Department",
-                                        func: () {},
-                                      ),
-                                      DrawOption(
-                                        imgPath: "assets/join_icon.png",
-                                        text: "Booth Department",
-                                        func: () {},
-                                      ),
-                                      DrawOption(
-                                        imgPath: "assets/join_icon.png",
-                                        text: "Booth Department",
-                                        func: () {},
-                                      ),
-                                      DrawOption(
-                                        imgPath: "assets/join_icon.png",
-                                        text: "Booth Department",
-                                        func: () {},
-                                      ),
-                                      DrawOption(
-                                        imgPath: "assets/join_icon.png",
-                                        text: "Booth Department",
-                                        func: () {},
-                                      ),
-                                      DrawOption(
-                                        imgPath: "assets/join_icon.png",
-                                        text: "Booth Department",
-                                        func: () {},
-                                      ),
-                                      DrawOption(
-                                        imgPath: "assets/join_icon.png",
-                                        text: "Booth Department",
-                                        func: () {},
-                                      ),
-                                      DrawOption(
-                                        imgPath: "assets/join_icon.png",
-                                        text: "Booth Department",
-                                        func: () {},
-                                      ),
-                                      DrawOption(
-                                        imgPath: "assets/join_icon.png",
-                                        text: "Booth Department",
-                                        func: () {},
-                                      ),
-                                      DrawOption(
-                                        imgPath: "assets/join_icon.png",
-                                        text: "Booth Department",
-                                        func: () {},
-                                      ),
-                                    ]
-                                  ),
+                                  child: SidebarList(children: [
+                                    DrawOption(
+                                      imgPath: "assets/join_icon.png",
+                                      text: "Booth Department",
+                                      func: () {},
+                                    ),
+                                    DrawOption(
+                                      imgPath: "assets/join_icon.png",
+                                      text: "Booth Department",
+                                      func: () {},
+                                    ),
+                                    DrawOption(
+                                      imgPath: "assets/join_icon.png",
+                                      text: "Booth Department",
+                                      func: () {},
+                                    ),
+                                    DrawOption(
+                                      imgPath: "assets/join_icon.png",
+                                      text: "Booth Department",
+                                      func: () {},
+                                    ),
+                                    DrawOption(
+                                      imgPath: "assets/join_icon.png",
+                                      text: "Booth Department",
+                                      func: () {},
+                                    ),
+                                    DrawOption(
+                                      imgPath: "assets/join_icon.png",
+                                      text: "Booth Department",
+                                      func: () {},
+                                    ),
+                                    DrawOption(
+                                      imgPath: "assets/join_icon.png",
+                                      text: "Booth Department",
+                                      func: () {},
+                                    ),
+                                    DrawOption(
+                                      imgPath: "assets/join_icon.png",
+                                      text: "Booth Department",
+                                      func: () {},
+                                    ),
+                                    DrawOption(
+                                      imgPath: "assets/join_icon.png",
+                                      text: "Booth Department",
+                                      func: () {},
+                                    ),
+                                    DrawOption(
+                                      imgPath: "assets/join_icon.png",
+                                      text: "Booth Department",
+                                      func: () {},
+                                    ),
+                                  ]),
                                 ),
                               ),
                             ),
@@ -218,28 +212,32 @@ class _WorkspacePageState extends State<WorkspacePage> {
             ),
           ),
           Expanded(
-            flex: 4,
-            child: Stack(
-              children: [
+              flex: 4,
+              child: Stack(children: [
                 Padding(
-                 padding: const EdgeInsets.only(left: 20, top: 21),
-                  child: BackButton(onPressed: () {Navigator.pop(context);}),
+                  padding: const EdgeInsets.only(left: 20, top: 21),
+                  child: BackButton(onPressed: () {
+                    Navigator.pop(context);
+                  }),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 30, right: 30, top: 70, bottom: 30),
+                  padding: const EdgeInsets.only(
+                      left: 30, right: 30, top: 70, bottom: 30),
                   child: LayoutBuilder(builder: (context, constraints) {
                     if (showTask) {
-                      return const TaskPage(label: "Team Tasks",);
+                      return const TaskPage(
+                        label: "Team Tasks",
+                      );
                     } else if (showMembers) {
                       return const MembersPage();
                     } else {
-                      return const TaskPage(label: "Team Tasks",);
+                      return const TaskPage(
+                        label: "Team Tasks",
+                      );
                     }
                   }),
                 )
-              ]
-            )
-          ),
+              ])),
         ],
       ),
     );
