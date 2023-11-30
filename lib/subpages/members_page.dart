@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/widgets/member_card.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:project_zenith/widgets/tasklist_card.dart';
 
 class MembersPage extends StatelessWidget {
   
