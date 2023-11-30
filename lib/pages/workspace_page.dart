@@ -153,8 +153,8 @@ class _WorkspacePageState extends State<WorkspacePage> {
                   child: BackButton(onPressed: () {}),
                 ),
                 const Padding(
-                  padding: EdgeInsets.only(left: 30, right: 30, top: 75, bottom: 30),
-                  child: TaskPage(label: "",),
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 70, bottom: 30),
+                  child: TaskPage(label: "Team Tasks",),
                 )
               ]
             )

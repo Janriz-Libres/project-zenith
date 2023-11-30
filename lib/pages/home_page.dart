@@ -29,22 +29,21 @@ class _HomePageState extends State<HomePage> {
       body: Row(
         children: [
           Flexible(
-            child: ConstrainedBox(
+            child: Container(
               constraints: const BoxConstraints(minWidth: 330, maxWidth: 385),
-              child: Container(
-                padding: const EdgeInsets.only(top: 25),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFD9D9D9),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0x3F000000),
-                      blurRadius: 4,
-                      offset: Offset(2, 0),
-                      spreadRadius: 0,
-                    )
-                  ],
-                ),
-                child: Column(
+              padding: const EdgeInsets.only(top: 25),
+              decoration: const BoxDecoration(
+                color: Color(0xFFD9D9D9),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 4,
+                    offset: Offset(2, 0),
+                    spreadRadius: 0,
+                  )
+                ],
+              ),
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
@@ -127,9 +126,7 @@ class _HomePageState extends State<HomePage> {
                             DrawOption(
                               imgPath: "assets/build_icon.png",
                               text: "Profile",
-                              func: () {
-                                if (context.mounted) {}
-                              },
+                              func: () {},
                             ),
                             DrawOption(
                               imgPath: "assets/later_icon.png",
@@ -139,6 +136,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.only(left: 24),
                         child: Row(children: [
@@ -169,41 +167,36 @@ class _HomePageState extends State<HomePage> {
                                 shrinkWrap: true,
                                 itemCount: ownedWorkspaces.length,
                                 itemBuilder: (context, index) {
-                                  Workspace workspace =
-                                      ownedWorkspaces.elementAt(index);
-
                                   return DrawOption(
                                     imgPath: "assets/build_icon.png",
-                                    text: workspace.title.toString(),
-                                    func: () {
-                                      if (context.mounted) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return TaskPage(
-                                                  label: workspace.title);
-                                            },
-                                          ),
-                                        );
-                                      }
-                                    },
+                                    text: ownedWorkspaces
+                                        .elementAt(index)
+                                        .title
+                                        .toString(),
+                                    func: () {},
                                   );
                                 },
                               ),
                       ),
-                      const SizedBox(height: 20),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 24),
-                        child: Text(
-                          'SHARED',
-                          style: TextStyle(
-                            color: Color(0xFF959A9C),
-                            fontSize: 16,
-                            fontFamily: 'Rubik',
-                            fontWeight: FontWeight.w700,
-                            height: 0,
-                          ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 24),
+                        child: Row(
+                          children: [
+                            const Text('SHARED',
+                                style: TextStyle(
+                                  color: Color(0xFF959A9C),
+                                  fontSize: 16,
+                                  fontFamily: 'Rubik',
+                                  fontWeight: FontWeight.w700,
+                                  height: 0,
+                                )),
+                            const SizedBox(width: 10),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () {},
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -216,33 +209,19 @@ class _HomePageState extends State<HomePage> {
                                 shrinkWrap: true,
                                 itemCount: sharedWorkspaces.length,
                                 itemBuilder: (context, index) {
-                                  Workspace workspace =
-                                      sharedWorkspaces.elementAt(index);
-
                                   return DrawOption(
                                     imgPath: "assets/later_icon.png",
-                                    text: workspace.title.toString(),
-                                    func: () {
-                                      if (context.mounted) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return TaskPage(
-                                                  label: workspace.title);
-                                            },
-                                          ),
-                                        );
-                                      }
-                                    },
+                                    text: sharedWorkspaces
+                                        .elementAt(index)
+                                        .title
+                                        .toString(),
+                                    func: () {},
                                   );
                                 },
                               ),
                       ),
-                    ])
-                  ],
-                ),
-              ),
+                    ]),
+                  ]),
             ),
           ),
           Expanded(
