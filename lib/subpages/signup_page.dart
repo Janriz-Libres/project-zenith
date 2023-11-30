@@ -105,7 +105,7 @@ class _SignupPageState extends State<SignupPage> {
       passwordController.text,
     );
 
-    initializeModels();
+    await initializeModels();
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -113,7 +113,10 @@ class _SignupPageState extends State<SignupPage> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return HomePage(emailAddress: currentUser!.email, username: currentUser!.username,);
+            return HomePage(
+              emailAddress: currentUser!.email,
+              username: currentUser!.username,
+            );
           },
         ),
       );

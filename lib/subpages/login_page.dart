@@ -102,13 +102,18 @@ class _LoginPageState extends State<LoginPage> {
           await prefs.setString('email', currentUser!.email);
           await prefs.setString('pw', currentUser!.password);
 
-          initializeModels();
+          await initializeModels();
 
           if (context.mounted) {
             ScaffoldMessenger.of(context).removeCurrentSnackBar();
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => HomePage(emailAddress: currentUser!.email, username: currentUser!.username,)),
+              MaterialPageRoute(
+                builder: (context) => HomePage(
+                  emailAddress: currentUser!.email,
+                  username: currentUser!.username,
+                ),
+              ),
             );
           }
         } on AuthException {
