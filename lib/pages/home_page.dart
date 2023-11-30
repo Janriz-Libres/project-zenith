@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
+import 'package:project_zenith/main.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
@@ -101,6 +102,12 @@ class _HomePageState extends State<HomePage> {
                                   await SharedPreferences.getInstance();
                               prefs.clear();
 
+                              ownedWorkspaces.clear();
+                              sharedWorkspaces.clear();
+                              lists.clear();
+                              tasks.clear();
+                              currentUser = null;
+
                               if (context.mounted) {
                                 Navigator.pushReplacement(
                                   context,
@@ -146,22 +153,24 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Container(
                       constraints: const BoxConstraints(maxHeight: 150),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            DrawOption(
-                              imgPath: "assets/join_icon.png",
-                              text: "Booth Department",
-                              func: () {},
+                      child: ownedWorkspaces.isEmpty
+                          ? const Column(
+                              mainAxisSize: MainAxisSize.min,
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: ownedWorkspaces.length,
+                              itemBuilder: (context, index) {
+                                return DrawOption(
+                                  imgPath: "assets/build_icon.png",
+                                  text: ownedWorkspaces
+                                      .elementAt(index)
+                                      .title
+                                      .toString(),
+                                  func: () {},
+                                );
+                              },
                             ),
-                            DrawOption(
-                              imgPath: "assets/extra_icon.png",
-                              text: "Create new workspace",
-                              func: () {},
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
                     const SizedBox(height: 20),
                     const Padding(
@@ -179,37 +188,24 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Container(
                       constraints: const BoxConstraints(maxHeight: 150),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            DrawOption(
-                              imgPath: "assets/build_icon.png",
-                              text: "Booth Department",
-                              func: () {},
+                      child: sharedWorkspaces.isEmpty
+                          ? const Column(
+                              mainAxisSize: MainAxisSize.min,
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: sharedWorkspaces.length,
+                              itemBuilder: (context, index) {
+                                return DrawOption(
+                                  imgPath: "assets/later_icon.png",
+                                  text: sharedWorkspaces
+                                      .elementAt(index)
+                                      .title
+                                      .toString(),
+                                  func: () {},
+                                );
+                              },
                             ),
-                            DrawOption(
-                              imgPath: "assets/build_icon.png",
-                              text: "Booth Department",
-                              func: () {},
-                            ),
-                            DrawOption(
-                              imgPath: "assets/build_icon.png",
-                              text: "Booth Department",
-                              func: () {},
-                            ),
-                            DrawOption(
-                              imgPath: "assets/build_icon.png",
-                              text: "Booth Department",
-                              func: () {},
-                            ),
-                            DrawOption(
-                              imgPath: "assets/later_icon.png",
-                              text: "Finance Department",
-                              func: () {},
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
                   ],
                 ),

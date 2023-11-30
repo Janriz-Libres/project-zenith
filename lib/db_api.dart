@@ -98,12 +98,27 @@ class User {
     List<Workspace> workspaces = [];
 
     for (final Document workspace in docs) {
+      List<User> members = [];
+      List<dynamic> memberRefs = workspace['members'];
+
+      for (DocumentReference ref in memberRefs) {
+        Document userDoc = await ref.get();
+
+        members.add(User(
+          authId: userDoc['auth_id'],
+          email: userDoc['email'],
+          id: userDoc['id'],
+          password: userDoc['password'],
+          username: userDoc['username'],
+        ));
+      }
+
       Workspace newWorkspace = Workspace(
         id: workspace.id,
         title: workspace['title'],
         description: workspace['description'],
-        owner: workspace['owner'],
-        members: workspace['members'],
+        owner: this,
+        members: members,
       );
       workspaces.add(newWorkspace);
     }
@@ -177,7 +192,7 @@ class Workspace {
       WorkList newWorkspace = WorkList(
         id: list.id,
         name: list['name'],
-        workspace: list['workspace'],
+        workspace: this,
       );
       lists.add(newWorkspace);
     }
@@ -227,12 +242,26 @@ class WorkList {
     List<Task> tasks = [];
 
     for (final Document task in query) {
+      List<User> assignedUsers = <User>[];
+      List<dynamic> refs = task['assigned'];
+
+      for (DocumentReference ref in refs) {
+        Document realDoc = await ref.get();
+        assignedUsers.add(User(
+          authId: realDoc['auth_id'],
+          email: realDoc['email'],
+          id: realDoc['id'],
+          password: realDoc['password'],
+          username: realDoc['username'],
+        ));
+      }
+
       Task newWorkspace = Task(
         id: task.id,
-        assigned: task['assigned'],
+        assigned: assignedUsers,
         deadline: task['deadline'],
         description: task['description'],
-        list: task['list'],
+        list: this,
         title: task['title'],
       );
       tasks.add(newWorkspace);

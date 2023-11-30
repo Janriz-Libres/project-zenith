@@ -7,31 +7,25 @@ import 'package:project_zenith/pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 User? currentUser;
-List<Workspace>? ownedWorkspaces;
-List<Workspace>? sharedWorkspaces;
-List<WorkList>? lists;
-List<Task>? tasks;
+List<Workspace> ownedWorkspaces = <Workspace>[];
+List<Workspace> sharedWorkspaces = <Workspace>[];
+List<WorkList> lists = <WorkList>[];
+List<Task> tasks = <Task>[];
 
-void initializeModels() async {
-  ownedWorkspaces = await currentUser?.getOwnedWorkspaces();
-  sharedWorkspaces = await currentUser?.getSharedWorkspaces();
+Future<void> initializeModels() async {
+  ownedWorkspaces = await currentUser!.getOwnedWorkspaces();
+  sharedWorkspaces = await currentUser!.getSharedWorkspaces();
 
-  if (ownedWorkspaces != null) {
-    for (Workspace space in ownedWorkspaces!) {
-      lists?.addAll(await space.getLists());
-    }
+  for (Workspace space in ownedWorkspaces) {
+    lists.addAll(await space.getLists());
   }
 
-  if (sharedWorkspaces != null) {
-    for (Workspace space in sharedWorkspaces!) {
-      lists?.addAll(await space.getLists());
-    }
+  for (Workspace space in sharedWorkspaces) {
+    lists.addAll(await space.getLists());
   }
 
-  if (lists != null) {
-    for (WorkList list in lists!) {
-      tasks?.addAll(await list.getTasks());
-    }
+  for (WorkList list in lists) {
+    tasks.addAll(await list.getTasks());
   }
 }
 
@@ -48,7 +42,7 @@ void main() async {
     currentUser =
         await Authenticator.signIn(email, prefs.getString('pw') as String);
 
-    initializeModels();
+    await initializeModels();
   }
 
   runApp(const MyApp());
@@ -73,8 +67,12 @@ class MyApp extends StatelessWidget {
       title: 'Zenith',
       debugShowCheckedModeBanner: false,
       home: LayoutBuilder(
-        builder: (context, constraints) =>
-            currentUser != null ? HomePage(emailAddress: currentUser!.email, username: currentUser!.username,) : const AuthPage(),
+        builder: (context, constraints) => currentUser != null
+            ? HomePage(
+                emailAddress: currentUser!.email,
+                username: currentUser!.username,
+              )
+            : const AuthPage(),
       ),
     );
   }
