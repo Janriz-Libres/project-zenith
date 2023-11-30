@@ -1,12 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:project_zenith/subpages/createtasklist_dialog.dart';
 import 'package:project_zenith/widgets/tasklist_card.dart';
 
 class TaskPage extends StatelessWidget {
   final String label;
+  final tasklistNameController = TextEditingController();
   
-  const TaskPage({super.key, required this.label});
+  TaskPage({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,17 @@ class TaskPage extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () {},
+              onPressed: () async {
+                await showDialog(
+                  useSafeArea: false,
+                  context: context,
+                  builder: (context) {
+                    return CreateTaskList(
+                      tasklistNameController: tasklistNameController,
+                    );
+                  },
+                );
+              },
             )
           ],
         ),
