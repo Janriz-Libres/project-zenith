@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/main.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/pages/workspace_page.dart';
 import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:project_zenith/subpages/task_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
@@ -92,49 +93,41 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 20),
                     SidebarList(children: [
-                      SizedBox(
-                        width: double.maxFinite,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            DrawOption(
-                              imgPath: "assets/white_logo.png",
-                              text: "Logout",
-                              func: () async {
-                                await Authenticator.logout();
-
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                prefs.clear();
-
-                                ownedWorkspaces.clear();
-                                sharedWorkspaces.clear();
-                                lists.clear();
-                                tasks.clear();
-                                currentUser = null;
-
-                                if (context.mounted) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const AuthPage(),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                            DrawOption(
-                              imgPath: "assets/build_icon.png",
-                              text: "Profile",
-                              func: () {},
-                            ),
-                            DrawOption(
-                              imgPath: "assets/later_icon.png",
-                              text: "Attendance",
-                              func: () {},
-                            ),
-                          ],
-                        ),
+                      DrawOption(
+                        imgPath: "assets/white_logo.png",
+                        text: "Logout",
+                        func: () async {
+                          await Authenticator.logout();
+                                            
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.clear();
+                                            
+                          ownedWorkspaces.clear();
+                          sharedWorkspaces.clear();
+                          lists.clear();
+                          tasks.clear();
+                          currentUser = null;
+                                            
+                          if (context.mounted) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AuthPage(),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      DrawOption(
+                        imgPath: "assets/build_icon.png",
+                        text: "Profile",
+                        func: () {},
+                      ),
+                      DrawOption(
+                        imgPath: "assets/later_icon.png",
+                        text: "Attendance",
+                        func: () {},
                       ),
                       const SizedBox(height: 10),
                       Padding(
@@ -215,7 +208,10 @@ class _HomePageState extends State<HomePage> {
                                         .elementAt(index)
                                         .title
                                         .toString(),
-                                    func: () {},
+                                    func: () {Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => const WorkspacePage()),
+                                            );},
                                   );
                                 },
                               ),
