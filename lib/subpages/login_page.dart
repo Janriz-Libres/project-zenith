@@ -4,7 +4,6 @@ import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/main.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/home_page.dart';
-import 'package:project_zenith/subpages/loading_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:project_zenith/widgets/transparent_button.dart';
 import 'package:project_zenith/widgets/authpage_textfield.dart';
@@ -29,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void validateForm() async {
     // showDialog(
-    //   context: context, 
+    //   context: context,
     //   builder: (context) {
     //     return const LoadingPage();
     //   }
@@ -41,13 +40,14 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Padding(
             padding: EdgeInsets.only(right: 8.0),
-            child: Icon(Icons.error_outline, color: Colors.white,),
+            child: Icon(
+              Icons.error_outline,
+              color: Colors.white,
+            ),
           ),
           Text(
             'Oh snap! Log in unsuccessful.',
-            style: TextStyle(
-              fontSize: 16
-            ),
+            style: TextStyle(fontSize: 16),
           ),
         ],
       ),

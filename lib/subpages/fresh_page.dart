@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/pages/home_page.dart';
 import 'package:project_zenith/subpages/attendance_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:firedart/firedart.dart';
