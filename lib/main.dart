@@ -4,6 +4,8 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/home_page.dart';
+import 'package:project_zenith/subpages/fresh_page.dart';
+import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 User? currentUser;

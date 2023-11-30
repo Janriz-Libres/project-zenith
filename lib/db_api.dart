@@ -22,6 +22,8 @@ class Authenticator {
       password: user['password'],
       authId: user['auth_id'],
       username: user['username'],
+      timeStarted: user['time_started'],
+      hasCheckedIn: user['has_checked_in'],
     );
   }
 
@@ -49,6 +51,8 @@ class Authenticator {
       password: pw,
       authId: FirebaseAuth.instance.userId,
       username: '',
+      timeStarted: DateTime.now(),
+      hasCheckedIn: false,
     );
   }
 
@@ -65,6 +69,8 @@ class User {
   final String email;
   final String password;
   final String username;
+  final DateTime timeStarted;
+  final bool hasCheckedIn;
 
   const User({
     required this.id,
@@ -72,6 +78,8 @@ class User {
     required this.password,
     required this.authId,
     required this.username,
+    required this.timeStarted,
+    required this.hasCheckedIn,
   });
 
   /// Adds a workspace for the user.
@@ -110,6 +118,8 @@ class User {
           id: userDoc['id'],
           password: userDoc['password'],
           username: userDoc['username'],
+          timeStarted: userDoc['time_started'],
+          hasCheckedIn: userDoc['has_checked_in'],
         ));
       }
 
@@ -253,6 +263,8 @@ class WorkList {
           id: realDoc['id'],
           password: realDoc['password'],
           username: realDoc['username'],
+          timeStarted: realDoc['time_started'],
+          hasCheckedIn: realDoc['has_checked_in'],
         ));
       }
 

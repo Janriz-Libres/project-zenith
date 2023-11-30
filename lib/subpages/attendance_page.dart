@@ -1,3 +1,4 @@
+import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/pages/home_page.dart';
@@ -25,10 +26,18 @@ class _AttendancePageState extends State<AttendancePage> {
             children: [
               Text(user.email),
               ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
                       checkedInUsers.remove(user);
                       users = checkedInUsers;
+                    });
+
+                    DocumentReference userRef = Firestore.instance
+                        .collection('users')
+                        .document(user.id);
+
+                    await userRef.update({
+                      'has_checked_in': false,
                     });
                   },
                   child: const Text("Check Oout"))
