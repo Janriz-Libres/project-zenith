@@ -16,7 +16,7 @@ class TaskCard extends StatelessWidget {
         child: Card(
           color: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(20),
               //set border radius more than 50% of height and width to make circle
           ),
           
