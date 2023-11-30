@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
+import 'package:project_zenith/subpages/createboards_dialog.dart';
 import 'package:project_zenith/subpages/members_page.dart';
 import 'package:project_zenith/subpages/task_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
@@ -20,6 +21,8 @@ class WorkspacePage extends StatefulWidget {
 class _WorkspacePageState extends State<WorkspacePage> {
   bool showTask = true;
   bool showMembers = false;
+  final boardNameController = TextEditingController();
+  final tasklistNameController = TextEditingController();
 
   void _showTask() {
     setState(() {
@@ -144,7 +147,20 @@ class _WorkspacePageState extends State<WorkspacePage> {
                                 const SizedBox(width: 10),
                                 IconButton(
                                   icon: const Icon(Icons.add),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await showDialog(
+                                      useSafeArea: false,
+                                      context: context,
+                                      builder: (context) {
+                                        return CreateBoard(
+                                          boardNameController:
+                                              boardNameController,
+                                          tasklistNameController:
+                                              tasklistNameController,
+                                        );
+                                      },
+                                    );
+                                  },
                                 )
                               ]),
                             ),

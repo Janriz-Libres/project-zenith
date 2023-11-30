@@ -1,12 +1,20 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:project_zenith/subpages/createtasklist_dialog.dart';
 import 'package:project_zenith/widgets/tasklist_card.dart';
 
-class TaskPage extends StatelessWidget {
+class TaskPage extends StatefulWidget {
   final String label;
-  
+
   const TaskPage({super.key, required this.label});
+
+  @override
+  State<TaskPage> createState() => _TaskPageState();
+}
+
+class _TaskPageState extends State<TaskPage> {
+  final tasklistNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +24,7 @@ class TaskPage extends StatelessWidget {
         Row(
           children: [
             SelectableText(
-              label,
+              widget.label,
               textAlign: TextAlign.left,
               style: const TextStyle(
                 color: Colors.black,
@@ -28,7 +36,17 @@ class TaskPage extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () {},
+              onPressed: () async {
+                await showDialog(
+                  useSafeArea: false,
+                  context: context,
+                  builder: (context) {
+                    return CreateTaskList(
+                      tasklistNameController: tasklistNameController,
+                    );
+                  },
+                );
+              },
             )
           ],
         ),
