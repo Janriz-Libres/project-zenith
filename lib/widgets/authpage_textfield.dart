@@ -40,6 +40,7 @@ class InputWidget extends StatelessWidget {
               style: const TextStyle(fontSize: 14, color: Colors.white),
               maxLines: 1,
               decoration: InputDecoration(
+                errorStyle: const TextStyle(height: 0),
                 filled: true,
                 fillColor: Colors.black,
                 enabledBorder: OutlineInputBorder(

@@ -55,8 +55,6 @@ class TaskPage extends StatelessWidget {
                       // This next line does the trick.
                       children: [
                         TaskList(label: "To Do"),
-                        TaskList(label: "Doing"),
-                        TaskList(label: "Done"),
                       ],
                     ),
                   ),

@@ -7,6 +7,7 @@ class ObscuredField extends StatefulWidget {
   final Color enabledColor;
   final Color focusedColor;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   const ObscuredField(
       {super.key,
@@ -15,7 +16,8 @@ class ObscuredField extends StatefulWidget {
       required this.borderColor,
       required this.enabledColor,
       required this.focusedColor,
-      required this.controller});
+      required this.controller, 
+      required this.validator});
 
   @override
   State<ObscuredField> createState() => _ObscuredFieldState();
@@ -43,11 +45,13 @@ class _ObscuredFieldState extends State<ObscuredField> {
           Expanded(
             flex: 8,
             child: TextFormField(
+              validator: widget.validator,
               controller: widget.controller,
               obscureText: obscured,
               style: const TextStyle(fontSize: 14, color: Colors.white),
               maxLines: 1,
               decoration: InputDecoration(
+                errorStyle: const TextStyle(height: 0),
                 filled: true,
                 fillColor: Colors.black,
                 enabledBorder: OutlineInputBorder(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/widgets/task_card.dart';
 
 class TaskList extends StatelessWidget {
   final String label;
@@ -13,7 +12,7 @@ class TaskList extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 5, right: 5),
       child: SizedBox(
-        width: 375,
+        width: 321,
         child: Card(
           color: Colors.black87,
           shape: RoundedRectangleBorder(
@@ -45,11 +44,12 @@ class TaskList extends StatelessWidget {
                     ],
                   ),
                 ),
+                const Divider(),
                 const Flexible(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        TaskCard(),
+                        
                       ],
                     ),
                   ),
