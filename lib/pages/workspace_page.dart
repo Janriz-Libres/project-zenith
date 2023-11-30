@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/subpages/task_page.dart';
 import 'package:project_zenith/widgets/draw_option.dart';
 
 class WorkspacePage extends StatefulWidget {
@@ -143,28 +144,22 @@ class _WorkspacePageState extends State<WorkspacePage> {
               ),
             ),
           ),
-          const Expanded(
-            flex: 3,
-            child: BoardPage()
+          Expanded(
+            flex: 4,
+            child: Stack(
+              children: [
+                Padding(
+                 padding: const EdgeInsets.only(left: 20, top: 21),
+                  child: BackButton(onPressed: () {}),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 75, bottom: 30),
+                  child: TaskPage(label: "",),
+                )
+              ]
+            )
           ),
         ],
-      ),
-    );
-  }
-}
-
-class BoardPage extends StatelessWidget {
-  
-  const BoardPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      heightFactor: 0.9,
-      widthFactor: 0.6,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 50),
-        child: Container(),
       ),
     );
   }
