@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/subpages/createboards_dialog.dart';
 import 'package:project_zenith/subpages/members_page.dart';
 import 'package:project_zenith/subpages/task_page.dart';
@@ -6,7 +7,12 @@ import 'package:project_zenith/widgets/draw_option.dart';
 import 'package:project_zenith/widgets/sidebar_list.dart';
 
 class WorkspacePage extends StatefulWidget {
-  const WorkspacePage({super.key});
+  final Workspace workspace;
+
+  const WorkspacePage({
+    super.key,
+    required this.workspace,
+  });
 
   @override
   State<WorkspacePage> createState() => _WorkspacePageState();
@@ -15,7 +21,7 @@ class WorkspacePage extends StatefulWidget {
 class _WorkspacePageState extends State<WorkspacePage> {
   bool showTask = true;
   bool showMembers = false;
-  final boardNameController= TextEditingController();
+  final boardNameController = TextEditingController();
   final tasklistNameController = TextEditingController();
 
   void _showTask() {
@@ -56,7 +62,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 29, right: 29),
+                    padding: const EdgeInsets.only(left: 29),
                     child: Row(
                       children: [
                         Container(
@@ -146,8 +152,10 @@ class _WorkspacePageState extends State<WorkspacePage> {
                                     context: context,
                                     builder: (context) {
                                       return CreateBoard(
-                                        boardNameController: boardNameController,
-                                        tasklistNameController: tasklistNameController,
+                                        boardNameController:
+                                            boardNameController,
+                                        tasklistNameController:
+                                            tasklistNameController,
                                       );
                                     },
                                   );

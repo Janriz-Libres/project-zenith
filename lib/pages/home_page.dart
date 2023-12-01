@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       body: Row(
         children: [
           Container(
-            constraints: const BoxConstraints(maxWidth: 385),
+            constraints: const BoxConstraints(minWidth: 330, maxWidth: 385),
             padding: const EdgeInsets.only(top: 25),
             decoration: const BoxDecoration(
               color: Color(0xFFD9D9D9),
@@ -250,13 +250,21 @@ class _HomePageState extends State<HomePage> {
                                 shrinkWrap: true,
                                 itemCount: ownedWorkspaces.length,
                                 itemBuilder: (context, index) {
+                                  Workspace thisSpace =
+                                      ownedWorkspaces.elementAt(index);
+          
                                   return DrawOption(
                                     imgPath: "assets/build_icon.png",
-                                    text: ownedWorkspaces
-                                        .elementAt(index)
-                                        .title
-                                        .toString(),
-                                    func: () {},
+                                    text: thisSpace.title.toString(),
+                                    func: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WorkspacePage(
+                                              workspace: thisSpace),
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
                               ),
@@ -302,18 +310,20 @@ class _HomePageState extends State<HomePage> {
                                 shrinkWrap: true,
                                 itemCount: sharedWorkspaces.length,
                                 itemBuilder: (context, index) {
+                                  Workspace thisSpace =
+                                      sharedWorkspaces.elementAt(index);
+          
                                   return DrawOption(
                                     imgPath: "assets/later_icon.png",
-                                    text: sharedWorkspaces
-                                        .elementAt(index)
-                                        .title
-                                        .toString(),
+                                    text: thisSpace.title.toString(),
                                     func: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const WorkspacePage()),
+                                          builder: (context) => WorkspacePage(
+                                            workspace: thisSpace,
+                                          ),
+                                        ),
                                       );
                                     },
                                   );
