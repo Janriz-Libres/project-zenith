@@ -240,7 +240,7 @@ class WorkList {
     var docReference = await Firestore.instance.collection('tasks').add({
       'title': title,
       'description': desc,
-      'assigned': [],
+      'assigned': <DocumentReference>[],
       'deadline': null,
       'list': Firestore.instance.collection('lists').document(id),
     });
