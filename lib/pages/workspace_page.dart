@@ -218,7 +218,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
                         taskLists: listArg,
                       );
                     } else if (showMembers) {
-                      return const MembersPage();
+                      return MembersPage(space: widget.workspace);
                     } else {
                       for (WorkList list in lists) {
                         if (list.workspace == widget.workspace) {

@@ -296,6 +296,11 @@ class WorkList {
 
     return tasks;
   }
+
+  Future<void> deleteTask(Task task) async {
+    var reference = Firestore.instance.collection('tasks').document(task.id);
+    await reference.delete();
+  }
 }
 
 class Task {
