@@ -12,7 +12,48 @@ class TaskList extends StatefulWidget {
   const TaskList({
     super.key,
     required this.label,
+    required this.list,
+    required this.tasks,
+    required this.deleteFunc,
   });
+
+  @override
+  State<TaskList> createState() => _TaskListState();
+}
+
+class _TaskListState extends State<TaskList> {
+  List<Task> displayTasks = <Task>[];
+
+  final titleController = TextEditingController();
+  final descController = TextEditingController();
+
+  Future<void> updateTasks() async {
+    Task task =
+        await widget.list.addTask(titleController.text, descController.text);
+
+    setState(() {
+      displayTasks.add(task);
+      tasks.add(task);
+    });
+  }
+
+  Future<void> deleteTasks() async {
+    for (Task task in displayTasks) {
+      var reference = Firestore.instance.collection('tasks').document(task.id);
+      reference.delete();
+    }
+
+    setState(() {
+      tasks.removeWhere((element) => displayTasks.contains(element));
+      displayTasks.clear();
+    });
+  }
+
+  void deleteSingleTask(Task task) {
+    setState(() {
+      displayTasks.remove(task);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

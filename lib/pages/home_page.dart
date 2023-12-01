@@ -289,22 +289,6 @@ class _HomePageState extends State<HomePage> {
                                       func: reflectDeletedSpaces,
                                     );
                                   }),
-            
-                                    return DrawOption(
-                                      imgPath: "assets/build_icon.png",
-                                      text: thisSpace.title.toString(),
-                                      func: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => WorkspacePage(
-                                                workspace: thisSpace),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
                         ),
                         const SizedBox(height: 10),
                         Padding(
@@ -332,15 +316,6 @@ class _HomePageState extends State<HomePage> {
                                       );
                                     },
                                   );
-                                  useSafeArea: false,
-                                  context: context,
-                                  builder: (context) {
-                                    codeController.clear();
-                                    return JoinWorkspace(
-                                      codeController: codeController,
-                                    );
-                                  },
-                                );
                                 },
                               )
                             ],
@@ -364,20 +339,6 @@ class _HomePageState extends State<HomePage> {
                                       controller: _cmController,
                                       owned: false,
                                       func: reflectDeletedSpaces,
-            
-                                    return DrawOption(
-                                      imgPath: "assets/later_icon.png",
-                                      text: thisSpace.title.toString(),
-                                      func: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => WorkspacePage(
-                                              workspace: thisSpace,
-                                            ),
-                                          ),
-                                        );
-                                      },
                                     );
                                   },
                                 ),
