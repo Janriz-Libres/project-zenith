@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/db_api.dart';
 
 class MemberCard extends StatelessWidget {
+  final User user;
 
   const MemberCard({
     super.key,
+    required this.user,
   });
 
   @override
@@ -12,9 +15,10 @@ class MemberCard extends StatelessWidget {
       width: double.maxFinite,
       height: 75,
       child: Card(
-        color: Color(0xFFD4515D),
+        color: const Color(0xFFD4515D),
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
           child: Row(
             children: [
               Container(
@@ -25,13 +29,15 @@ class MemberCard extends StatelessWidget {
                   shape: OvalBorder(),
                 ),
               ),
-              const SizedBox(width: 20,),
-              const Column(
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Username",
-                    style: TextStyle(
+                    user.username,
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
                       fontFamily: 'Rubik',
@@ -40,8 +46,8 @@ class MemberCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Email Address",
-                    style: TextStyle(
+                    user.email,
+                    style: const TextStyle(
                       color: Color(0xFF636769),
                       fontSize: 15,
                       fontFamily: 'Rubik',

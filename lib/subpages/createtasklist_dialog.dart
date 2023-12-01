@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/subpages/attendance_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:firedart/firedart.dart';
 
 class CreateTaskList extends StatelessWidget {
+  final TextEditingController tasklistNameController;
+  final Function() func;
+
   const CreateTaskList({
     super.key,
     required this.tasklistNameController,
+    required this.func,
   });
-
-  final TextEditingController tasklistNameController;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,8 @@ class CreateTaskList extends StatelessWidget {
           child: Wrap(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 25, bottom: 35, left: 25, right: 25),
+                padding: const EdgeInsets.only(
+                    top: 25, bottom: 35, left: 25, right: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -31,18 +31,16 @@ class CreateTaskList extends StatelessWidget {
                       child: Text(
                         "Create new task list",
                         style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: "Rubik",
-                          fontWeight: FontWeight.w700
-                        ),
+                            fontSize: 24,
+                            fontFamily: "Rubik",
+                            fontWeight: FontWeight.w700),
                       ),
                     ),
                     IconButton(
-                      onPressed: () {Navigator.of(context).pop();}, 
-                      icon: const Icon(
-                        Icons.close
-                      )
-                    )
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: const Icon(Icons.close))
                   ],
                 ),
               ),
@@ -91,7 +89,13 @@ class CreateTaskList extends StatelessWidget {
                     text: "Enter",
                     gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
                     minSize: const Size(200, 50),
-                    func: () async {},
+                    func: () async {
+                      await func();
+
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
+                    },
                   ),
                 ),
               ),

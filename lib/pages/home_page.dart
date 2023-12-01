@@ -31,11 +31,14 @@ class _HomePageState extends State<HomePage> {
   final workspaceNameController = TextEditingController();
   final workspaceDescriptionController = TextEditingController();
   final codeController = TextEditingController();
+
   Widget initAdminPage = FreshPage();
   Widget initUserPage = ProfilePage(
     username: currentUser!.username,
     emailAddress: currentUser!.email,
   );
+
+  final ContextMenuController _cmController = ContextMenuController();
 
   Future<void> logoutFunc() async {
     await Authenticator.logout();
@@ -57,6 +60,26 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
+  }
+
+  Future<void> updateWorkspaces() async {
+    Workspace? space = await currentUser?.addWorkspace(
+        workspaceNameController.text, workspaceDescriptionController.text);
+
+    setState(() {
+      ownedWorkspaces.add(space!);
+    });
+  }
+
+  void reflectDeletedSpaces(Workspace space, bool owned) {
+    setState(() {
+      if (owned) {
+        ownedWorkspaces.remove(space);
+        return;
+      }
+
+      sharedWorkspaces.remove(space);
+    });
   }
 
   @override
@@ -190,9 +213,9 @@ class _HomePageState extends State<HomePage> {
                                 func: () {
                                   setState(() {
                                     initUserPage = ProfilePage(
-                                    username: widget.username,
-                                    emailAddress: widget.emailAddress,
-                                  );
+                                      username: widget.username,
+                                      emailAddress: widget.emailAddress,
+                                    );
                                   });
                                 },
                               ),
@@ -234,8 +257,11 @@ class _HomePageState extends State<HomePage> {
                                     workspaceNameController.clear();
                                     workspaceDescriptionController.clear();
                                     return CreateWorkspace(
-                                      workspaceNameController: workspaceNameController,
-                                      workspaceDescriptionController: workspaceDescriptionController,
+                                      workspaceNameController:
+                                          workspaceNameController,
+                                      workspaceDescriptionController:
+                                          workspaceDescriptionController,
+                                      func: updateWorkspaces,
                                     );
                                   },
                                 );
@@ -255,6 +281,14 @@ class _HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     Workspace thisSpace =
                                         ownedWorkspaces.elementAt(index);
+
+                                    return WorkspaceTile(
+                                      space: thisSpace,
+                                      controller: _cmController,
+                                      owned: true,
+                                      func: reflectDeletedSpaces,
+                                    );
+                                  }),
             
                                     return DrawOption(
                                       imgPath: "assets/build_icon.png",
@@ -290,6 +324,14 @@ class _HomePageState extends State<HomePage> {
                                 icon: const Icon(Icons.add),
                                 onPressed: () async {
                                   await showDialog(
+                                    useSafeArea: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return JoinWorkspace(
+                                        codeController: workspaceNameController,
+                                      );
+                                    },
+                                  );
                                   useSafeArea: false,
                                   context: context,
                                   builder: (context) {
@@ -316,6 +358,12 @@ class _HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     Workspace thisSpace =
                                         sharedWorkspaces.elementAt(index);
+
+                                    return WorkspaceTile(
+                                      space: thisSpace,
+                                      controller: _cmController,
+                                      owned: false,
+                                      func: reflectDeletedSpaces,
             
                                     return DrawOption(
                                       imgPath: "assets/later_icon.png",
@@ -352,6 +400,61 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class WorkspaceTile extends StatelessWidget {
+  final ContextMenuController controller;
+  final Workspace space;
+  final bool owned;
+  final Function(Workspace, bool) func;
+
+  const WorkspaceTile({
+    super.key,
+    required this.space,
+    required this.controller,
+    required this.owned,
+    required this.func,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onSecondaryTapDown: (details) => controller.show(
+        context: context,
+        contextMenuBuilder: (context) {
+          return AdaptiveTextSelectionToolbar.buttonItems(
+            anchors: TextSelectionToolbarAnchors(
+              primaryAnchor: details.globalPosition,
+            ),
+            buttonItems: <ContextMenuButtonItem>[
+              ContextMenuButtonItem(
+                onPressed: () async {
+                  ContextMenuController.removeAny();
+                  await currentUser?.deleteWorkspace(space);
+                  func(space, owned);
+                },
+                label: 'Delete',
+              ),
+            ],
+          );
+        },
+      ),
+      child: DrawOption(
+        imgPath: "assets/later_icon.png",
+        text: space.title.toString(),
+        func: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WorkspacePage(
+                workspace: space,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

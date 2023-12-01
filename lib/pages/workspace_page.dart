@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
+import 'package:project_zenith/main.dart';
 import 'package:project_zenith/subpages/createboards_dialog.dart';
 import 'package:project_zenith/subpages/members_page.dart';
 import 'package:project_zenith/subpages/task_page.dart';
@@ -187,8 +188,9 @@ class _WorkspacePageState extends State<WorkspacePage> {
             ),
           ),
           Expanded(
-              flex: 3,
-              child: Stack(children: [
+            flex: 3,
+            child: Stack(
+              children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 20, top: 21),
                   child: BackButton(onPressed: () {
@@ -199,20 +201,40 @@ class _WorkspacePageState extends State<WorkspacePage> {
                   padding: const EdgeInsets.only(
                       left: 30, right: 30, top: 70, bottom: 30),
                   child: LayoutBuilder(builder: (context, constraints) {
+                    List<WorkList> listArg = <WorkList>[];
+
                     if (showTask) {
-                      return const TaskPage(
+                      for (WorkList list in lists) {
+                        if (list.workspace == widget.workspace) {
+                          listArg.add(list);
+                        }
+                      }
+
+                      return TaskPage(
                         label: "Team Tasks",
+                        workspace: widget.workspace,
+                        taskLists: listArg,
                       );
                     } else if (showMembers) {
-                      return const MembersPage();
+                      return MembersPage(space: widget.workspace);
                     } else {
-                      return const TaskPage(
+                      for (WorkList list in lists) {
+                        if (list.workspace == widget.workspace) {
+                          listArg.add(list);
+                        }
+                      }
+
+                      return TaskPage(
                         label: "Team Tasks",
+                        workspace: widget.workspace,
+                        taskLists: listArg,
                       );
                     }
                   }),
                 )
-              ])),
+              ],
+            ),
+          ),
         ],
       ),
     );
