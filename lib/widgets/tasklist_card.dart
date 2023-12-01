@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TaskList extends StatelessWidget {
+class TaskList extends StatefulWidget {
   final String label;
 
   const TaskList({
@@ -8,6 +8,11 @@ class TaskList extends StatelessWidget {
     required this.label,
   });
 
+  @override
+  State<TaskList> createState() => _TaskListState();
+}
+
+class _TaskListState extends State<TaskList> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -32,7 +37,7 @@ class TaskList extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        label.toUpperCase(),
+                        widget.label.toUpperCase(),
                         style: const TextStyle(
                             color: Colors.white,
                             fontFamily: "Rubik",

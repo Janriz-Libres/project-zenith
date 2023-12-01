@@ -23,7 +23,7 @@ class _TaskPageState extends State<TaskPage> {
       children: [
         Row(
           children: [
-            SelectableText(
+            Text(
               widget.label,
               textAlign: TextAlign.left,
               style: const TextStyle(
@@ -70,7 +70,6 @@ class _TaskPageState extends State<TaskPage> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      // This next line does the trick.
                       children: [
                         TaskList(label: "To Do"),
                       ],
