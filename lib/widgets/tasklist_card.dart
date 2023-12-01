@@ -1,15 +1,60 @@
+import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
+import 'package:project_zenith/db_api.dart';
+import 'package:project_zenith/main.dart';
 
-class TaskList extends StatelessWidget {
+class TaskList extends StatefulWidget {
   final String label;
+  final WorkList list;
+  final List<Task> tasks;
+  final Function(WorkList list) deleteFunc;
 
   const TaskList({
     super.key,
     required this.label,
+    required this.list,
+    required this.tasks,
+    required this.deleteFunc,
   });
 
   @override
+  State<TaskList> createState() => _TaskListState();
+}
+
+class _TaskListState extends State<TaskList> {
+  List<Task> displayTasks = <Task>[];
+
+  final titleController = TextEditingController();
+  final descController = TextEditingController();
+
+  Future<void> updateTasks() async {
+    Task task =
+        await widget.list.addTask(titleController.text, descController.text);
+
+    setState(() {
+      displayTasks.add(task);
+      tasks.add(task);
+    });
+  }
+
+  Future<void> deleteTasks() async {
+    for (Task task in displayTasks) {
+      var reference = Firestore.instance.collection('tasks').document(task.id);
+      reference.delete();
+    }
+
+    setState(() {
+      tasks.removeWhere((element) => displayTasks.contains(element));
+      displayTasks.clear();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (displayTasks.isEmpty) {
+      displayTasks = widget.tasks;
+    }
+
     return Padding(
       padding: const EdgeInsets.only(left: 5, right: 5),
       child: SizedBox(
@@ -32,7 +77,7 @@ class TaskList extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        label.toUpperCase(),
+                        widget.label.toUpperCase(),
                         style: const TextStyle(
                             color: Colors.white,
                             fontFamily: "Rubik",
@@ -40,38 +85,75 @@ class TaskList extends StatelessWidget {
                             fontSize: 18),
                       ),
                       IconButton(
-                          icon: const Icon(Icons.more_horiz), onPressed: () {})
+                        icon: const Icon(Icons.more_horiz),
+                        onPressed: () async {
+                          await deleteTasks();
+                          await widget.deleteFunc(widget.list);
+                        },
+                      )
                     ],
                   ),
                 ),
                 const Divider(),
-                const Flexible(
+                Flexible(
                   child: SingleChildScrollView(
                     child: Column(
-                      children: [
-                        
-                      ],
+                      children: displayTasks
+                          .map((e) => Text(
+                                e.title,
+                                style: const TextStyle(color: Colors.white),
+                              ))
+                          .toList(),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        foregroundColor: Colors.white,
-                        shadowColor: Colors.transparent,
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.add),
-                          Text(
-                            "Add a card",
-                            style: TextStyle(fontFamily: "Rubik", fontSize: 16),
-                          )
-                        ],
-                      ),
-                      onPressed: () {}),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.white,
+                      shadowColor: Colors.transparent,
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.add),
+                        Text(
+                          "Add a card",
+                          style: TextStyle(fontFamily: "Rubik", fontSize: 16),
+                        )
+                      ],
+                    ),
+                    onPressed: () async {
+                      await showDialog(
+                        useSafeArea: false,
+                        context: context,
+                        builder: (context) {
+                          return Scaffold(
+                            backgroundColor: Colors.transparent,
+                            body: AlertDialog(
+                              content: Column(
+                                children: [
+                                  TextFormField(controller: titleController),
+                                  TextFormField(controller: descController),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      await updateTasks();
+
+                                      if (context.mounted) {
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                                    child: const Text("Enter"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 )
               ],
             ),

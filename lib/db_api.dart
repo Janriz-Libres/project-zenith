@@ -166,6 +166,12 @@ class User {
 
     return await _getWorkspaces(userQuery);
   }
+
+  Future<void> deleteWorkspace(Workspace space) async {
+    var reference =
+        Firestore.instance.collection('workspaces').document(space.id);
+    await reference.delete();
+  }
 }
 
 class Workspace {
@@ -186,7 +192,7 @@ class Workspace {
   Future<WorkList> addList(String name) async {
     var docReference = await Firestore.instance.collection('lists').add({
       'name': name,
-      'workspace': this,
+      'workspace': Firestore.instance.collection('workspaces').document(id),
     });
 
     return WorkList(
@@ -236,7 +242,7 @@ class WorkList {
       'description': desc,
       'assigned': [],
       'deadline': null,
-      'list': this
+      'list': Firestore.instance.collection('lists').document(id),
     });
 
     return Task(

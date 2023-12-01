@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/subpages/attendance_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:firedart/firedart.dart';
 
 class CreateBoard extends StatelessWidget {
   const CreateBoard({
@@ -24,7 +21,8 @@ class CreateBoard extends StatelessWidget {
           child: Wrap(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 25, bottom: 35, left: 25, right: 25),
+                padding: const EdgeInsets.only(
+                    top: 25, bottom: 35, left: 25, right: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -33,18 +31,16 @@ class CreateBoard extends StatelessWidget {
                       child: Text(
                         "Create new board",
                         style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: "Rubik",
-                          fontWeight: FontWeight.w700
-                        ),
+                            fontSize: 24,
+                            fontFamily: "Rubik",
+                            fontWeight: FontWeight.w700),
                       ),
                     ),
                     IconButton(
-                      onPressed: () {Navigator.of(context).pop();}, 
-                      icon: const Icon(
-                        Icons.close
-                      )
-                    )
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: const Icon(Icons.close))
                   ],
                 ),
               ),

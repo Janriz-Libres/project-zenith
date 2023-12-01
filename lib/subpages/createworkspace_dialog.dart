@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/subpages/attendance_page.dart';
 import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:firedart/firedart.dart';
 
 class CreateWorkspace extends StatelessWidget {
   const CreateWorkspace({
     super.key,
     required this.workspaceNameController,
     required this.workspaceDescriptionController,
+    required this.func,
   });
 
   final TextEditingController workspaceNameController;
   final TextEditingController workspaceDescriptionController;
+  final Future<void> Function() func;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,8 @@ class CreateWorkspace extends StatelessWidget {
           child: Wrap(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 25, bottom: 35, left: 25, right: 25),
+                padding: const EdgeInsets.only(
+                    top: 25, bottom: 35, left: 25, right: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -33,18 +33,16 @@ class CreateWorkspace extends StatelessWidget {
                       child: Text(
                         "Create new workspace",
                         style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: "Rubik",
-                          fontWeight: FontWeight.w700
-                        ),
+                            fontSize: 24,
+                            fontFamily: "Rubik",
+                            fontWeight: FontWeight.w700),
                       ),
                     ),
                     IconButton(
-                      onPressed: () {Navigator.of(context).pop();}, 
-                      icon: const Icon(
-                        Icons.close
-                      )
-                    )
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: const Icon(Icons.close))
                   ],
                 ),
               ),
@@ -115,7 +113,8 @@ class CreateWorkspace extends StatelessWidget {
                       ),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    contentPadding: const EdgeInsets.only(top:30, left: 20, right: 20),
+                    contentPadding:
+                        const EdgeInsets.only(top: 30, left: 20, right: 20),
                     hintText: "Enter workspace description",
                     hintStyle: const TextStyle(
                         color: Color.fromARGB(255, 144, 142, 142),
@@ -131,7 +130,12 @@ class CreateWorkspace extends StatelessWidget {
                     text: "Enter",
                     gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
                     minSize: const Size(200, 50),
-                    func: () async {},
+                    func: () async {
+                      await func();
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
+                    },
                   ),
                 ),
               ),
