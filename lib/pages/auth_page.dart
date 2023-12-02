@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/subpages/login_page.dart';
 import 'package:project_zenith/subpages/signup_page.dart';
-import 'package:project_zenith/widgets/aesthetic_border.dart';
-import 'package:project_zenith/widgets/copyright_mark.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -161,10 +160,10 @@ class CheckWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
             ),
           ),
-          child: Checkbox(
+          child: const Checkbox(
             value: false,
             side: BorderSide.none,
-            onChanged: (value) {},
+            onChanged: null,
           ),
         ),
         Text(
@@ -181,38 +180,3 @@ class CheckWidget extends StatelessWidget {
     );
   }
 }
-
-// return Container(
-//   padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 12),
-//   decoration: ShapeDecoration(
-//     gradient: const LinearGradient(
-//       begin: Alignment(0, -1),
-//       end: Alignment(0, 1),
-//       colors: [
-//         Color(0xFF06BCC1),
-//         Color(0xFF047679),
-//       ],
-//     ),
-//     shape: RoundedRectangleBorder(
-//       side: const BorderSide(
-//         width: 4,
-//         strokeAlign: BorderSide.strokeAlignCenter,
-//         color: Color(0xFF06BCC1),
-//       ),
-//       borderRadius: BorderRadius.circular(8),
-//     ),
-//   ),
-// child: Text(
-//   text,
-//   textAlign: TextAlign.center,
-//   style: const TextStyle(
-//     color: Colors.white,
-//     fontSize: 20,
-//     fontFamily: 'DM Sans',
-//     fontWeight: FontWeight.w700,
-//     height: 0,
-//   ),
-// ),
-// );
-
-changePage() {}

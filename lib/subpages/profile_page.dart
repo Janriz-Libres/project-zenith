@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/widgets/aesthetic_border.dart';
+import 'package:project_zenith/custom_widgets.dart';
 
 class ProfilePage extends StatelessWidget {
   final String username;
   final String emailAddress;
-  
-  const ProfilePage({super.key, required this.username, required this.emailAddress});
+
+  const ProfilePage(
+      {super.key, required this.username, required this.emailAddress});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,10 @@ class ProfilePage extends StatelessWidget {
         child: AestheticBorder(
           borderColor: Colors.black,
           mainColor: const Color(0xFFF8F7F4),
-          child: ProfileView(username: username, emailAddress: emailAddress,),
+          child: ProfileView(
+            username: username,
+            emailAddress: emailAddress,
+          ),
         ),
       ),
     );
@@ -27,8 +31,9 @@ class ProfilePage extends StatelessWidget {
 class ProfileView extends StatelessWidget {
   final String username;
   final String emailAddress;
-  
-  const ProfileView({super.key, required this.username, required this.emailAddress});
+
+  const ProfileView(
+      {super.key, required this.username, required this.emailAddress});
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +44,7 @@ class ProfileView extends StatelessWidget {
         children: [
           Flexible(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxHeight: 264.5
-              ),
+              constraints: const BoxConstraints(maxHeight: 264.5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -85,7 +88,9 @@ class ProfileView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 0.02*MediaQuery.of(context).size.height,),
+                  SizedBox(
+                    height: 0.02 * MediaQuery.of(context).size.height,
+                  ),
                   SizedBox(
                     width: double.infinity,
                     child: Container(
@@ -106,7 +111,9 @@ class ProfileView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 0.02*MediaQuery.of(context).size.height,),
+                  SizedBox(
+                    height: 0.02 * MediaQuery.of(context).size.height,
+                  ),
                   SizedBox(
                     width: double.infinity,
                     child: Container(
@@ -134,7 +141,8 @@ class ProfileView extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(top: 0.08*MediaQuery.of(context).size.height),
+              padding: EdgeInsets.only(
+                  top: 0.08 * MediaQuery.of(context).size.height),
               child: Column(
                 children: [
                   const Text(
@@ -148,7 +156,9 @@ class ProfileView extends StatelessWidget {
                       height: 0,
                     ),
                   ),
-                  SizedBox(height: 0.025*MediaQuery.of(context).size.height,),
+                  SizedBox(
+                    height: 0.025 * MediaQuery.of(context).size.height,
+                  ),
                   Expanded(
                     flex: 3,
                     child: Row(
@@ -168,7 +178,10 @@ class ProfileView extends StatelessWidget {
                                   height: 0,
                                 ),
                               ),
-                              SizedBox(height: 0.015*MediaQuery.of(context).size.height,),
+                              SizedBox(
+                                height:
+                                    0.015 * MediaQuery.of(context).size.height,
+                              ),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 40, vertical: 13),
@@ -207,7 +220,10 @@ class ProfileView extends StatelessWidget {
                                   height: 0,
                                 ),
                               ),
-                              SizedBox(height: 0.015*MediaQuery.of(context).size.height,),
+                              SizedBox(
+                                height:
+                                    0.015 * MediaQuery.of(context).size.height,
+                              ),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 40, vertical: 13),

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/widgets/copyright_mark.dart';
-import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:project_zenith/widgets/transparent_button.dart';
-import 'package:project_zenith/widgets/aftersignup_field.dart';
+import 'package:project_zenith/custom_widgets.dart';
 
 class InviteTeamPage extends StatelessWidget {
   const InviteTeamPage({super.key});
@@ -22,8 +19,8 @@ class InviteTeamPage extends StatelessWidget {
             child: Image.asset("assets/right_bg.png"),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
+            padding: const EdgeInsets.only(
+                top: 18, bottom: 80, left: 120, right: 120),
             child: Content(),
           ),
           const Copyright(mLeft: 85, mBot: 30),
@@ -115,17 +112,15 @@ class Content extends StatelessWidget {
                           children: [
                             Expanded(
                               flex: 7,
-                              child:
-                                  WorkspaceField(
-                                    controller: inviteController,
-                                    label: "Workspace Members:"
-                                  ),
+                              child: WorkspaceField(
+                                  controller: inviteController,
+                                  label: "Workspace Members:"),
                             ),
                             const SizedBox(height: 10),
                             const Expanded(
                               flex: 6,
                               child: InviteCodeField(
-                                label: "Or invite them with one code:", 
+                                label: "Or invite them with one code:",
                                 code: "12345",
                               ),
                             ),
@@ -223,23 +218,24 @@ class InviteCodeField extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5)),
             ),
             child: Padding(
-              padding: EdgeInsets.only(left: 0.005*MediaQuery.of(context).size.width, top: 0.005*MediaQuery.of(context).size.height, bottom: 0.005*MediaQuery.of(context).size.height),
+              padding: EdgeInsets.only(
+                  left: 0.005 * MediaQuery.of(context).size.width,
+                  top: 0.005 * MediaQuery.of(context).size.height,
+                  bottom: 0.005 * MediaQuery.of(context).size.height),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: FittedBox(
-                      child: Icon(
-                        Icons.link,
-                        color: Theme.of(context).dialogBackgroundColor
-                      ),
+                      child: Icon(Icons.link,
+                          color: Theme.of(context).dialogBackgroundColor),
                     ),
                   ),
                   Expanded(
                     flex: 6,
                     child: FittedBox(
                       child: Transform.translate(
-                        offset: const Offset(-20,0),
+                        offset: const Offset(-20, 0),
                         child: SelectableText(
                           code,
                           style: const TextStyle(

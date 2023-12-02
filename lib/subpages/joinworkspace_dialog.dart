@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/widgets/submit_button.dart';
+import 'package:project_zenith/custom_widgets.dart';
 
 class JoinWorkspace extends StatelessWidget {
   const JoinWorkspace({

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/pages/inviteteam_page.dart';
-import 'package:project_zenith/widgets/copyright_mark.dart';
-import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:project_zenith/widgets/transparent_button.dart';
-import 'package:project_zenith/widgets/aftersignup_field.dart';
 
 class BuildWorkspacePage extends StatelessWidget {
   const BuildWorkspacePage({super.key});
@@ -23,8 +20,8 @@ class BuildWorkspacePage extends StatelessWidget {
             child: Image.asset("assets/right_bg.png"),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
+            padding: const EdgeInsets.only(
+                top: 18, bottom: 80, left: 120, right: 120),
             child: Content(),
           ),
           const Copyright(mLeft: 85, mBot: 30),
@@ -117,9 +114,8 @@ class Content extends StatelessWidget {
                             Expanded(
                               flex: 6,
                               child: WorkspaceField(
-                                controller: buildController,
-                                label: "Workspace Name:"
-                              ),
+                                  controller: buildController,
+                                  label: "Workspace Name:"),
                             ),
                             const Spacer(),
                             const Expanded(
@@ -215,18 +211,15 @@ class LongInputField extends StatelessWidget {
         Expanded(
           flex: 7,
           child: TextFormField(
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.white
-            ),
+            style: const TextStyle(fontSize: 14, color: Colors.white),
             maxLines: 5,
             decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.black,
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.white,
-                  width: 2,
+                filled: true,
+                fillColor: Colors.black,
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    width: 2,
                   ),
                 ),
                 focusedBorder: const OutlineInputBorder(
@@ -242,7 +235,8 @@ class LongInputField extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(50),
                 ),
-                contentPadding: const EdgeInsets.only(top: 40,left: 30, right: 30),
+                contentPadding:
+                    const EdgeInsets.only(top: 40, left: 30, right: 30),
                 hintText: "Description",
                 hintStyle: const TextStyle(
                     color: Color.fromARGB(255, 144, 142, 142),

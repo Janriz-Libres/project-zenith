@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/widgets/member_card.dart';
-import 'package:project_zenith/widgets/submit_button.dart';
 
 class MembersPage extends StatelessWidget {
   final Workspace space;

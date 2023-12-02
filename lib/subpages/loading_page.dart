@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/widgets/copyright_mark.dart';
+import 'package:project_zenith/custom_widgets.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});

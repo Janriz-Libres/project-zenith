@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/subpages/attendance_page.dart';
-import 'package:project_zenith/widgets/aesthetic_border.dart';
-import 'package:project_zenith/widgets/submit_button.dart';
 import 'package:firedart/firedart.dart';
 
 class FreshPage extends StatelessWidget {
@@ -21,7 +20,10 @@ class FreshPage extends StatelessWidget {
         child: AestheticBorder(
           borderColor: Colors.black,
           mainColor: const Color(0xFFF8F7F4),
-          child: Content(emailController: emailController, passController: passController,),
+          child: Content(
+            emailController: emailController,
+            passController: passController,
+          ),
         ),
       ),
     );
@@ -32,7 +34,8 @@ class Content extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController passController;
 
-  const Content({super.key, required this.emailController, required this.passController});
+  const Content(
+      {super.key, required this.emailController, required this.passController});
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +125,8 @@ class CheckInDialog extends StatelessWidget {
           child: Wrap(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 25, bottom: 35, left: 25, right: 25),
+                padding: const EdgeInsets.only(
+                    top: 25, bottom: 35, left: 25, right: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -131,18 +135,16 @@ class CheckInDialog extends StatelessWidget {
                       child: Text(
                         "Enter Account to Render Duty Hours",
                         style: TextStyle(
-                          fontSize: 24,
-                          fontFamily: "Rubik",
-                          fontWeight: FontWeight.w700
-                        ),
+                            fontSize: 24,
+                            fontFamily: "Rubik",
+                            fontWeight: FontWeight.w700),
                       ),
                     ),
                     IconButton(
-                      onPressed: () {Navigator.of(context).pop();}, 
-                      icon: const Icon(
-                        Icons.close
-                      )
-                    )
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: const Icon(Icons.close))
                   ],
                 ),
               ),
@@ -234,45 +236,44 @@ class CheckInDialog extends StatelessWidget {
                           .where('email', isEqualTo: emailController.text)
                           .where('password', isEqualTo: passController.text)
                           .get();
-                          
+
                       if (docs.isEmpty && context.mounted) {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: Colors.red.shade800,
-                            content: const Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(right: 8.0),
-                                  child: Icon(
-                                    Icons.error_outline,
-                                    color: Colors.white,
-                                  ),
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.red.shade800,
+                          content: const Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.error_outline,
+                                  color: Colors.white,
                                 ),
-                                Text(
-                                  'Oh snap! There\'s something wrong.',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ],
-                            ),
-                            action: SnackBarAction(
-                              label: 'Hide',
-                              textColor: Colors.white,
-                              onPressed: () {
-                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                              },
-                            ),
-                          )
-                        );
+                              ),
+                              Text(
+                                'Oh snap! There\'s something wrong.',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          action: SnackBarAction(
+                            label: 'Hide',
+                            textColor: Colors.white,
+                            onPressed: () {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                            },
+                          ),
+                        ));
                         return;
                       }
-                          
+
                       Document thisUser = docs.first;
                       await thisUser.reference.update({
                         'time_started': DateTime.now().toUtc(),
                         'has_checked_in': true,
                       });
-                          
+
                       User u = User(
                         authId: thisUser['auth_id'],
                         email: thisUser['email'],
@@ -283,14 +284,14 @@ class CheckInDialog extends StatelessWidget {
                         hasCheckedIn: thisUser['has_checked_in'],
                         totalMinutes: thisUser['total_minutes'],
                       );
-                          
+
                       checkedInUsers[u] = Duration.zero;
-                          
+
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Nice ka wan pipty.")),
                         );
-                          
+
                         Navigator.pop(context);
                       }
                     },

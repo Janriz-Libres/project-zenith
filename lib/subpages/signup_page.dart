@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/main.dart';
+import 'package:project_zenith/globals.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/home_page.dart';
-import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:project_zenith/widgets/authpage_textfield.dart';
-import 'package:project_zenith/widgets/authpage_obscuredfield.dart';
 
 class SignupPage extends StatefulWidget {
   final Function() function;
@@ -40,12 +38,12 @@ class _SignupPageState extends State<SignupPage> {
               Text('Oh snap! Sign up unsuccessful.'),
             ],
           ),
-            action: SnackBarAction(
-              label: 'Hide',
-              onPressed: () {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              },
-            ),
+          action: SnackBarAction(
+            label: 'Hide',
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
         ),
       );
       return;

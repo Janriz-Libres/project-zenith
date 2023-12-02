@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/main.dart';
+import 'package:project_zenith/globals.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/workspace_page.dart';
 import 'package:project_zenith/subpages/attendance_page.dart';
@@ -10,8 +9,6 @@ import 'package:project_zenith/subpages/createworkspace_dialog.dart';
 import 'package:project_zenith/subpages/fresh_page.dart';
 import 'package:project_zenith/subpages/joinworkspace_dialog.dart';
 import 'package:project_zenith/subpages/profile_page.dart';
-import 'package:project_zenith/widgets/draw_option.dart';
-import 'package:project_zenith/widgets/sidebar_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {

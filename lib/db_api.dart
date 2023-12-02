@@ -97,7 +97,7 @@ class User {
       'title': title,
       'description': desc,
       'owner': Firestore.instance.collection('users').document(id),
-      'members': [],
+      'members': <DocumentReference>[],
     });
 
     return Workspace(
@@ -215,7 +215,7 @@ class Workspace {
     for (final Document list in query) {
       WorkList newWorkspace = WorkList(
         id: list.id,
-        name: list['name'],
+        name: await list['name'],
         workspace: this,
       );
       lists.add(newWorkspace);

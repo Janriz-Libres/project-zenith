@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
+import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/main.dart';
+import 'package:project_zenith/globals.dart';
 import 'package:project_zenith/subpages/createtasklist_dialog.dart';
-import 'package:project_zenith/widgets/tasklist_card.dart';
 
 class TaskPage extends StatefulWidget {
   final Workspace workspace;

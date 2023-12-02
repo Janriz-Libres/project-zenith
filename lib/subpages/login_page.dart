@@ -1,14 +1,11 @@
 import 'package:firedart/auth/exceptions.dart';
 import 'package:flutter/material.dart';
+import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/main.dart';
+import 'package:project_zenith/globals.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/home_page.dart';
 import 'package:project_zenith/subpages/loading_page.dart';
-import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:project_zenith/widgets/transparent_button.dart';
-import 'package:project_zenith/widgets/authpage_textfield.dart';
-import 'package:project_zenith/widgets/authpage_obscuredfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -29,11 +26,10 @@ class _LoginPageState extends State<LoginPage> {
 
   void validateForm() async {
     showDialog(
-      context: context, 
-      builder: (context) {
-      return const LoadingPage();
-      }
-    );
+        context: context,
+        builder: (context) {
+          return const LoadingPage();
+        });
 
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     SnackBar snackbar = SnackBar(
@@ -81,32 +77,31 @@ class _LoginPageState extends State<LoginPage> {
 
         if (context.mounted) {
           Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.green.shade400,
-              content: const Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 8.0),
-                    child: Icon(Icons.check_circle, color: Colors.white,),
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green.shade400,
+            content: const Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 8.0),
+                  child: Icon(
+                    Icons.check_circle,
+                    color: Colors.white,
                   ),
-                  Text(
-                    'Log in successful.',
-                    style: TextStyle(
-                      fontSize: 16
-                    ),
-                  ),
-                ],
-              ),
-              action: SnackBarAction(
-                label: 'Hide',
-                textColor: Colors.white,
-                onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                },
-              ),
-            )
-          );
+                ),
+                Text(
+                  'Log in successful.',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            action: SnackBarAction(
+              label: 'Hide',
+              textColor: Colors.white,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          ));
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
