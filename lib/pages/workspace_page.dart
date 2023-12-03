@@ -9,10 +9,14 @@ import 'package:project_zenith/widgets/sidebar_list.dart';
 
 class WorkspacePage extends StatefulWidget {
   final Workspace workspace;
+  final String workspaceTitle;
+  final String workspaceDescription;
 
   const WorkspacePage({
     super.key,
-    required this.workspace,
+    required this.workspace, 
+    required this.workspaceTitle,
+    required this.workspaceDescription
   });
 
   @override
@@ -75,14 +79,14 @@ class _WorkspacePageState extends State<WorkspacePage> {
                           ),
                         ),
                         const Spacer(),
-                        const Expanded(
+                        Expanded(
                           flex: 18,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Production Department",
-                                style: TextStyle(
+                                widget.workspaceTitle,
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 20,
                                   fontFamily: 'Rubik',
@@ -91,8 +95,8 @@ class _WorkspacePageState extends State<WorkspacePage> {
                                 ),
                               ),
                               Text(
-                                "In charge of operations",
-                                style: TextStyle(
+                                widget.workspaceDescription,
+                                style: const TextStyle(
                                   color: Color(0xFF636769),
                                   fontSize: 15,
                                   fontFamily: 'Rubik',
@@ -189,50 +193,52 @@ class _WorkspacePageState extends State<WorkspacePage> {
           ),
           Expanded(
             flex: 3,
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 21),
-                  child: BackButton(onPressed: () {
-                    Navigator.pop(context);
-                  }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 30, right: 30, top: 70, bottom: 30),
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    List<WorkList> listArg = <WorkList>[];
-
-                    if (showTask) {
-                      for (WorkList list in lists) {
-                        if (list.workspace == widget.workspace) {
-                          listArg.add(list);
+            child: SelectionArea(
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 21),
+                    child: BackButton(onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 30, right: 30, top: 70, bottom: 30),
+                    child: LayoutBuilder(builder: (context, constraints) {
+                      List<WorkList> listArg = <WorkList>[];
+              
+                      if (showTask) {
+                        for (WorkList list in lists) {
+                          if (list.workspace == widget.workspace) {
+                            listArg.add(list);
+                          }
                         }
-                      }
-
-                      return TaskPage(
-                        label: "Team Tasks",
-                        workspace: widget.workspace,
-                        taskLists: listArg,
-                      );
-                    } else if (showMembers) {
-                      return MembersPage(space: widget.workspace);
-                    } else {
-                      for (WorkList list in lists) {
-                        if (list.workspace == widget.workspace) {
-                          listArg.add(list);
+              
+                        return TaskPage(
+                          label: "Team Tasks",
+                          workspace: widget.workspace,
+                          taskLists: listArg,
+                        );
+                      } else if (showMembers) {
+                        return MembersPage(space: widget.workspace);
+                      } else {
+                        for (WorkList list in lists) {
+                          if (list.workspace == widget.workspace) {
+                            listArg.add(list);
+                          }
                         }
+              
+                        return TaskPage(
+                          label: "Team Tasks",
+                          workspace: widget.workspace,
+                          taskLists: listArg,
+                        );
                       }
-
-                      return TaskPage(
-                        label: "Team Tasks",
-                        workspace: widget.workspace,
-                        taskLists: listArg,
-                      );
-                    }
-                  }),
-                )
-              ],
+                    }),
+                  )
+                ],
+              ),
             ),
           ),
         ],

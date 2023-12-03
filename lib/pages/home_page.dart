@@ -88,9 +88,9 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: const Color(0xFFF8F7F4),
       body: Row(
         children: [
-          Flexible(
+          ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 330, maxWidth: 385),
             child: Container(
-              constraints: const BoxConstraints(minWidth: 330, maxWidth: 385),
               padding: const EdgeInsets.only(top: 25),
               decoration: const BoxDecoration(
                 color: Color(0xFFD9D9D9),
@@ -104,7 +104,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 29),
@@ -195,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         );
                       }
-            
+                        
                       return SidebarList(children: [
                         SizedBox(
                           width: double.maxFinite,
@@ -281,12 +280,14 @@ class _HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     Workspace thisSpace =
                                         ownedWorkspaces.elementAt(index);
-
+                        
                                     return WorkspaceTile(
                                       space: thisSpace,
                                       controller: _cmController,
                                       owned: true,
                                       func: reflectDeletedSpaces,
+                                      workspaceTitle: thisSpace.title,
+                                      workspaceDescription: thisSpace.description,
                                     );
                                   }),
                         ),
@@ -333,12 +334,14 @@ class _HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     Workspace thisSpace =
                                         sharedWorkspaces.elementAt(index);
-
+                        
                                     return WorkspaceTile(
                                       space: thisSpace,
                                       controller: _cmController,
                                       owned: false,
                                       func: reflectDeletedSpaces,
+                                      workspaceTitle: thisSpace.title,
+                                      workspaceDescription: thisSpace.description,
                                     );
                                   },
                                 ),
@@ -350,14 +353,18 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             flex: 3,
-            child: SizedBox(
-              child: LayoutBuilder(builder: (context, constraints) {
-                if (currentUser?.id == 'rISCknyu5dlIrfGrKyCp') {
-                  return initAdminPage;
-                }
-              
-                return initUserPage;
-              }),
+            child: SelectionArea(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                        left: 30, right: 30, top: 30, bottom: 30),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  if (currentUser?.id == 'rISCknyu5dlIrfGrKyCp') {
+                    return initAdminPage;
+                  }
+                
+                  return initUserPage;
+                }),
+              ),
             ),
           ),
         ],
@@ -371,13 +378,17 @@ class WorkspaceTile extends StatelessWidget {
   final Workspace space;
   final bool owned;
   final Function(Workspace, bool) func;
+  final String workspaceTitle;
+  final String workspaceDescription;
 
   const WorkspaceTile({
     super.key,
     required this.space,
     required this.controller,
     required this.owned,
-    required this.func,
+    required this.func, 
+    required this.workspaceTitle, 
+    required this.workspaceDescription,
   });
 
   @override
@@ -412,6 +423,8 @@ class WorkspaceTile extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => WorkspacePage(
                 workspace: space,
+                workspaceTitle: workspaceTitle,
+                workspaceDescription: workspaceDescription,
               ),
             ),
           );
