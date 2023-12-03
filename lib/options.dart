@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-enum CustomIcon { 
+enum CustomIcon<String> { 
   cyan("assets/build_icon.png"), 
   magenta("assets/join_icon.png"), 
   yellow("assets/later_icon.png"), 
@@ -11,6 +11,13 @@ enum CustomIcon {
 
   const CustomIcon(this.asset);
   final String asset;
+}
+
+extension IconOptions<String> on CustomIcon<String> {
+  static CustomIcon generateRandomIcon() {
+    var rnd = Random();
+    return CustomIcon.values[rnd.nextInt(CustomIcon.values.length)];
+  }
 }
 
 enum CustomColors<Colors> {
