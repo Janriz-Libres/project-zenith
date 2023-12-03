@@ -199,19 +199,23 @@ class _HomePageState extends State<HomePage> {
                                 imgPath: "assets/build_icon.png",
                                 text: "Profile",
                                 func: () {
-                                  setState(() {
-                                    initUserPage = const ProfilePage();
-                                  });
+                                  setState(
+                                    () {
+                                      initUserPage = const ProfilePage();
+                                    },
+                                  );
                                 },
                               ),
                               DrawOption(
                                 imgPath: 'assets/join_icon.png',
                                 text: "Attendance",
                                 func: () {
-                                  setState(() {
-                                    initAdminPage = const AttendancePage();
-                                    initUserPage = const AttendancePage();
-                                  });
+                                  setState(
+                                    () {
+                                      initAdminPage = const AttendancePage();
+                                      initUserPage = const AttendancePage();
+                                    },
+                                  );
                                 },
                               )
                             ],
@@ -387,15 +391,26 @@ class WorkspaceTile extends StatelessWidget {
       child: DrawOption(
         imgPath: "assets/later_icon.png",
         text: space.title.toString(),
-        func: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WorkspacePage(
-                workspace: space,
+        func: () async {
+          List<WorkList> worklists = await space.getLists();
+          List<Task> tasks = <Task>[];
+
+          for (WorkList list in worklists) {
+            tasks.addAll(await list.getTasks());
+          }
+
+          if (context.mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WorkspacePage(
+                  workspace: space,
+                  worklists: worklists,
+                  tasks: tasks,
+                ),
               ),
-            ),
-          );
+            );
+          }
         },
       ),
     );

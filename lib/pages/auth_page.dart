@@ -328,7 +328,7 @@ class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void validateForm() async {
+  void _validateForm() async {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const LoadingPage()),
@@ -508,7 +508,7 @@ class _LoginPageState extends State<LoginPage> {
                               Color(0xFF047679)
                             ],
                             minSize: const Size(300, 70),
-                            func: validateForm),
+                            func: _validateForm),
                       ),
                       Expanded(
                         child: Padding(

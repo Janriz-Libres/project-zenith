@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/subpages/attendance_page.dart';
 import 'package:firedart/firedart.dart';
+import 'package:project_zenith/pages/attendance_page.dart';
 
 class FreshPage extends StatelessWidget {
   FreshPage({super.key});
