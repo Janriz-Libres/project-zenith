@@ -223,6 +223,11 @@ class Workspace {
 
     return lists;
   }
+
+  Future<void> deleteList(WorkList list) async {
+    var reference = Firestore.instance.collection('lists').document(list.id);
+    await reference.delete();
+  }
 }
 
 class WorkList {
@@ -319,4 +324,11 @@ class Task {
     required this.deadline,
     required this.list,
   });
+
+  Future<void> changeTaskParentList(WorkList list) async {
+    var reference = Firestore.instance.collection('tasks').document(id);
+    await reference.update({
+      'list': Firestore.instance.collection('lists').document(list.id),
+    });
+  }
 }

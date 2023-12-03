@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
+import 'package:project_zenith/globals.dart';
 
 class ProfilePage extends StatelessWidget {
-  final String username;
-  final String emailAddress;
-
-  const ProfilePage(
-      {super.key, required this.username, required this.emailAddress});
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +16,8 @@ class ProfilePage extends StatelessWidget {
           borderColor: Colors.black,
           mainColor: const Color(0xFFF8F7F4),
           child: ProfileView(
-            username: username,
-            emailAddress: emailAddress,
+            username: currentUser!.username,
+            emailAddress: currentUser!.email,
           ),
         ),
       ),

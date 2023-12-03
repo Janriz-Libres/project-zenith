@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
+import 'package:project_zenith/prompt_pages/welcome_page.dart';
+import 'package:project_zenith/prompt_pages/inviteteam_page.dart';
 
-class JoinWorkspacePage extends StatelessWidget {
-  const JoinWorkspacePage({super.key});
+class BuildWorkspacePage extends StatelessWidget {
+  const BuildWorkspacePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class JoinWorkspacePage extends StatelessWidget {
 }
 
 class Content extends StatelessWidget {
-  final joinController = TextEditingController();
+  final buildController = TextEditingController();
 
   Content({super.key});
 
@@ -56,7 +58,7 @@ class Content extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 65, bottom: 65),
+            padding: const EdgeInsets.only(top: 65),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -70,7 +72,7 @@ class Content extends StatelessWidget {
                               flex: 3,
                               child: FittedBox(
                                 child: Text(
-                                  'Let\'s Join a Workspace!',
+                                  'Let\'s Build a Workspace!',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
@@ -111,37 +113,65 @@ class Content extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Expanded(
-                              flex: 4,
+                              flex: 6,
                               child: WorkspaceField(
-                                  controller: joinController,
-                                  label: "Invited to a Workspace?"),
+                                  controller: buildController,
+                                  label: "Workspace Name:"),
                             ),
-                            const SizedBox(height: 30),
+                            const Spacer(),
                             const Expanded(
-                                flex: 3,
-                                child: SubmitButton(
-                                    text: "Join Workspace",
-                                    gradient: [
-                                      Color(0xFF06BCC1),
-                                      Color(0xFF047679)
-                                    ],
-                                    minSize: Size(300, 70),
-                                    func: test)),
-                            const SizedBox(height: 30),
-                            const Expanded(
-                                flex: 2,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 30, right: 30),
-                                  child: TransparentButton(
-                                    text: "I'll do this later",
-                                    hovered: Color.fromARGB(255, 6, 140, 145),
-                                    flat: Color(0xFF06BCC1),
-                                    lineColor: Color.fromARGB(255, 6, 140, 145),
-                                    function: test,
+                              flex: 7,
+                              child: LongInputField(
+                                  label: "Workspace Description (Optional):"),
+                            ),
+                            const Spacer(flex: 2),
+                            Expanded(
+                              flex: 3,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Row(children: [
+                                      Expanded(
+                                        child: SubmitButton(
+                                          text: "Continue",
+                                          gradient: const [
+                                            Color(0xFF06BCC1),
+                                            Color(0xFF047679)
+                                          ],
+                                          minSize: const Size(300, 70),
+                                          func: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const InviteTeamPage(),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Expanded(
+                                          child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 30, right: 30),
+                                        child: TransparentButton(
+                                          text: "I'll do this later",
+                                          hovered: const Color.fromARGB(
+                                              255, 6, 140, 145),
+                                          flat: const Color(0xFF06BCC1),
+                                          lineColor: const Color.fromARGB(
+                                              255, 6, 140, 145),
+                                          function: () {},
+                                        ),
+                                      ))
+                                    ]),
                                   ),
-                                )),
+                                ],
+                              ),
+                            ),
                           ]),
                     )),
+                const Spacer()
               ],
             ),
           ),
@@ -185,21 +215,40 @@ class LongInputField extends StatelessWidget {
         const Spacer(),
         Expanded(
           flex: 7,
-          child: Container(
-              height: 51,
-              decoration: ShapeDecoration(
-                color: Colors.black,
-                shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      width: 4,
-                      color: Colors.white,
-                    ),
-                    borderRadius: BorderRadius.circular(5)),
-              )),
+          child: TextFormField(
+            style: const TextStyle(fontSize: 14, color: Colors.white),
+            maxLines: 5,
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.black,
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFF06BCC1),
+                    width: 2,
+                  ),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    width: 2,
+                    color: Colors.white,
+                  ),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                contentPadding:
+                    const EdgeInsets.only(top: 40, left: 30, right: 30),
+                hintText: "Description",
+                hintStyle: const TextStyle(
+                    color: Color.fromARGB(255, 144, 142, 142),
+                    fontWeight: FontWeight.normal)),
+          ),
         )
       ],
     );
   }
 }
-
-void test() {}

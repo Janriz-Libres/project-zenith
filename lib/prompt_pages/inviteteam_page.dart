@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
+import 'package:project_zenith/prompt_pages/welcome_page.dart';
 
 class InviteTeamPage extends StatelessWidget {
   const InviteTeamPage({super.key});
@@ -125,7 +126,7 @@ class Content extends StatelessWidget {
                               ),
                             ),
                             const Spacer(flex: 2),
-                            const Expanded(
+                            Expanded(
                               flex: 4,
                               child: Column(
                                 children: [
@@ -134,24 +135,24 @@ class Content extends StatelessWidget {
                                       Expanded(
                                           child: SubmitButton(
                                               text: "Invite Members",
-                                              gradient: [
+                                              gradient: const [
                                                 Color(0xFF06BCC1),
                                                 Color(0xFF047679)
                                               ],
-                                              minSize: Size(300, 70),
-                                              func: test)),
+                                              minSize: const Size(300, 70),
+                                              func: () {})),
                                       Expanded(
                                           child: Padding(
-                                        padding: EdgeInsets.only(
+                                        padding: const EdgeInsets.only(
                                             left: 30, right: 30),
                                         child: TransparentButton(
                                           text: "I'll do this later",
-                                          hovered:
-                                              Color.fromARGB(255, 6, 140, 145),
-                                          flat: Color(0xFF06BCC1),
-                                          lineColor:
-                                              Color.fromARGB(255, 6, 140, 145),
-                                          function: test,
+                                          hovered: const Color.fromARGB(
+                                              255, 6, 140, 145),
+                                          flat: const Color(0xFF06BCC1),
+                                          lineColor: const Color.fromARGB(
+                                              255, 6, 140, 145),
+                                          function: () {},
                                         ),
                                       ))
                                     ]),
@@ -256,5 +257,3 @@ class InviteCodeField extends StatelessWidget {
     );
   }
 }
-
-void test() {}

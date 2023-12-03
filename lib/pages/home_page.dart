@@ -2,22 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/globals.dart';
+import 'package:project_zenith/pages/attendance_page.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/pages/fresh_page.dart';
+import 'package:project_zenith/pages/profile_page.dart';
 import 'package:project_zenith/pages/workspace_page.dart';
-import 'package:project_zenith/subpages/attendance_page.dart';
-import 'package:project_zenith/subpages/createworkspace_dialog.dart';
-import 'package:project_zenith/subpages/fresh_page.dart';
-import 'package:project_zenith/subpages/joinworkspace_dialog.dart';
-import 'package:project_zenith/subpages/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  final String emailAddress;
-  final String username;
   const HomePage({
     super.key,
-    required this.emailAddress,
-    required this.username,
   });
 
   @override
@@ -30,10 +24,7 @@ class _HomePageState extends State<HomePage> {
   final codeController = TextEditingController();
 
   Widget initAdminPage = FreshPage();
-  Widget initUserPage = ProfilePage(
-    username: currentUser!.username,
-    emailAddress: currentUser!.email,
-  );
+  Widget initUserPage = const ProfilePage();
 
   final ContextMenuController _cmController = ContextMenuController();
 
@@ -45,8 +36,8 @@ class _HomePageState extends State<HomePage> {
 
     ownedWorkspaces.clear();
     sharedWorkspaces.clear();
-    lists.clear();
-    tasks.clear();
+    // lists.clear();
+    // tasks.clear();
     currentUser = null;
 
     if (context.mounted) {
@@ -122,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  widget.username,
+                                  currentUser!.username,
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
@@ -132,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 Text(
-                                  widget.emailAddress,
+                                  currentUser!.email,
                                   style: const TextStyle(
                                     color: Color(0xFF636769),
                                     fontSize: 15,
@@ -209,10 +200,7 @@ class _HomePageState extends State<HomePage> {
                                 text: "Profile",
                                 func: () {
                                   setState(() {
-                                    initUserPage = ProfilePage(
-                                      username: widget.username,
-                                      emailAddress: widget.emailAddress,
-                                    );
+                                    initUserPage = const ProfilePage();
                                   });
                                 },
                               ),
@@ -251,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                                   useSafeArea: false,
                                   context: context,
                                   builder: (context) {
-                                    return CreateWorkspace(
+                                    return CreateWorkspaceDialog(
                                       workspaceNameController:
                                           workspaceNameController,
                                       workspaceDescriptionController:
@@ -306,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                                     useSafeArea: false,
                                     context: context,
                                     builder: (context) {
-                                      return JoinWorkspace(
+                                      return JoinWorkspaceDialog(
                                         codeController: workspaceNameController,
                                       );
                                     },

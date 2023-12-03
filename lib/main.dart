@@ -20,7 +20,7 @@ void main() async {
     currentUser =
         await Authenticator.signIn(email, prefs.getString('pw') as String);
 
-    await initializeModels();
+    await initWorkspaceModels();
   }
 
   runApp(const MyApp());
@@ -44,14 +44,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Zenith',
       debugShowCheckedModeBanner: false,
-      home: LayoutBuilder(
-        builder: (context, constraints) => currentUser != null
-            ? HomePage(
-                emailAddress: currentUser!.email,
-                username: currentUser!.username,
-              )
-            : const AuthPage(),
-      ),
+      home: currentUser != null ? const HomePage() : const AuthPage(),
     );
   }
 }
