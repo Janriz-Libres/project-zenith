@@ -10,28 +10,24 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SelectionArea(
-      child: FractionallySizedBox(
-        heightFactor: 1,
-        widthFactor: 1,
-        child: Stack(
-          children: [
-            const Text("Account Settings",
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontFamily: 'Rubik',
-                fontWeight: FontWeight.w700,
-                height: 0,
-              )
-            ),
-            AestheticBorder(
-              borderColor: Colors.black,
-              mainColor: const Color(0xFFF8F7F4),
-              child: ProfileView(username: username, emailAddress: emailAddress,),
-            ),
-          ],
-        ),
+      child: Stack(
+        children: [
+          const Text("Account Settings",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontFamily: 'Rubik',
+              fontWeight: FontWeight.w700,
+              height: 0,
+            )
+          ),
+          AestheticBorder(
+            borderColor: Colors.black,
+            mainColor: const Color(0xFFF8F7F4),
+            child: ProfileView(username: username, emailAddress: emailAddress,),
+          ),
+        ],
       ),
     );
   }
