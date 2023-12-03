@@ -69,6 +69,7 @@ class _TaskPageState extends State<TaskPage> {
                 useSafeArea: false,
                 context: context,
                 builder: (context) {
+                  tasklistNameController.clear();
                   return CreateTaskList(
                     tasklistNameController: tasklistNameController,
                     func: updateTaskList,

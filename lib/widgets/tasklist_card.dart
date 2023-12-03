@@ -2,6 +2,8 @@ import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/main.dart';
+import 'package:project_zenith/subpages/createtask_dialog.dart';
+import 'package:project_zenith/widgets/task_card.dart';
 
 class TaskList extends StatefulWidget {
   final String label;
@@ -113,7 +115,7 @@ class _TaskListState extends State<TaskList> {
                                 fontSize: 18),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.more_horiz),
+                            icon: const Icon(Icons.close),
                             onPressed: () async {
                               await deleteTasks();
                               await widget.deleteFunc(widget.list);
@@ -133,12 +135,14 @@ class _TaskListState extends State<TaskList> {
                                     task: e,
                                     func: deleteSingleTask,
                                   ),
-                                  feedback: Card(
-                                    child: Text(e.title),
+                                  feedback: TaskCard(
+                                    title: e.title,
+                                    desc: e.description
                                   ),
                                   childWhenDragging: Container(),
-                                  child: Card(
-                                    child: Text(e.title),
+                                  child: TaskCard(
+                                    title: e.title,
+                                    desc: e.description
                                   ),
                                 ),
                               )
@@ -169,27 +173,12 @@ class _TaskListState extends State<TaskList> {
                             useSafeArea: false,
                             context: context,
                             builder: (context) {
-                              return Scaffold(
-                                backgroundColor: Colors.transparent,
-                                body: AlertDialog(
-                                  content: Column(
-                                    children: [
-                                      TextFormField(
-                                          controller: titleController),
-                                      TextFormField(controller: descController),
-                                      ElevatedButton(
-                                        onPressed: () async {
-                                          await updateTasks();
-
-                                          if (context.mounted) {
-                                            Navigator.pop(context);
-                                          }
-                                        },
-                                        child: const Text("Enter"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              titleController.clear();
+                              descController.clear();
+                              return CreateTask(
+                                taskNameController: titleController,
+                                taskDescriptionController: descController, 
+                                func: updateTasks
                               );
                             },
                           );

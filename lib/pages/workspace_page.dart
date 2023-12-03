@@ -27,7 +27,6 @@ class _WorkspacePageState extends State<WorkspacePage> {
   bool showTask = true;
   bool showMembers = false;
   final boardNameController = TextEditingController();
-  final tasklistNameController = TextEditingController();
 
   void _showTask() {
     setState(() {
@@ -156,11 +155,10 @@ class _WorkspacePageState extends State<WorkspacePage> {
                                     useSafeArea: false,
                                     context: context,
                                     builder: (context) {
+                                      boardNameController.clear();
                                       return CreateBoard(
                                         boardNameController:
-                                            boardNameController,
-                                        tasklistNameController:
-                                            tasklistNameController,
+                                            boardNameController
                                       );
                                     },
                                   );

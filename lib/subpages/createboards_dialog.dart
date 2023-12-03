@@ -5,11 +5,9 @@ class CreateBoard extends StatelessWidget {
   const CreateBoard({
     super.key,
     required this.boardNameController,
-    required this.tasklistNameController,
   });
 
   final TextEditingController boardNameController;
-  final TextEditingController tasklistNameController;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,7 @@ class CreateBoard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 5, left: 12, right: 12),
+                padding: const EdgeInsets.only(bottom: 15, left: 12, right: 12),
                 child: TextFormField(
                   style: const TextStyle(fontSize: 14, color: Colors.white),
                   controller: boardNameController,
@@ -75,43 +73,6 @@ class CreateBoard extends StatelessWidget {
                     ),
                     contentPadding: const EdgeInsets.only(left: 20, right: 20),
                     hintText: "Enter board name",
-                    hintStyle: const TextStyle(
-                        color: Color.fromARGB(255, 144, 142, 142),
-                        fontWeight: FontWeight.normal),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15, left: 12, right: 12),
-                child: TextFormField(
-                  style: const TextStyle(fontSize: 14, color: Colors.white),
-                  controller: tasklistNameController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.black,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      borderSide: const BorderSide(
-                        color: Color(0xFF06BCC1),
-                        width: 2,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      borderSide: const BorderSide(
-                        color: Color(0xFF06BCC1),
-                        width: 2,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        width: 2,
-                        color: Color(0xFF06BCC1),
-                      ),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    contentPadding: const EdgeInsets.only(left: 20, right: 20),
-                    hintText: "Enter initial task list name",
                     hintStyle: const TextStyle(
                         color: Color.fromARGB(255, 144, 142, 142),
                         fontWeight: FontWeight.normal),

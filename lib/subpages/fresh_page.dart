@@ -86,6 +86,8 @@ class Content extends StatelessWidget {
                             ],
                             minSize: const Size(200, 50),
                             func: () async {
+                              emailController.clear();
+                              passController.clear();
                               await showDialog(
                                 useSafeArea: false,
                                 context: context,
@@ -209,7 +211,7 @@ class _CheckInDialogState extends State<CheckInDialog> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 15, left: 12, right: 12),
                 child: TextFormField(
-                  obscureText: true,
+                  obscureText: obscured,
                   style: const TextStyle(fontSize: 14, color: Colors.white),
                   controller: widget.passController,
                   decoration: InputDecoration(
@@ -355,6 +357,8 @@ class _CheckInDialogState extends State<CheckInDialog> {
                         Future.delayed(const Duration(milliseconds: 1500), () {
                           Navigator.pop(context);
                         });
+                        widget.emailController.clear();
+                        widget.passController.clear();
                       }
                     },
                   ),

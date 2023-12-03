@@ -312,6 +312,7 @@ class _HomePageState extends State<HomePage> {
                                     useSafeArea: false,
                                     context: context,
                                     builder: (context) {
+                                      workspaceNameController.clear();
                                       return JoinWorkspace(
                                         codeController: workspaceNameController,
                                       );
