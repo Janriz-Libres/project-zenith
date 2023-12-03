@@ -53,7 +53,7 @@ class _TaskPageState extends State<TaskPage> {
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Row(
         children: [
-          SelectableText(widget.label,
+          Text(widget.label,
               textAlign: TextAlign.left,
               style: const TextStyle(
                 color: Colors.black,
