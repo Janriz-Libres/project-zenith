@@ -34,11 +34,11 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
 
-    ownedWorkspaces.clear();
-    sharedWorkspaces.clear();
+    gOwnedSpaces.clear();
+    gSharedSpaces.clear();
     // lists.clear();
     // tasks.clear();
-    currentUser = null;
+    gUser = null;
 
     if (context.mounted) {
       Navigator.pushReplacement(
@@ -51,22 +51,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> updateWorkspaces() async {
-    Workspace? space = await currentUser?.addWorkspace(
+    Workspace? space = await gUser?.addWorkspace(
         workspaceNameController.text, workspaceDescriptionController.text);
 
     setState(() {
-      ownedWorkspaces.add(space!);
+      gOwnedSpaces.add(space!);
     });
   }
 
   void reflectDeletedSpaces(Workspace space, bool owned) {
     setState(() {
       if (owned) {
-        ownedWorkspaces.remove(space);
+        gOwnedSpaces.remove(space);
         return;
       }
 
-      sharedWorkspaces.remove(space);
+      gSharedSpaces.remove(space);
     });
   }
 
@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  currentUser!.username,
+                                  gUser!.username,
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 Text(
-                                  currentUser!.email,
+                                  gUser!.email,
                                   style: const TextStyle(
                                     color: Color(0xFF636769),
                                     fontSize: 15,
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 20),
                     LayoutBuilder(builder: (context, constraints) {
-                      if (currentUser?.id == 'rISCknyu5dlIrfGrKyCp') {
+                      if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
                         return SidebarList(
                           children: [
                             SizedBox(
@@ -258,16 +258,16 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Container(
                           constraints: const BoxConstraints(maxHeight: 150),
-                          child: ownedWorkspaces.isEmpty
+                          child: gOwnedSpaces.isEmpty
                               ? const Column(
                                   mainAxisSize: MainAxisSize.min,
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: ownedWorkspaces.length,
+                                  itemCount: gOwnedSpaces.length,
                                   itemBuilder: (context, index) {
                                     Workspace thisSpace =
-                                        ownedWorkspaces.elementAt(index);
+                                        gOwnedSpaces.elementAt(index);
 
                                     return WorkspaceTile(
                                       space: thisSpace,
@@ -310,16 +310,16 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Container(
                           constraints: const BoxConstraints(maxHeight: 150),
-                          child: sharedWorkspaces.isEmpty
+                          child: gSharedSpaces.isEmpty
                               ? const Column(
                                   mainAxisSize: MainAxisSize.min,
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: sharedWorkspaces.length,
+                                  itemCount: gSharedSpaces.length,
                                   itemBuilder: (context, index) {
                                     Workspace thisSpace =
-                                        sharedWorkspaces.elementAt(index);
+                                        gSharedSpaces.elementAt(index);
 
                                     return WorkspaceTile(
                                       space: thisSpace,
@@ -338,7 +338,7 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             flex: 3,
             child: LayoutBuilder(builder: (context, constraints) {
-              if (currentUser?.id == 'rISCknyu5dlIrfGrKyCp') {
+              if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
                 return initAdminPage;
               }
 
@@ -379,7 +379,7 @@ class WorkspaceTile extends StatelessWidget {
               ContextMenuButtonItem(
                 onPressed: () async {
                   ContextMenuController.removeAny();
-                  await currentUser?.deleteWorkspace(space);
+                  await gUser?.deleteWorkspace(space);
                   func(space, owned);
                 },
                 label: 'Delete',
@@ -392,22 +392,11 @@ class WorkspaceTile extends StatelessWidget {
         imgPath: "assets/later_icon.png",
         text: space.title.toString(),
         func: () async {
-          List<WorkList> worklists = await space.getLists();
-          List<Task> tasks = <Task>[];
-
-          for (WorkList list in worklists) {
-            tasks.addAll(await list.getTasks());
-          }
-
           if (context.mounted) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => WorkspacePage(
-                  workspace: space,
-                  worklists: worklists,
-                  tasks: tasks,
-                ),
+                builder: (context) => WorkspacePage(workspace: space),
               ),
             );
           }

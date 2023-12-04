@@ -314,9 +314,9 @@ class Task {
   final String description;
   final List<User> assigned;
   final DateTime? deadline;
-  final WorkList list;
+  WorkList list;
 
-  const Task({
+  Task({
     required this.id,
     required this.title,
     required this.description,
@@ -325,10 +325,11 @@ class Task {
     required this.list,
   });
 
-  Future<void> changeTaskParentList(WorkList list) async {
+  Future<void> changeParentList(WorkList list) async {
     var reference = Firestore.instance.collection('tasks').document(id);
     await reference.update({
       'list': Firestore.instance.collection('lists').document(list.id),
     });
+    this.list = list;
   }
 }

@@ -105,7 +105,7 @@ class _SignupPageState extends State<SignupPage> {
         const SnackBar(content: Text('Processing Data')),
       );
 
-      currentUser = await Authenticator.signUp(
+      gUser = await Authenticator.signUp(
         emailController.text,
         usernameController.text,
         passwordController.text,
@@ -337,15 +337,15 @@ class _LoginPageState extends State<LoginPage> {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
     try {
-      currentUser = await Authenticator.signIn(
+      gUser = await Authenticator.signIn(
         usernameController.text,
         passwordController.text,
       );
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      await prefs.setString('email', currentUser!.email);
-      await prefs.setString('pw', currentUser!.password);
+      await prefs.setString('email', gUser!.email);
+      await prefs.setString('pw', gUser!.password);
 
       await initWorkspaceModels();
 

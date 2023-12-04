@@ -17,8 +17,7 @@ void main() async {
   String? email = prefs.getString('email');
 
   if (email != null) {
-    currentUser =
-        await Authenticator.signIn(email, prefs.getString('pw') as String);
+    gUser = await Authenticator.signIn(email, prefs.getString('pw') as String);
 
     await initWorkspaceModels();
   }
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Zenith',
       debugShowCheckedModeBanner: false,
-      home: currentUser != null ? const HomePage() : const AuthPage(),
+      home: gUser != null ? const HomePage() : const AuthPage(),
     );
   }
 }

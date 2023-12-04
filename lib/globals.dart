@@ -1,24 +1,24 @@
 import 'package:project_zenith/db_api.dart';
 
-User? currentUser;
-List<Workspace> ownedWorkspaces = <Workspace>[];
-List<Workspace> sharedWorkspaces = <Workspace>[];
-// List<WorkList> lists = <WorkList>[];
-// List<Task> tasks = <Task>[];
+User? gUser;
+List<Workspace> gOwnedSpaces = <Workspace>[];
+List<Workspace> gSharedSpaces = <Workspace>[];
+List<WorkList> gLists = <WorkList>[];
+List<Task> gTasks = <Task>[];
 
 Future<void> initWorkspaceModels() async {
-  ownedWorkspaces = await currentUser!.getOwnedWorkspaces();
-  sharedWorkspaces = await currentUser!.getSharedWorkspaces();
+  gOwnedSpaces = await gUser!.getOwnedWorkspaces();
+  gSharedSpaces = await gUser!.getSharedWorkspaces();
 
-  // for (Workspace space in ownedWorkspaces) {
-  //   lists.addAll(await space.getLists());
-  // }
+  for (Workspace space in gOwnedSpaces) {
+    gLists.addAll(await space.getLists());
+  }
 
-  // for (Workspace space in sharedWorkspaces) {
-  //   lists.addAll(await space.getLists());
-  // }
+  for (Workspace space in gSharedSpaces) {
+    gLists.addAll(await space.getLists());
+  }
 
-  // for (WorkList list in lists) {
-  //   tasks.addAll(await list.getTasks());
-  // }
+  for (WorkList list in gLists) {
+    gTasks.addAll(await list.getTasks());
+  }
 }

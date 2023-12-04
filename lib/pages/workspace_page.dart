@@ -1,20 +1,16 @@
-import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
+import 'package:project_zenith/globals.dart';
 import 'package:project_zenith/pages/members_page.dart';
 
 class WorkspacePage extends StatefulWidget {
   final Workspace workspace;
-  final List<WorkList> worklists;
-  final List<Task> tasks;
 
   const WorkspacePage({
     super.key,
     required this.workspace,
-    required this.worklists,
-    required this.tasks,
   });
 
   @override
@@ -25,6 +21,7 @@ enum ContentWidget { task, members }
 
 class _WorkspacePageState extends State<WorkspacePage> {
   ContentWidget contentWidget = ContentWidget.task;
+
   final boardNameController = TextEditingController();
   final tasklistNameController = TextEditingController();
 
@@ -116,7 +113,9 @@ class _WorkspacePageState extends State<WorkspacePage> {
                       DrawOption(
                         imgPath: "assets/white_logo.png",
                         text: "Workspace",
-                        func: () async => _changeContent(ContentWidget.task),
+                        func: () {
+                          _changeContent(ContentWidget.task);
+                        },
                       ),
                       DrawOption(
                         imgPath: "assets/build_icon.png",
@@ -205,9 +204,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
                       switch (contentWidget) {
                         case ContentWidget.task:
                           return TaskPage(
-                            label: "Team Tasks",
                             workspace: widget.workspace,
-                            worklists: widget.worklists,
                           );
                         case ContentWidget.members:
                           return MembersPage(space: widget.workspace);
@@ -228,14 +225,10 @@ class _WorkspacePageState extends State<WorkspacePage> {
 
 class TaskPage extends StatefulWidget {
   final Workspace workspace;
-  final List<WorkList> worklists;
-  final String label;
 
   const TaskPage({
     super.key,
-    required this.label,
     required this.workspace,
-    required this.worklists,
   });
 
   @override
@@ -244,39 +237,38 @@ class TaskPage extends StatefulWidget {
 
 class _TaskPageState extends State<TaskPage> {
   final tasklistNameController = TextEditingController();
-  List<WorkList> displayLists = <WorkList>[];
+  List<WorkList>? worklists;
 
-  Future<void> updateTaskList() async {
-    WorkList list = await widget.workspace.addList(tasklistNameController.text);
+  void initWorklists() {
+    if (worklists != null) {
+      return;
+    }
 
-    setState(() {
-      displayLists.add(list);
-      // lists.add(list);
-    });
+    worklists = <WorkList>[];
+
+    for (WorkList list in gLists) {
+      if (list.workspace == widget.workspace) {
+        worklists?.add(list);
+      }
+    }
   }
 
-  Future<void> deleteList(WorkList list) async {
-    var reference = Firestore.instance.collection('lists').document(list.id);
-    await reference.delete();
-
-    setState(() {
-      displayLists.remove(list);
-      // lists.remove(list);
-    });
+  @override
+  void dispose() {
+    tasklistNameController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (displayLists.isEmpty) {
-      displayLists = widget.worklists;
-    }
+    initWorklists();
 
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Row(
         children: [
-          SelectableText(widget.label,
+          const SelectableText("Team Tasks",
               textAlign: TextAlign.left,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.black,
                 fontSize: 18,
                 fontFamily: 'Rubik',
@@ -292,7 +284,7 @@ class _TaskPageState extends State<TaskPage> {
                 builder: (context) {
                   return CreateTaskListDialog(
                     tasklistNameController: tasklistNameController,
-                    func: updateTaskList,
+                    func: () {},
                   );
                 },
               );
@@ -318,23 +310,7 @@ class _TaskPageState extends State<TaskPage> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    // This next line does the trick.
-                    children: displayLists.map((e) {
-                      List<Task> thisTasks = <Task>[];
-
-                      // for (Task task in tasks) {
-                      //   if (task.list.id == e.id) {
-                      //     thisTasks.add(task);
-                      //   }
-                      // }
-
-                      return TaskList(
-                        label: e.name,
-                        list: e,
-                        tasks: thisTasks,
-                        deleteFunc: deleteList,
-                      );
-                    }).toList(),
+                    children: worklists!.map((e) => TaskList(list: e)).toList(),
                   ),
                 ),
               ),
@@ -347,17 +323,11 @@ class _TaskPageState extends State<TaskPage> {
 }
 
 class TaskList extends StatefulWidget {
-  final String label;
   final WorkList list;
-  final List<Task> tasks;
-  final Function(WorkList list) deleteFunc;
 
   const TaskList({
     super.key,
-    required this.label,
     required this.list,
-    required this.tasks,
-    required this.deleteFunc,
   });
 
   @override
@@ -365,65 +335,69 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  List<Task> displayTasks = <Task>[];
-
+  List<Task>? tasks;
   final titleController = TextEditingController();
   final descController = TextEditingController();
 
-  Future<void> updateTasks() async {
-    Task task =
-        await widget.list.addTask(titleController.text, descController.text);
+  Future<void> _addTask() async {
+    Task newTask =
+        await widget.list.addTask(titleController.text, titleController.text);
+    gTasks.add(newTask);
 
     setState(() {
-      displayTasks.add(task);
-      // tasks.add(task);
+      tasks = null;
     });
+
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
   }
 
-  Future<void> deleteTasks() async {
-    for (Task task in displayTasks) {
-      var reference = Firestore.instance.collection('tasks').document(task.id);
-      reference.delete();
+  Future<void> _removeTask(Task task) async {
+    setState(() {
+      tasks?.remove(task);
+    });
+    await widget.list.deleteTask(task);
+  }
+
+  Future<void> _moveTask(TaskFuncPair data) async {
+    setState(() {
+      tasks?.add(data.task);
+    });
+
+    await data.removeTaskFunc(data.task);
+    await data.task.changeParentList(widget.list);
+  }
+
+  void initTasks() {
+    if (tasks != null) {
+      return;
     }
 
-    setState(() {
-      // tasks.removeWhere((element) => displayTasks.contains(element));
-      displayTasks.clear();
-    });
+    tasks = <Task>[];
+
+    for (Task task in gTasks) {
+      if (task.list.id == widget.list.id) {
+        tasks?.add(task);
+      }
+    }
   }
 
-  void deleteSingleTask(Task task) {
-    setState(() {
-      displayTasks.remove(task);
-    });
+  @override
+  void dispose() {
+    titleController.dispose();
+    descController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (displayTasks.isEmpty) {
-      displayTasks = widget.tasks;
-    }
+    initTasks();
 
     return DragTarget<TaskFuncPair>(
-      onWillAccept: (data) => !displayTasks.contains(data?.task),
+      onWillAccept: (data) => !(tasks!.contains(data?.task)),
       onAccept: (data) async {
-        setState(() {
-          displayTasks.add(data.task);
-        });
-
-        await data.func(data.task);
-
-        var reference =
-            Firestore.instance.collection('tasks').document(data.task.id);
-        await reference.update({
-          'list':
-              Firestore.instance.collection('lists').document(widget.list.id),
-        });
-
-        // tasks.clear();
-        // for (WorkList list in lists) {
-        //   tasks.addAll(await list.getTasks());
-        // }
+        await _moveTask(data);
       },
       builder: (context, incoming, rejected) {
         return Padding(
@@ -448,7 +422,7 @@ class _TaskListState extends State<TaskList> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            widget.label.toUpperCase(),
+                            widget.list.name.toUpperCase(),
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: "Rubik",
@@ -457,10 +431,7 @@ class _TaskListState extends State<TaskList> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.more_horiz),
-                            onPressed: () async {
-                              await deleteTasks();
-                              await widget.deleteFunc(widget.list);
-                            },
+                            onPressed: () {},
                           )
                         ],
                       ),
@@ -469,12 +440,12 @@ class _TaskListState extends State<TaskList> {
                     Flexible(
                       child: SingleChildScrollView(
                         child: Column(
-                          children: displayTasks
+                          children: tasks!
                               .map(
                                 (e) => Draggable<TaskFuncPair>(
                                   data: TaskFuncPair(
                                     task: e,
-                                    func: deleteSingleTask,
+                                    removeTaskFunc: _removeTask,
                                   ),
                                   feedback: Card(
                                     child: Text(e.title),
@@ -521,13 +492,7 @@ class _TaskListState extends State<TaskList> {
                                           controller: titleController),
                                       TextFormField(controller: descController),
                                       ElevatedButton(
-                                        onPressed: () async {
-                                          await updateTasks();
-
-                                          if (context.mounted) {
-                                            Navigator.pop(context);
-                                          }
-                                        },
+                                        onPressed: _addTask,
                                         child: const Text("Enter"),
                                       ),
                                     ],
@@ -548,4 +513,14 @@ class _TaskListState extends State<TaskList> {
       },
     );
   }
+}
+
+class TaskFuncPair {
+  final Task task;
+  final Function(Task) removeTaskFunc;
+
+  const TaskFuncPair({
+    required this.task,
+    required this.removeTaskFunc,
+  });
 }

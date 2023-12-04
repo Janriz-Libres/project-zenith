@@ -459,16 +459,6 @@ class SubmitButton extends StatelessWidget {
   }
 }
 
-class TaskFuncPair {
-  final Task task;
-  final Function(Task) func;
-
-  const TaskFuncPair({
-    required this.task,
-    required this.func,
-  });
-}
-
 class TransparentButton extends StatelessWidget {
   final String text;
   final Color flat;

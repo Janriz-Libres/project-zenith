@@ -16,8 +16,8 @@ class ProfilePage extends StatelessWidget {
           borderColor: Colors.black,
           mainColor: const Color(0xFFF8F7F4),
           child: ProfileView(
-            username: currentUser!.username,
-            emailAddress: currentUser!.email,
+            username: gUser!.username,
+            emailAddress: gUser!.email,
           ),
         ),
       ),
