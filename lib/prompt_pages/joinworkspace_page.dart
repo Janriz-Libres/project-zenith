@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/widgets/copyright_mark.dart';
-import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:project_zenith/widgets/transparent_button.dart';
-import 'package:project_zenith/widgets/aftersignup_field.dart';
+import 'package:project_zenith/custom_widgets.dart';
+import 'package:project_zenith/prompt_pages/welcome_page.dart';
 
 class JoinWorkspacePage extends StatelessWidget {
   const JoinWorkspacePage({super.key});
@@ -105,46 +103,50 @@ class Content extends StatelessWidget {
                     )),
                 const Spacer(),
                 Expanded(
-                    flex: 6,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: 0.25 * MediaQuery.of(context).size.width,
-                          right: 0.25 * MediaQuery.of(context).size.width),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: WorkspaceField(
-                                  controller: joinController,
-                                  label: "Invited to a Workspace?"),
+                  flex: 6,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 0.25 * MediaQuery.of(context).size.width,
+                        right: 0.25 * MediaQuery.of(context).size.width),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: WorkspaceField(
+                              controller: joinController,
+                              label: "Invited to a Workspace?"),
+                        ),
+                        const SizedBox(height: 30),
+                        Expanded(
+                          flex: 3,
+                          child: SubmitButton(
+                              text: "Join Workspace",
+                              gradient: const [
+                                Color(0xFF06BCC1),
+                                Color(0xFF047679)
+                              ],
+                              minSize: const Size(300, 70),
+                              func: () {}),
+                        ),
+                        const SizedBox(height: 30),
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 30, right: 30),
+                            child: TransparentButton(
+                              text: "I'll do this later",
+                              hovered: const Color.fromARGB(255, 6, 140, 145),
+                              flat: const Color(0xFF06BCC1),
+                              lineColor: const Color.fromARGB(255, 6, 140, 145),
+                              function: () {},
                             ),
-                            const SizedBox(height: 30),
-                            const Expanded(
-                                flex: 3,
-                                child: SubmitButton(
-                                    text: "Join Workspace",
-                                    gradient: [
-                                      Color(0xFF06BCC1),
-                                      Color(0xFF047679)
-                                    ],
-                                    minSize: Size(300, 70),
-                                    func: test)),
-                            const SizedBox(height: 30),
-                            const Expanded(
-                                flex: 2,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 30, right: 30),
-                                  child: TransparentButton(
-                                    text: "I'll do this later",
-                                    hovered: Color.fromARGB(255, 6, 140, 145),
-                                    flat: Color(0xFF06BCC1),
-                                    lineColor: Color.fromARGB(255, 6, 140, 145),
-                                    function: test,
-                                  ),
-                                )),
-                          ]),
-                    )),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -204,5 +206,3 @@ class LongInputField extends StatelessWidget {
     );
   }
 }
-
-void test() {}

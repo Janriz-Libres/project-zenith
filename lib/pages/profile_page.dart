@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/widgets/aesthetic_border.dart';
+import 'package:project_zenith/custom_widgets.dart';
+import 'package:project_zenith/globals.dart';
 
 class ProfilePage extends StatelessWidget {
-  final String username;
-  final String emailAddress;
-  
-  const ProfilePage({super.key, required this.username, required this.emailAddress});
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +34,9 @@ class ProfilePage extends StatelessWidget {
 class ProfileView extends StatefulWidget {
   final String username;
   final String emailAddress;
-  
-  const ProfileView({super.key, required this.username, required this.emailAddress});
+
+  const ProfileView(
+      {super.key, required this.username, required this.emailAddress});
 
   @override
   State<ProfileView> createState() => _ProfileViewState();

@@ -1,26 +1,17 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/main.dart';
+import 'package:project_zenith/globals.dart';
+import 'package:project_zenith/pages/attendance_page.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/pages/fresh_page.dart';
+import 'package:project_zenith/pages/profile_page.dart';
 import 'package:project_zenith/pages/workspace_page.dart';
-import 'package:project_zenith/subpages/attendance_page.dart';
-import 'package:project_zenith/subpages/createworkspace_dialog.dart';
-import 'package:project_zenith/subpages/fresh_page.dart';
-import 'package:project_zenith/subpages/joinworkspace_dialog.dart';
-import 'package:project_zenith/subpages/profile_page.dart';
-import 'package:project_zenith/widgets/draw_option.dart';
-import 'package:project_zenith/widgets/sidebar_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  final String emailAddress;
-  final String username;
   const HomePage({
     super.key,
-    required this.emailAddress,
-    required this.username,
   });
 
   @override
@@ -33,10 +24,7 @@ class _HomePageState extends State<HomePage> {
   final codeController = TextEditingController();
 
   Widget initAdminPage = FreshPage();
-  Widget initUserPage = ProfilePage(
-    username: currentUser!.username,
-    emailAddress: currentUser!.email,
-  );
+  Widget initUserPage = const ProfilePage();
 
   final ContextMenuController _cmController = ContextMenuController();
 
@@ -46,11 +34,11 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
 
-    ownedWorkspaces.clear();
-    sharedWorkspaces.clear();
-    lists.clear();
-    tasks.clear();
-    currentUser = null;
+    gOwnedSpaces.clear();
+    gSharedSpaces.clear();
+    // lists.clear();
+    // tasks.clear();
+    gUser = null;
 
     if (context.mounted) {
       Navigator.pushReplacement(
@@ -63,22 +51,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> updateWorkspaces() async {
-    Workspace? space = await currentUser?.addWorkspace(
+    Workspace? space = await gUser?.addWorkspace(
         workspaceNameController.text, workspaceDescriptionController.text);
 
     setState(() {
-      ownedWorkspaces.add(space!);
+      gOwnedSpaces.add(space!);
     });
   }
 
   void reflectDeletedSpaces(Workspace space, bool owned) {
     setState(() {
       if (owned) {
-        ownedWorkspaces.remove(space);
+        gOwnedSpaces.remove(space);
         return;
       }
 
-      sharedWorkspaces.remove(space);
+      gSharedSpaces.remove(space);
     });
   }
 
@@ -124,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  widget.username,
+                                  gUser!.username,
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
@@ -134,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 Text(
-                                  widget.emailAddress,
+                                  gUser!.email,
                                   style: const TextStyle(
                                     color: Color(0xFF636769),
                                     fontSize: 15,
@@ -151,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 20),
                     LayoutBuilder(builder: (context, constraints) {
-                      if (currentUser?.id == 'rISCknyu5dlIrfGrKyCp') {
+                      if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
                         return SidebarList(
                           children: [
                             SizedBox(
@@ -210,22 +198,23 @@ class _HomePageState extends State<HomePage> {
                                 imgPath: "assets/build_icon.png",
                                 text: "Profile",
                                 func: () {
-                                  setState(() {
-                                    initUserPage = ProfilePage(
-                                      username: widget.username,
-                                      emailAddress: widget.emailAddress,
-                                    );
-                                  });
+                                  setState(
+                                    () {
+                                      initUserPage = const ProfilePage();
+                                    },
+                                  );
                                 },
                               ),
                               DrawOption(
                                 imgPath: 'assets/join_icon.png',
                                 text: "Attendance",
                                 func: () {
-                                  setState(() {
-                                    initAdminPage = const AttendancePage();
-                                    initUserPage = const AttendancePage();
-                                  });
+                                  setState(
+                                    () {
+                                      initAdminPage = const AttendancePage();
+                                      initUserPage = const AttendancePage();
+                                    },
+                                  );
                                 },
                               )
                             ],
@@ -255,7 +244,8 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context) {
                                     workspaceNameController.clear();
                                     workspaceDescriptionController.clear();
-                                    return CreateWorkspace(
+                                    
+                                    return CreateWorkspaceDialog(
                                       workspaceNameController:
                                           workspaceNameController,
                                       workspaceDescriptionController:
@@ -270,17 +260,17 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Container(
                           constraints: const BoxConstraints(maxHeight: 150),
-                          child: ownedWorkspaces.isEmpty
+                          child: gOwnedSpaces.isEmpty
                               ? const Column(
                                   mainAxisSize: MainAxisSize.min,
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: ownedWorkspaces.length,
+                                  itemCount: gOwnedSpaces.length,
                                   itemBuilder: (context, index) {
                                     Workspace thisSpace =
-                                        ownedWorkspaces.elementAt(index);
-                        
+                                        gOwnedSpaces.elementAt(index);
+
                                     return WorkspaceTile(
                                       space: thisSpace,
                                       controller: _cmController,
@@ -313,7 +303,8 @@ class _HomePageState extends State<HomePage> {
                                     context: context,
                                     builder: (context) {
                                       workspaceNameController.clear();
-                                      return JoinWorkspace(
+                                      
+                                      return JoinWorkspaceDialog(
                                         codeController: workspaceNameController,
                                       );
                                     },
@@ -325,17 +316,17 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Container(
                           constraints: const BoxConstraints(maxHeight: 150),
-                          child: sharedWorkspaces.isEmpty
+                          child: gSharedSpaces.isEmpty
                               ? const Column(
                                   mainAxisSize: MainAxisSize.min,
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: sharedWorkspaces.length,
+                                  itemCount: gSharedSpaces.length,
                                   itemBuilder: (context, index) {
                                     Workspace thisSpace =
-                                        sharedWorkspaces.elementAt(index);
-                        
+                                        gSharedSpaces.elementAt(index);
+
                                     return WorkspaceTile(
                                       space: thisSpace,
                                       controller: _cmController,
@@ -359,10 +350,10 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(
                         left: 30, right: 30, top: 30, bottom: 30),
                 child: LayoutBuilder(builder: (context, constraints) {
-                  if (currentUser?.id == 'rISCknyu5dlIrfGrKyCp') {
+                  if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
                     return initAdminPage;
                   }
-                
+
                   return initUserPage;
                 }),
               ),
@@ -406,7 +397,7 @@ class WorkspaceTile extends StatelessWidget {
               ContextMenuButtonItem(
                 onPressed: () async {
                   ContextMenuController.removeAny();
-                  await currentUser?.deleteWorkspace(space);
+                  await gUser?.deleteWorkspace(space);
                   func(space, owned);
                 },
                 label: 'Delete',
@@ -418,17 +409,15 @@ class WorkspaceTile extends StatelessWidget {
       child: DrawOption(
         imgPath: "assets/later_icon.png",
         text: space.title.toString(),
-        func: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WorkspacePage(
-                workspace: space,
-                workspaceTitle: workspaceTitle,
-                workspaceDescription: workspaceDescription,
+        func: () async {
+          if (context.mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WorkspacePage(workspace: space),
               ),
-            ),
-          );
+            );
+          }
         },
       ),
     );

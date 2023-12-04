@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/widgets/copyright_mark.dart';
-import 'package:project_zenith/widgets/submit_button.dart';
-import 'package:project_zenith/widgets/transparent_button.dart';
-import 'package:project_zenith/widgets/aftersignup_field.dart';
+import 'package:project_zenith/custom_widgets.dart';
+import 'package:project_zenith/prompt_pages/welcome_page.dart';
+import 'package:project_zenith/prompt_pages/inviteteam_page.dart';
 
-class InviteTeamPage extends StatelessWidget {
-  const InviteTeamPage({super.key});
+class BuildWorkspacePage extends StatelessWidget {
+  const BuildWorkspacePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +21,8 @@ class InviteTeamPage extends StatelessWidget {
             child: Image.asset("assets/right_bg.png"),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 18, bottom: 80, left: 120, right: 120),
+            padding: const EdgeInsets.only(
+                top: 18, bottom: 80, left: 120, right: 120),
             child: Content(),
           ),
           const Copyright(mLeft: 85, mBot: 30),
@@ -34,7 +33,7 @@ class InviteTeamPage extends StatelessWidget {
 }
 
 class Content extends StatelessWidget {
-  final inviteController = TextEditingController();
+  final buildController = TextEditingController();
 
   Content({super.key});
 
@@ -59,7 +58,7 @@ class Content extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 65, bottom: 65),
+            padding: const EdgeInsets.only(top: 65),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -73,7 +72,7 @@ class Content extends StatelessWidget {
                               flex: 3,
                               child: FittedBox(
                                 child: Text(
-                                  'Invite Your Team!',
+                                  'Let\'s Build a Workspace!',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
@@ -114,49 +113,55 @@ class Content extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Expanded(
-                              flex: 7,
-                              child:
-                                  WorkspaceField(
-                                    controller: inviteController,
-                                    label: "Workspace Members:"
-                                  ),
-                            ),
-                            const SizedBox(height: 10),
-                            const Expanded(
                               flex: 6,
-                              child: InviteCodeField(
-                                label: "Or invite them with one code:", 
-                                code: "12345",
-                              ),
+                              child: WorkspaceField(
+                                  controller: buildController,
+                                  label: "Workspace Name:"),
+                            ),
+                            const Spacer(),
+                            const Expanded(
+                              flex: 7,
+                              child: LongInputField(
+                                  label: "Workspace Description (Optional):"),
                             ),
                             const Spacer(flex: 2),
-                            const Expanded(
-                              flex: 4,
+                            Expanded(
+                              flex: 3,
                               child: Column(
                                 children: [
                                   Expanded(
                                     child: Row(children: [
                                       Expanded(
-                                          child: SubmitButton(
-                                              text: "Invite Members",
-                                              gradient: [
-                                                Color(0xFF06BCC1),
-                                                Color(0xFF047679)
-                                              ],
-                                              minSize: Size(300, 70),
-                                              func: test)),
+                                        child: SubmitButton(
+                                          text: "Continue",
+                                          gradient: const [
+                                            Color(0xFF06BCC1),
+                                            Color(0xFF047679)
+                                          ],
+                                          minSize: const Size(300, 70),
+                                          func: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const InviteTeamPage(),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
                                       Expanded(
                                           child: Padding(
-                                        padding: EdgeInsets.only(
+                                        padding: const EdgeInsets.only(
                                             left: 30, right: 30),
                                         child: TransparentButton(
                                           text: "I'll do this later",
-                                          hovered:
-                                              Color.fromARGB(255, 6, 140, 145),
-                                          flat: Color(0xFF06BCC1),
-                                          lineColor:
-                                              Color.fromARGB(255, 6, 140, 145),
-                                          function: test,
+                                          hovered: const Color.fromARGB(
+                                              255, 6, 140, 145),
+                                          flat: const Color(0xFF06BCC1),
+                                          lineColor: const Color.fromARGB(
+                                              255, 6, 140, 145),
+                                          function: () {},
                                         ),
                                       ))
                                     ]),
@@ -166,7 +171,7 @@ class Content extends StatelessWidget {
                             ),
                           ]),
                     )),
-                const Spacer(),
+                const Spacer()
               ],
             ),
           ),
@@ -180,11 +185,10 @@ class Content extends StatelessWidget {
   }
 }
 
-class InviteCodeField extends StatelessWidget {
+class LongInputField extends StatelessWidget {
   final String label;
-  final String code;
 
-  const InviteCodeField({super.key, required this.label, required this.code});
+  const LongInputField({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -211,54 +215,40 @@ class InviteCodeField extends StatelessWidget {
         const Spacer(),
         Expanded(
           flex: 7,
-          child: Container(
-            height: 51,
-            decoration: ShapeDecoration(
-              color: Colors.black,
-              shape: RoundedRectangleBorder(
-                  side: const BorderSide(
-                    width: 4,
+          child: TextFormField(
+            style: const TextStyle(fontSize: 14, color: Colors.white),
+            maxLines: 5,
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.black,
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFF06BCC1),
+                    width: 2,
+                  ),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    width: 2,
                     color: Colors.white,
                   ),
-                  borderRadius: BorderRadius.circular(5)),
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(left: 0.005*MediaQuery.of(context).size.width, top: 0.005*MediaQuery.of(context).size.height, bottom: 0.005*MediaQuery.of(context).size.height),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: FittedBox(
-                      child: Icon(
-                        Icons.link,
-                        color: Theme.of(context).dialogBackgroundColor
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 6,
-                    child: FittedBox(
-                      child: Transform.translate(
-                        offset: const Offset(-20,0),
-                        child: SelectableText(
-                          code,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontFamily: 'DM Sans',
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                contentPadding:
+                    const EdgeInsets.only(top: 40, left: 30, right: 30),
+                hintText: "Description",
+                hintStyle: const TextStyle(
+                    color: Color.fromARGB(255, 144, 142, 142),
+                    fontWeight: FontWeight.normal)),
           ),
         )
       ],
     );
   }
 }
-
-void test() {}

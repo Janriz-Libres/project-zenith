@@ -97,7 +97,7 @@ class User {
       'title': title,
       'description': desc,
       'owner': Firestore.instance.collection('users').document(id),
-      'members': [],
+      'members': <DocumentReference>[],
     });
 
     return Workspace(
@@ -215,13 +215,18 @@ class Workspace {
     for (final Document list in query) {
       WorkList newWorkspace = WorkList(
         id: list.id,
-        name: list['name'],
+        name: await list['name'],
         workspace: this,
       );
       lists.add(newWorkspace);
     }
 
     return lists;
+  }
+
+  Future<void> deleteList(WorkList list) async {
+    var reference = Firestore.instance.collection('lists').document(list.id);
+    await reference.delete();
   }
 }
 
@@ -309,9 +314,9 @@ class Task {
   final String description;
   final List<User> assigned;
   final DateTime? deadline;
-  final WorkList list;
+  WorkList list;
 
-  const Task({
+  Task({
     required this.id,
     required this.title,
     required this.description,
@@ -319,4 +324,12 @@ class Task {
     required this.deadline,
     required this.list,
   });
+
+  Future<void> changeParentList(WorkList list) async {
+    var reference = Firestore.instance.collection('tasks').document(id);
+    await reference.update({
+      'list': Firestore.instance.collection('lists').document(list.id),
+    });
+    this.list = list;
+  }
 }
