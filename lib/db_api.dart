@@ -1,4 +1,5 @@
 import 'package:firedart/firedart.dart';
+import 'package:project_zenith/globals.dart';
 
 class Authenticator {
   /// Signs the user in using the provided email and password.
@@ -168,9 +169,25 @@ class User {
   }
 
   Future<void> deleteWorkspace(Workspace space) async {
-    var reference =
-        Firestore.instance.collection('workspaces').document(space.id);
+    var reference = Firestore.instance.collection('workspaces').document(space.id);
     await reference.delete();
+  }
+
+  Future<void> updateUser (String newName) async {
+    var reference = Firestore.instance.collection('users').document(id);
+    await reference.update({'username': newName});
+    
+    Document userDoc = await reference.get();
+    gUser = User(
+      authId: await userDoc['auth_id'],
+      email: await userDoc['email'],
+      id: await userDoc['id'],
+      password: await userDoc['password'],
+      username: await userDoc['username'],
+      timeStarted: await userDoc['time_started'],
+      hasCheckedIn: await userDoc['has_checked_in'],
+      totalMinutes: await userDoc['total_minutes'],
+    );
   }
 }
 
