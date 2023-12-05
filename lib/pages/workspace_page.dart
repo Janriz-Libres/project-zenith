@@ -2,8 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/subpages/createboards_dialog.dart';
-import 'package:project_zenith/subpages/task_page.dart';
+import 'package:project_zenith/globals.dart';
+import 'package:project_zenith/pages/members_page.dart';
 
 class WorkspacePage extends StatefulWidget {
   final Workspace workspace;
@@ -23,6 +23,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
   ContentWidget contentWidget = ContentWidget.task;
 
   final boardNameController = TextEditingController();
+  final tasklistNameController = TextEditingController();
 
   void _changeContent(ContentWidget cw) {
     setState(() {
@@ -112,15 +113,13 @@ class _WorkspacePageState extends State<WorkspacePage> {
                       imgPath: "assets/white_logo.png",
                       text: "Workspace",
                       func: () {
-                        _showTask();
+                        _changeContent(ContentWidget.task);
                       },
                     ),
                     DrawOption(
                       imgPath: "assets/build_icon.png",
                       text: "Members",
-                      func: () {
-                        _showMembers();
-                      },
+                      func:  () => _changeContent(ContentWidget.members),
                     ),
                   ]),
                   const SizedBox(height: 10),
@@ -151,10 +150,12 @@ class _WorkspacePageState extends State<WorkspacePage> {
                                     context: context,
                                     builder: (context) {
                                       boardNameController.clear();
-                                      return CreateBoard(
-                                        boardNameController:
-                                            boardNameController
-                                      );
+                                      return CreateBoardDialog(
+                                          boardNameController:
+                                              boardNameController,
+                                          tasklistNameController:
+                                              tasklistNameController,
+                                        );
                                     },
                                   );
                                 },

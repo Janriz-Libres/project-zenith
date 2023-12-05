@@ -7,10 +7,10 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SelectionArea(
+    return const SelectionArea(
       child: Stack(
         children: [
-          const Text("Account Settings",
+          Text("Account Settings",
             textAlign: TextAlign.left,
             style: TextStyle(
               color: Colors.black,
@@ -22,8 +22,8 @@ class ProfilePage extends StatelessWidget {
           ),
           AestheticBorder(
             borderColor: Colors.black,
-            mainColor: const Color(0xFFF8F7F4),
-            child: ProfileView(username: username, emailAddress: emailAddress,),
+            mainColor: Color(0xFFF8F7F4),
+            child: ProfileView(),
           ),
         ],
       ),
@@ -32,17 +32,19 @@ class ProfilePage extends StatelessWidget {
 }
 
 class ProfileView extends StatefulWidget {
-  final String username;
-  final String emailAddress;
-
   const ProfileView(
-      {super.key, required this.username, required this.emailAddress});
+      {super.key});
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  final newName = TextEditingController();
+  bool editable = false;
+  bool disabled = true;
+  Color color = Colors.grey;
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -54,7 +56,12 @@ class _ProfileViewState extends State<ProfileView> {
             children: [
               Container(
                 height: 0.23*MediaQuery.of(context).size.height,
-                color: Colors.amber,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10),
+                  ),
+                  color: Color.fromARGB(255, 152, 147, 147),
+                ),
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: IconButton(
@@ -107,7 +114,7 @@ class _ProfileViewState extends State<ProfileView> {
                       borderRadius: BorderRadius.all(Radius.circular(4)),
                     ),
                     child: Text(
-                      widget.emailAddress.split('@')[0],
+                      gUser!.email.split('@')[0],
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 15,
@@ -140,16 +147,72 @@ class _ProfileViewState extends State<ProfileView> {
                       color: Color(0xFFD4515D),
                       borderRadius: BorderRadius.all(Radius.circular(4)),
                     ),
-                    child: Text(
-                      widget.username,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontFamily: 'Rubik',
-                        fontWeight: FontWeight.w500,
-                        height: 0,
-                      ),
-                    ),
+                    child: !editable ? Row(
+                      children: [
+                        Text(
+                          gUser!.username,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontFamily: 'Rubik',
+                            fontWeight: FontWeight.w500,
+                            height: 0,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              editable = true;
+                            });
+                          }, 
+                          icon: const Icon(Icons.edit, color: Colors.white,))
+                      ],
+                    ) : Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: newName,
+                            onChanged: (text) {
+                              if (text == gUser!.username || text.isEmpty) {
+                                setState(() {
+                                  disabled = true;
+                                  color = Colors.grey;
+                                });
+                              } else {
+                                setState(() {
+                                  disabled = false;
+                                  color = Colors.white;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            newName.clear();
+                            setState(() {
+                              editable = false;
+                              disabled = true;
+                              color = Colors.grey;
+                            });
+                          }, 
+                          icon: const Icon(Icons.close, color: Colors.white)),
+                        IconButton(
+                          onPressed: disabled ? null : 
+                          () async {
+                            await gUser?.updateUser(newName.text);
+                            newName.clear();
+                            setState(() {
+                              editable = false;
+                              disabled = true;
+                              color = Colors.grey;
+                            });
+                          }, 
+                          icon: Icon(Icons.subdirectory_arrow_left, color: color)
+                        )
+                      ],
+                    )
                   ),
                 ],
               ),
@@ -175,7 +238,7 @@ class _ProfileViewState extends State<ProfileView> {
                       borderRadius: BorderRadius.all(Radius.circular(4)),
                     ),
                     child: Text(
-                      widget.emailAddress,
+                      gUser!.email,
                       style: const TextStyle(
                         color: Color(0xFF646869),
                         fontSize: 15,

@@ -276,8 +276,6 @@ class _HomePageState extends State<HomePage> {
                                       controller: _cmController,
                                       owned: true,
                                       func: reflectDeletedSpaces,
-                                      workspaceTitle: thisSpace.title,
-                                      workspaceDescription: thisSpace.description,
                                     );
                                   }),
                         ),
@@ -332,8 +330,6 @@ class _HomePageState extends State<HomePage> {
                                       controller: _cmController,
                                       owned: false,
                                       func: reflectDeletedSpaces,
-                                      workspaceTitle: thisSpace.title,
-                                      workspaceDescription: thisSpace.description,
                                     );
                                   },
                                 ),
@@ -370,17 +366,13 @@ class WorkspaceTile extends StatelessWidget {
   final Workspace space;
   final bool owned;
   final Function(Workspace, bool) func;
-  final String workspaceTitle;
-  final String workspaceDescription;
 
   const WorkspaceTile({
     super.key,
     required this.space,
     required this.controller,
     required this.owned,
-    required this.func, 
-    required this.workspaceTitle, 
-    required this.workspaceDescription,
+    required this.func,
   });
 
   @override
@@ -408,7 +400,7 @@ class WorkspaceTile extends StatelessWidget {
       ),
       child: DrawOption(
         imgPath: "assets/later_icon.png",
-        text: space.title.toString(),
+        text: space.title,
         func: () async {
           if (context.mounted) {
             Navigator.push(
