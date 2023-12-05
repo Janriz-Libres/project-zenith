@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   Widget initAdminPage = FreshPage();
   Widget initUserPage = const ProfilePage();
 
-  final ContextMenuController _cmController = ContextMenuController();
+  final _cmController = ContextMenuController();
 
   Future<void> logoutFunc() async {
     await Authenticator.logout();
@@ -34,11 +34,7 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
 
-    gOwnedSpaces.clear();
-    gSharedSpaces.clear();
-    // lists.clear();
-    // tasks.clear();
-    gUser = null;
+    clearAllData();
 
     if (context.mounted) {
       Navigator.pushReplacement(

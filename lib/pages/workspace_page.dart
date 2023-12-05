@@ -240,7 +240,17 @@ class _TaskPageState extends State<TaskPage> {
   final tasklistNameController = TextEditingController();
   List<WorkList>? worklists;
 
-  void initWorklists() {
+  Future<void> _addWorklist() async {
+    WorkList list = await widget.workspace.addList(tasklistNameController.text);
+
+    setState(() {
+      worklists?.add(list);
+    });
+
+    gLists.add(list);
+  }
+
+  void _initWorklists() {
     if (worklists != null) {
       return;
     }
@@ -262,7 +272,7 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    initWorklists();
+    _initWorklists();
 
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Row(
@@ -285,7 +295,7 @@ class _TaskPageState extends State<TaskPage> {
                 builder: (context) {
                   return CreateTaskListDialog(
                     tasklistNameController: tasklistNameController,
-                    func: () {},
+                    func: _addWorklist,
                   );
                 },
               );
@@ -343,11 +353,12 @@ class _TaskListState extends State<TaskList> {
   Future<void> _addTask() async {
     Task newTask =
         await widget.list.addTask(titleController.text, titleController.text);
-    gTasks.add(newTask);
 
     setState(() {
-      tasks = null;
+      tasks?.add(newTask);
     });
+
+    gTasks.add(newTask);
 
     if (context.mounted) {
       Navigator.pop(context);
@@ -358,7 +369,6 @@ class _TaskListState extends State<TaskList> {
     setState(() {
       tasks?.remove(task);
     });
-    await widget.list.deleteTask(task);
   }
 
   Future<void> _moveTask(TaskFuncPair data) async {
@@ -366,7 +376,7 @@ class _TaskListState extends State<TaskList> {
       tasks?.add(data.task);
     });
 
-    await data.removeTaskFunc(data.task);
+    await data.removeTaskCopy(data.task);
     await data.task.changeParentList(widget.list);
   }
 
@@ -425,10 +435,11 @@ class _TaskListState extends State<TaskList> {
                           Text(
                             widget.list.name.toUpperCase(),
                             style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18),
+                              color: Colors.white,
+                              fontFamily: "Rubik",
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                            ),
                           ),
                           IconButton(
                             icon: const Icon(Icons.more_horiz),
@@ -446,7 +457,7 @@ class _TaskListState extends State<TaskList> {
                                 (e) => Draggable<TaskFuncPair>(
                                   data: TaskFuncPair(
                                     task: e,
-                                    removeTaskFunc: _removeTask,
+                                    removeTaskCopy: _removeTask,
                                   ),
                                   feedback: Card(
                                     child: Text(e.title),
@@ -518,10 +529,10 @@ class _TaskListState extends State<TaskList> {
 
 class TaskFuncPair {
   final Task task;
-  final Function(Task) removeTaskFunc;
+  final Function(Task) removeTaskCopy;
 
   const TaskFuncPair({
     required this.task,
-    required this.removeTaskFunc,
+    required this.removeTaskCopy,
   });
 }

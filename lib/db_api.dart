@@ -266,6 +266,9 @@ class WorkList {
       'deadline': null,
       'list': Firestore.instance.collection('lists').document(id),
     });
+    await docReference.reference.update({
+      'id': docReference.id,
+    });
 
     return Task(
       id: docReference.id,

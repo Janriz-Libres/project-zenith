@@ -19,7 +19,7 @@ void main() async {
   if (email != null) {
     gUser = await Authenticator.signIn(email, prefs.getString('pw') as String);
 
-    await initWorkspaceModels();
+    await initDataModels();
   }
 
   runApp(const MyApp());
