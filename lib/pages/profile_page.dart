@@ -173,6 +173,11 @@ class _ProfileViewState extends State<ProfileView> {
                         Expanded(
                           child: TextField(
                             controller: newName,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontFamily: "Rubik",
+                              fontWeight: FontWeight.w500
+                            ),
                             onChanged: (text) {
                               if (text == gUser!.username || text.isEmpty) {
                                 setState(() {
