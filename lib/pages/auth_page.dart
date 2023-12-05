@@ -1,4 +1,3 @@
-import 'package:firedart/auth/exceptions.dart';
 import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
@@ -111,7 +110,7 @@ class _SignupPageState extends State<SignupPage> {
         passwordController.text,
       );
 
-      await initWorkspaceModels();
+      await initDataModels();
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -124,17 +123,17 @@ class _SignupPageState extends State<SignupPage> {
           ),
         );
       }
-    } on Exception {
+    } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Icon(Icons.error_outline),
                 ),
-                Text('Oh snap! Sign up unsuccessful.'),
+                Text('Oh snap! ${e.toString()}'),
               ],
             ),
             action: SnackBarAction(
@@ -154,7 +153,7 @@ class _SignupPageState extends State<SignupPage> {
     final regex = RegExp(pattern);
 
     if (!regex.hasMatch(emailController.text)) {
-      throw Exception();
+      throw Exception("Invalid Email");
     }
   }
 
@@ -163,7 +162,7 @@ class _SignupPageState extends State<SignupPage> {
     final regex = RegExp(pattern);
 
     if (!regex.hasMatch(usernameController.text)) {
-      throw Exception();
+      throw Exception("Invalid Username");
     }
   }
 
@@ -171,7 +170,7 @@ class _SignupPageState extends State<SignupPage> {
     if (passwordController.text.isEmpty ||
         passwordController.text != retypeController.text &&
             passwordController.text.isNotEmpty) {
-      throw Exception();
+      throw Exception("Invalid Password");
     }
   }
 
@@ -290,7 +289,7 @@ class _SignupPageState extends State<SignupPage> {
                               Color(0xFF047679)
                             ],
                             minSize: const Size(300, 70),
-                            func: () async => await _validateForm(),
+                            func: _validateForm,
                           ),
                         ),
                       ),
@@ -347,7 +346,7 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('email', gUser!.email);
       await prefs.setString('pw', gUser!.password);
 
-      await initWorkspaceModels();
+      await initDataModels();
 
       if (context.mounted) {
         Navigator.of(context).pop();
@@ -375,27 +374,18 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ),
-            action: SnackBarAction(
-              label: 'Hide',
-              textColor: Colors.white,
-              onPressed: () {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                }
-              },
-            ),
           ),
         );
       }
-    } on AuthException {
+    } catch (e) {
       if (context.mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red.shade800,
-            content: const Row(
+            content: Row(
               children: [
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(right: 8.0),
                   child: Icon(
                     Icons.error_outline,
@@ -403,8 +393,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Text(
-                  'Oh snap! Log in unsuccessful.',
-                  style: TextStyle(fontSize: 16),
+                  'Oh snap! ${e.toString()}',
+                  style: const TextStyle(fontSize: 16),
                 ),
               ],
             ),

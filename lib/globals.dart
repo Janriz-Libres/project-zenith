@@ -6,7 +6,7 @@ List<Workspace> gSharedSpaces = <Workspace>[];
 List<WorkList> gLists = <WorkList>[];
 List<Task> gTasks = <Task>[];
 
-Future<void> initWorkspaceModels() async {
+Future<void> initDataModels() async {
   gOwnedSpaces = await gUser!.getOwnedWorkspaces();
   gSharedSpaces = await gUser!.getSharedWorkspaces();
 
@@ -21,4 +21,12 @@ Future<void> initWorkspaceModels() async {
   for (WorkList list in gLists) {
     gTasks.addAll(await list.getTasks());
   }
+}
+
+void clearAllData() {
+  gUser = null;
+  gOwnedSpaces.clear();
+  gSharedSpaces.clear();
+  gLists.clear();
+  gTasks.clear();
 }

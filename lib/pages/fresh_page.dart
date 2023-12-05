@@ -251,7 +251,7 @@ class CheckInDialog extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                'Oh snap! There\'s something wrong.',
+                                'Oh snap! Invalid credentials.',
                                 style: TextStyle(fontSize: 16),
                               ),
                             ],
@@ -275,21 +275,21 @@ class CheckInDialog extends StatelessWidget {
                       });
 
                       User u = User(
-                        authId: thisUser['auth_id'],
-                        email: thisUser['email'],
-                        id: thisUser['id'],
-                        password: thisUser['password'],
-                        username: thisUser['username'],
+                        authId: await thisUser['auth_id'],
+                        email: await thisUser['email'],
+                        id: await thisUser['id'],
+                        password: await thisUser['password'],
+                        username: await thisUser['username'],
                         timeStarted: DateTime.now().toUtc(),
-                        hasCheckedIn: thisUser['has_checked_in'],
-                        totalMinutes: thisUser['total_minutes'],
+                        hasCheckedIn: await thisUser['has_checked_in'],
+                        totalMinutes: await thisUser['total_minutes'],
                       );
 
                       checkedInUsers[u] = Duration.zero;
 
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Nice ka wan pipty.")),
+                          const SnackBar(content: Text("Check in successful!")),
                         );
 
                         Navigator.pop(context);
