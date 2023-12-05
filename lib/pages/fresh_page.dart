@@ -61,6 +61,16 @@ class Content extends StatelessWidget {
                 height: 0,
               ),
             ),
+            const Text(
+              'Crusader Yearbook',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15,
+                fontFamily: 'Rubik',
+                fontWeight: FontWeight.w400,
+                height: 0,
+              ),
+            ),
             const Spacer(flex: 3),
             Expanded(
               flex: 4,
@@ -79,6 +89,8 @@ class Content extends StatelessWidget {
                             ],
                             minSize: const Size(200, 50),
                             func: () async {
+                              emailController.clear();
+                              passController.clear();
                               await showDialog(
                                 useSafeArea: false,
                                 context: context,
@@ -105,7 +117,7 @@ class Content extends StatelessWidget {
   }
 }
 
-class CheckInDialog extends StatelessWidget {
+class CheckInDialog extends StatefulWidget {
   const CheckInDialog({
     super.key,
     required this.emailController,
@@ -114,6 +126,19 @@ class CheckInDialog extends StatelessWidget {
 
   final TextEditingController emailController;
   final TextEditingController passController;
+
+  @override
+  State<CheckInDialog> createState() => _CheckInDialogState();
+}
+
+class _CheckInDialogState extends State<CheckInDialog> {
+  bool obscured = true;
+
+  void _toggle() {
+    setState(() {
+      obscured = !obscured;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +177,7 @@ class CheckInDialog extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 5, left: 12, right: 12),
                 child: TextFormField(
                   style: const TextStyle(fontSize: 14, color: Colors.white),
-                  controller: emailController,
+                  controller: widget.emailController,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.black,
@@ -188,8 +213,9 @@ class CheckInDialog extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 15, left: 12, right: 12),
                 child: TextFormField(
+                  obscureText: obscured,
                   style: const TextStyle(fontSize: 14, color: Colors.white),
-                  controller: passController,
+                  controller: widget.passController,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.black,
@@ -219,6 +245,18 @@ class CheckInDialog extends StatelessWidget {
                     hintStyle: const TextStyle(
                         color: Color.fromARGB(255, 144, 142, 142),
                         fontWeight: FontWeight.normal),
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: IconButton(
+                          icon: Icon(
+                            // Based on passwordVisible state choose the icon
+                            obscured ? Icons.visibility_off : Icons.visibility,
+                            color: Theme.of(context).dialogBackgroundColor,
+                          ),
+                          onPressed: () {
+                            _toggle();
+                          }),
+                    ),
                   ),
                 ),
               ),
@@ -233,8 +271,8 @@ class CheckInDialog extends StatelessWidget {
                     func: () async {
                       List<Document> docs = await Firestore.instance
                           .collection('users')
-                          .where('email', isEqualTo: emailController.text)
-                          .where('password', isEqualTo: passController.text)
+                          .where('email', isEqualTo: widget.emailController.text)
+                          .where('password', isEqualTo: widget.passController.text)
                           .get();
 
                       if (docs.isEmpty && context.mounted) {
@@ -288,11 +326,40 @@ class CheckInDialog extends StatelessWidget {
                       checkedInUsers[u] = Duration.zero;
 
                       if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Check in successful!")),
+                        showDialog(
+                          context: context, 
+                          builder: (context) {
+                            return const AlertDialog(
+                              content: SizedBox(
+                                width: 350,
+                                height: 350,
+                                child: Column(
+                                  children: [
+                                    Spacer(),
+                                    Icon(
+                                      Icons.check_circle_outline,
+                                      color: Colors.green,
+                                      size: 50
+                                    ),
+                                    Text(
+                                      "Successfully Checked In!",
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontFamily: "Rubik"
+                                      ),
+                                    ),
+                                    Spacer()
+                                  ]
+                                )
+                              ),
+                            );
+                          },
                         );
-
-                        Navigator.pop(context);
+                        Future.delayed(const Duration(milliseconds: 1500), () {
+                          Navigator.pop(context);
+                        });
+                        widget.emailController.clear();
+                        widget.passController.clear();
                       }
                     },
                   ),

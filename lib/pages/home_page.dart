@@ -72,9 +72,9 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: const Color(0xFFF8F7F4),
       body: Row(
         children: [
-          Flexible(
+          ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 330, maxWidth: 385),
             child: Container(
-              constraints: const BoxConstraints(minWidth: 330, maxWidth: 385),
               padding: const EdgeInsets.only(top: 25),
               decoration: const BoxDecoration(
                 color: Color(0xFFD9D9D9),
@@ -88,7 +88,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 29),
@@ -179,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         );
                       }
-
+                        
                       return SidebarList(children: [
                         SizedBox(
                           width: double.maxFinite,
@@ -239,6 +238,9 @@ class _HomePageState extends State<HomePage> {
                                   useSafeArea: false,
                                   context: context,
                                   builder: (context) {
+                                    workspaceNameController.clear();
+                                    workspaceDescriptionController.clear();
+                                    
                                     return CreateWorkspaceDialog(
                                       workspaceNameController:
                                           workspaceNameController,
@@ -294,6 +296,8 @@ class _HomePageState extends State<HomePage> {
                                     useSafeArea: false,
                                     context: context,
                                     builder: (context) {
+                                      workspaceNameController.clear();
+                                      
                                       return JoinWorkspaceDialog(
                                         codeController: workspaceNameController,
                                       );
@@ -333,13 +337,19 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             flex: 3,
-            child: LayoutBuilder(builder: (context, constraints) {
-              if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
-                return initAdminPage;
-              }
+            child: SelectionArea(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                        left: 30, right: 30, top: 30, bottom: 30),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
+                    return initAdminPage;
+                  }
 
-              return initUserPage;
-            }),
+                  return initUserPage;
+                }),
+              ),
+            ),
           ),
         ],
       ),
@@ -386,7 +396,7 @@ class WorkspaceTile extends StatelessWidget {
       ),
       child: DrawOption(
         imgPath: "assets/later_icon.png",
-        text: space.title.toString(),
+        text: space.title,
         func: () async {
           if (context.mounted) {
             Navigator.push(
