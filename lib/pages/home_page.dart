@@ -373,41 +373,78 @@ class WorkspaceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onSecondaryTapDown: (details) => controller.show(
-        context: context,
-        contextMenuBuilder: (context) {
-          return AdaptiveTextSelectionToolbar.buttonItems(
-            anchors: TextSelectionToolbarAnchors(
-              primaryAnchor: details.globalPosition,
+    return Stack(
+      children: [
+        DrawOption(
+          imgPath: "assets/later_icon.png",
+          text: space.title,
+          func: () async {
+            if (context.mounted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WorkspacePage(workspace: space),
+                ),
+              );
+            }
+          },
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Transform.translate(
+            offset: const Offset(-20,5),
+            child: MenuAnchor(
+              builder:
+                  (BuildContext context, MenuController controller, Widget? child) {
+                return IconButton(
+                  onPressed: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
+                  },
+                  icon: const Icon(Icons.more_vert),
+                  tooltip: 'Show menu',
+                );
+              },
+              menuChildren: List<MenuItemButton>.generate(
+                1,
+                (int index) => MenuItemButton(
+                  onPressed: () async {
+                    await gUser?.deleteWorkspace(space);
+                    func(space, owned);
+                  },
+                  child: const Text('Delete'),
+                ),
+              ),
             ),
-            buttonItems: <ContextMenuButtonItem>[
-              ContextMenuButtonItem(
-                onPressed: () async {
-                  ContextMenuController.removeAny();
-                  await gUser?.deleteWorkspace(space);
-                  func(space, owned);
-                },
-                label: 'Delete',
-              ),
-            ],
-          );
-        },
-      ),
-      child: DrawOption(
-        imgPath: "assets/later_icon.png",
-        text: space.title,
-        func: () async {
-          if (context.mounted) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => WorkspacePage(workspace: space),
-              ),
-            );
-          }
-        },
-      ),
+          ),
+        ),
+      ],
     );
+    
+    // GestureDetector(
+    //   onSecondaryTapDown: (details) => controller.show(
+    //     context: context,
+    //     contextMenuBuilder: (context) {
+    //       return AdaptiveTextSelectionToolbar.buttonItems(
+    //         anchors: TextSelectionToolbarAnchors(
+    //           primaryAnchor: details.globalPosition,
+    //         ),
+    //         buttonItems: <ContextMenuButtonItem>[
+    //           ContextMenuButtonItem(
+    //             onPressed: () async {
+    //               ContextMenuController.removeAny();
+    //               await gUser?.deleteWorkspace(space);
+    //               func(space, owned);
+    //             },
+    //             label: 'Delete',
+    //           ),
+    //         ],
+    //       );
+    //     },
+    //   ),
+    // );
   }
 }
