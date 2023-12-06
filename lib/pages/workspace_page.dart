@@ -352,17 +352,13 @@ class _TaskListState extends State<TaskList> {
 
   Future<void> _addTask() async {
     Task newTask =
-        await widget.list.addTask(titleController.text, titleController.text);
+        await widget.list.addTask(titleController.text, descController.text);
 
     setState(() {
       tasks?.add(newTask);
     });
 
     gTasks.add(newTask);
-
-    if (context.mounted) {
-      Navigator.pop(context);
-    }
   }
 
   Future<void> _removeTask(Task task) async {
@@ -370,13 +366,19 @@ class _TaskListState extends State<TaskList> {
       tasks?.remove(task);
     });
   }
+  
+  Future<void> _completeTask(Task task) async {
+    _removeTask(task);
+    gTasks.remove(task);
+    widget.list.deleteTask(task);
+  }
 
   Future<void> _moveTask(TaskFuncPair data) async {
     setState(() {
       tasks?.add(data.task);
     });
 
-    await data.removeTaskCopy(data.task);
+    await data.func();
     await data.task.changeParentList(widget.list);
   }
 
@@ -442,7 +444,7 @@ class _TaskListState extends State<TaskList> {
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.more_horiz),
+                            icon: const Icon(Icons.check, color: Colors.green,),
                             onPressed: () {},
                           )
                         ],
@@ -457,14 +459,20 @@ class _TaskListState extends State<TaskList> {
                                 (e) => Draggable<TaskFuncPair>(
                                   data: TaskFuncPair(
                                     task: e,
-                                    removeTaskCopy: _removeTask,
+                                    func: () {_removeTask(e);},
                                   ),
-                                  feedback: Card(
-                                    child: Text(e.title),
+                                  feedback: TaskCard(
+                                    data: TaskFuncPair(
+                                      task: e,
+                                      func: () async {await _completeTask(e);},
+                                    )
                                   ),
                                   childWhenDragging: Container(),
-                                  child: Card(
-                                    child: Text(e.title),
+                                  child: TaskCard(
+                                    data: TaskFuncPair(
+                                      task: e,
+                                      func: () async {await _completeTask(e);},
+                                    )
                                   ),
                                 ),
                               )
@@ -495,21 +503,12 @@ class _TaskListState extends State<TaskList> {
                             useSafeArea: false,
                             context: context,
                             builder: (context) {
-                              return Scaffold(
-                                backgroundColor: Colors.transparent,
-                                body: AlertDialog(
-                                  content: Column(
-                                    children: [
-                                      TextFormField(
-                                          controller: titleController),
-                                      TextFormField(controller: descController),
-                                      ElevatedButton(
-                                        onPressed: _addTask,
-                                        child: const Text("Enter"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              titleController.clear();
+                              descController.clear();
+                              return CreateTaskDialog(
+                                taskNameController: titleController,
+                                taskDescriptionController: descController, 
+                                func: _addTask
                               );
                             },
                           );
@@ -527,12 +526,72 @@ class _TaskListState extends State<TaskList> {
   }
 }
 
+class TaskCard extends StatelessWidget {
+  final TaskFuncPair data;
+
+  const TaskCard({
+    super.key, required this.data,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+            //set border radius more than 50% of height and width to make circle
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: 250,
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    data.task.description.isEmpty ? Container() : Text(
+                      data.task.description,
+                      style: const TextStyle(
+                        fontFamily: "Rubik",
+                        fontSize: 12,
+                        color: Colors.black87
+                      ),
+                    ),
+                    Text(
+                      data.task.title,
+                      style: const TextStyle(
+                        fontFamily: "Rubik",
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: data.func,
+                  icon: const Icon(Icons.check, 
+                  color: Colors.green,)
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class TaskFuncPair {
   final Task task;
-  final Function(Task) removeTaskCopy;
+  final Function() func;
 
   const TaskFuncPair({
     required this.task,
-    required this.removeTaskCopy,
+    required this.func,
   });
 }
