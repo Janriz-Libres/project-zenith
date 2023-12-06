@@ -68,27 +68,30 @@ class MembersPage extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text("Members",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontFamily: 'Rubik',
-                                fontWeight: FontWeight.w700,
-                                height: 0,
-                              )),
-                        ),
-                        Column(
-                          children: space.members
-                              .map((e) => MemberCard(user: e))
-                              .toList(),
-                        )
-                      ],
+                    SizedBox(
+                      width: double.maxFinite,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text("Members",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontFamily: 'Rubik',
+                                  fontWeight: FontWeight.w700,
+                                  height: 0,
+                                )),
+                          ),
+                          Column(
+                            children: space.members
+                                .map((e) => MemberCard(user: e))
+                                .toList(),
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),
