@@ -87,252 +87,238 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
-              child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 29),
-                      child: Row(
+              child: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 29),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 35,
+                        height: 35,
+                        decoration: const ShapeDecoration(
+                          color: Color(0xFF313638),
+                          shape: OvalBorder(),
+                        ),
+                      ),
+                      const Spacer(),
+                      Expanded(
+                        flex: 18,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              gUser!.username,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontFamily: 'Rubik',
+                                fontWeight: FontWeight.w400,
+                                height: 0,
+                              ),
+                            ),
+                            Text(
+                              gUser!.email,
+                              style: const TextStyle(
+                                color: Color(0xFF636769),
+                                fontSize: 15,
+                                fontFamily: 'Rubik',
+                                fontWeight: FontWeight.w400,
+                                height: 0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                LayoutBuilder(builder: (context, constraints) {
+                  if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
+                    return SidebarList(
+                      children: [
+                        SizedBox(
+                          child: Column(children: [
+                            const Divider(),
+                            DrawOption(
+                              imgPath: "assets/white_logo.png",
+                              text: "Logout",
+                              func: () async {
+                                await logoutFunc();
+                              },
+                            ),
+                            DrawOption(
+                              imgPath: 'assets/join_icon.png',
+                              text: "Home",
+                              func: () {
+                                setState(() {
+                                  initAdminPage = FreshPage();
+                                });
+                              },
+                            ),
+                            DrawOption(
+                              imgPath: 'assets/later_icon.png',
+                              text: "Attendance",
+                              func: () {
+                                setState(() {
+                                  initAdminPage = const AttendancePage();
+                                  checkedInUsers.forEach((key, value) {
+                                    Duration interval = DateTime.now()
+                                        .toUtc()
+                                        .difference(key.timeStarted.toUtc());
+                                    checkedInUsers[key] = interval;
+                                  });
+                                });
+                              },
+                            )
+                          ]),
+                        ),
+                      ],
+                    );
+                  }
+
+                  return SidebarList(children: [
+                    SizedBox(
+                      width: double.maxFinite,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: const ShapeDecoration(
-                              color: Color(0xFF313638),
-                              shape: OvalBorder(),
-                            ),
+                          DrawOption(
+                            imgPath: "assets/white_logo.png",
+                            text: "Logout",
+                            func: () async => await logoutFunc(),
                           ),
-                          const Spacer(),
-                          Expanded(
-                            flex: 18,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  gUser!.username,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontFamily: 'Rubik',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0,
-                                  ),
-                                ),
-                                Text(
-                                  gUser!.email,
-                                  style: const TextStyle(
-                                    color: Color(0xFF636769),
-                                    fontSize: 15,
-                                    fontFamily: 'Rubik',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0,
-                                  ),
-                                ),
-                              ],
-                            ),
+                          DrawOption(
+                            imgPath: "assets/build_icon.png",
+                            text: "Profile",
+                            func: () {
+                              setState(
+                                () {
+                                  initUserPage = const ProfilePage();
+                                },
+                              );
+                            },
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    LayoutBuilder(builder: (context, constraints) {
-                      if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
-                        return SidebarList(
-                          children: [
-                            SizedBox(
-                              child: Column(children: [
-                                const Divider(),
-                                DrawOption(
-                                  imgPath: "assets/white_logo.png",
-                                  text: "Logout",
-                                  func: () async {
-                                    await logoutFunc();
-                                  },
-                                ),
-                                DrawOption(
-                                  imgPath: 'assets/join_icon.png',
-                                  text: "Home",
-                                  func: () {
-                                    setState(() {
-                                      initAdminPage = FreshPage();
-                                    });
-                                  },
-                                ),
-                                DrawOption(
-                                  imgPath: 'assets/later_icon.png',
-                                  text: "Attendance",
-                                  func: () {
-                                    setState(() {
-                                      initAdminPage = const AttendancePage();
-                                      checkedInUsers.forEach((key, value) {
-                                        Duration interval = DateTime.now()
-                                            .toUtc()
-                                            .difference(
-                                                key.timeStarted.toUtc());
-                                        checkedInUsers[key] = interval;
-                                      });
-                                    });
-                                  },
-                                )
-                              ]),
-                            ),
-                          ],
-                        );
-                      }
-                        
-                      return SidebarList(children: [
-                        SizedBox(
-                          width: double.maxFinite,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              DrawOption(
-                                imgPath: "assets/white_logo.png",
-                                text: "Logout",
-                                func: () async => await logoutFunc(),
-                              ),
-                              DrawOption(
-                                imgPath: "assets/build_icon.png",
-                                text: "Profile",
-                                func: () {
-                                  setState(
-                                    () {
-                                      initUserPage = const ProfilePage();
-                                    },
-                                  );
-                                },
-                              ),
-                              DrawOption(
-                                imgPath: 'assets/join_icon.png',
-                                text: "Attendance",
-                                func: () {
-                                  setState(
-                                    () {
-                                      initAdminPage = const AttendancePage();
-                                      initUserPage = const AttendancePage();
-                                    },
-                                  );
-                                },
-                              )
-                            ],
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 24),
+                      child: Row(children: [
+                        const Text(
+                          'WORKSPACE',
+                          style: TextStyle(
+                            color: Color(0xFF959A9C),
+                            fontSize: 16,
+                            fontFamily: 'Rubik',
+                            fontWeight: FontWeight.w700,
+                            height: 0,
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 24),
-                          child: Row(children: [
-                            const Text(
-                              'WORKSPACE',
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () async {
+                            await showDialog(
+                              useSafeArea: false,
+                              context: context,
+                              builder: (context) {
+                                workspaceNameController.clear();
+                                workspaceDescriptionController.clear();
+
+                                return CreateWorkspaceDialog(
+                                  workspaceNameController:
+                                      workspaceNameController,
+                                  workspaceDescriptionController:
+                                      workspaceDescriptionController,
+                                  func: updateWorkspaces,
+                                );
+                              },
+                            );
+                          },
+                        )
+                      ]),
+                    ),
+                    Container(
+                      constraints: const BoxConstraints(maxHeight: 150),
+                      child: gOwnedSpaces.isEmpty
+                          ? const Column(
+                              mainAxisSize: MainAxisSize.min,
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: gOwnedSpaces.length,
+                              itemBuilder: (context, index) {
+                                Workspace thisSpace =
+                                    gOwnedSpaces.elementAt(index);
+
+                                return WorkspaceTile(
+                                  space: thisSpace,
+                                  controller: _cmController,
+                                  owned: true,
+                                  func: reflectDeletedSpaces,
+                                );
+                              }),
+                    ),
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 24),
+                      child: Row(
+                        children: [
+                          const Text('SHARED',
                               style: TextStyle(
                                 color: Color(0xFF959A9C),
                                 fontSize: 16,
                                 fontFamily: 'Rubik',
                                 fontWeight: FontWeight.w700,
                                 height: 0,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            IconButton(
-                              icon: const Icon(Icons.add),
-                              onPressed: () async {
-                                await showDialog(
-                                  useSafeArea: false,
-                                  context: context,
-                                  builder: (context) {
-                                    workspaceNameController.clear();
-                                    workspaceDescriptionController.clear();
-                                    
-                                    return CreateWorkspaceDialog(
-                                      workspaceNameController:
-                                          workspaceNameController,
-                                      workspaceDescriptionController:
-                                          workspaceDescriptionController,
-                                      func: updateWorkspaces,
-                                    );
-                                  },
-                                );
-                              },
-                            )
-                          ]),
-                        ),
-                        Container(
-                          constraints: const BoxConstraints(maxHeight: 150),
-                          child: gOwnedSpaces.isEmpty
-                              ? const Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                )
-                              : ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: gOwnedSpaces.length,
-                                  itemBuilder: (context, index) {
-                                    Workspace thisSpace =
-                                        gOwnedSpaces.elementAt(index);
+                              )),
+                          const SizedBox(width: 10),
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () async {
+                              await showDialog(
+                                useSafeArea: false,
+                                context: context,
+                                builder: (context) {
+                                  workspaceNameController.clear();
 
-                                    return WorkspaceTile(
-                                      space: thisSpace,
-                                      controller: _cmController,
-                                      owned: true,
-                                      func: reflectDeletedSpaces,
-                                    );
-                                  }),
-                        ),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 24),
-                          child: Row(
-                            children: [
-                              const Text('SHARED',
-                                  style: TextStyle(
-                                    color: Color(0xFF959A9C),
-                                    fontSize: 16,
-                                    fontFamily: 'Rubik',
-                                    fontWeight: FontWeight.w700,
-                                    height: 0,
-                                  )),
-                              const SizedBox(width: 10),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () async {
-                                  await showDialog(
-                                    useSafeArea: false,
-                                    context: context,
-                                    builder: (context) {
-                                      workspaceNameController.clear();
-                                      
-                                      return JoinWorkspaceDialog(
-                                        codeController: workspaceNameController,
-                                      );
-                                    },
+                                  return JoinWorkspaceDialog(
+                                    codeController: workspaceNameController,
                                   );
                                 },
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          constraints: const BoxConstraints(maxHeight: 150),
-                          child: gSharedSpaces.isEmpty
-                              ? const Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                )
-                              : ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: gSharedSpaces.length,
-                                  itemBuilder: (context, index) {
-                                    Workspace thisSpace =
-                                        gSharedSpaces.elementAt(index);
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      constraints: const BoxConstraints(maxHeight: 150),
+                      child: gSharedSpaces.isEmpty
+                          ? const Column(
+                              mainAxisSize: MainAxisSize.min,
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: gSharedSpaces.length,
+                              itemBuilder: (context, index) {
+                                Workspace thisSpace =
+                                    gSharedSpaces.elementAt(index);
 
-                                    return WorkspaceTile(
-                                      space: thisSpace,
-                                      controller: _cmController,
-                                      owned: false,
-                                      func: reflectDeletedSpaces,
-                                    );
-                                  },
-                                ),
-                        ),
-                      ]);
-                    }),
-                  ]),
+                                return WorkspaceTile(
+                                  space: thisSpace,
+                                  controller: _cmController,
+                                  owned: false,
+                                  func: reflectDeletedSpaces,
+                                );
+                              },
+                            ),
+                    ),
+                  ]);
+                }),
+              ]),
             ),
           ),
           Expanded(
@@ -340,7 +326,7 @@ class _HomePageState extends State<HomePage> {
             child: SelectionArea(
               child: Padding(
                 padding: const EdgeInsets.only(
-                        left: 30, right: 30, top: 30, bottom: 30),
+                    left: 30, right: 30, top: 30, bottom: 30),
                 child: LayoutBuilder(builder: (context, constraints) {
                   if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
                     return initAdminPage;
@@ -392,10 +378,10 @@ class WorkspaceTile extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: Transform.translate(
-            offset: const Offset(-20,5),
+            offset: const Offset(-20, 5),
             child: MenuAnchor(
-              builder:
-                  (BuildContext context, MenuController controller, Widget? child) {
+              builder: (BuildContext context, MenuController controller,
+                  Widget? child) {
                 return IconButton(
                   onPressed: () {
                     if (controller.isOpen) {
@@ -423,7 +409,7 @@ class WorkspaceTile extends StatelessWidget {
         ),
       ],
     );
-    
+
     // GestureDetector(
     //   onSecondaryTapDown: (details) => controller.show(
     //     context: context,
