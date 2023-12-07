@@ -11,7 +11,10 @@ List<WorkList> gLists = <WorkList>[];
 List<Task> gTasks = <Task>[];
 
 Future<void> initDataModels() async {
-  gAllUsers = await getAllUsers();
+  if (gUser?.id == "rISCknyu5dlIrfGrKyCp") {
+    gAllUsers = await getAllUsers();
+  }
+
   gOwnedSpaces = await gUser!.getOwnedWorkspaces();
   gSharedSpaces = await gUser!.getSharedWorkspaces();
 

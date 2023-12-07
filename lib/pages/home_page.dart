@@ -67,6 +67,19 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> updateSharedWorkspaces(String code) async {
+    Workspace? space = await gUser?.addSharedWorkspace(code);
+
+    if (space == null && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Workspace does not exist.")),
+      );
+      return;
+    }
+
+    setState(() => gSharedSpaces.add(space!));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -276,14 +289,16 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.only(left: 24),
                       child: Row(
                         children: [
-                          const Text('SHARED',
-                              style: TextStyle(
-                                color: Color(0xFF959A9C),
-                                fontSize: 16,
-                                fontFamily: 'Rubik',
-                                fontWeight: FontWeight.w700,
-                                height: 0,
-                              )),
+                          const Text(
+                            'SHARED',
+                            style: TextStyle(
+                              color: Color(0xFF959A9C),
+                              fontSize: 16,
+                              fontFamily: 'Rubik',
+                              fontWeight: FontWeight.w700,
+                              height: 0,
+                            ),
+                          ),
                           const SizedBox(width: 10),
                           IconButton(
                             icon: const Icon(Icons.add),
@@ -296,6 +311,7 @@ class _HomePageState extends State<HomePage> {
 
                                   return JoinWorkspaceDialog(
                                     codeController: workspaceNameController,
+                                    updateFunc: updateSharedWorkspaces,
                                   );
                                 },
                               );
