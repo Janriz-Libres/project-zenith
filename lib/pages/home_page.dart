@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void updateUsername(String name) async {
-    gUser = await gUser?.updateUser(name);
+    gUser = await gUser?.updateUsername(name);
     var newName = gUser!.username;
     setState(() {
       name = newName;
@@ -387,14 +387,14 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class WorkspaceTile extends StatelessWidget {
+class WorkspaceTile extends StatefulWidget {
   final ContextMenuController controller;
-  final Workspace space;
+  Workspace space;
   final bool owned;
   final Function(Workspace, bool) func;
   final Function(Workspace) callback;
 
-  const WorkspaceTile({
+  WorkspaceTile({
     super.key,
     required this.space,
     required this.controller,
@@ -404,18 +404,24 @@ class WorkspaceTile extends StatelessWidget {
   });
 
   @override
+  State<WorkspaceTile> createState() => _WorkspaceTileState();
+}
+
+class _WorkspaceTileState extends State<WorkspaceTile> {
+  @override
   Widget build(BuildContext context) {
+    
     return Stack(
       children: [
         DrawOption(
           imgPath: "assets/later_icon.png",
-          text: space.title,
+          text: widget.space.title,
           func: () async {
             if (context.mounted) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => WorkspacePage(workspace: space, callback: callback,),
+                  builder: (context) => WorkspacePage(workspace: widget.space, callback: widget.callback,),
                 ),
               );
             }
@@ -440,16 +446,41 @@ class WorkspaceTile extends StatelessWidget {
                   tooltip: 'Show menu',
                 );
               },
-              menuChildren: List<MenuItemButton>.generate(
-                1,
-                (int index) => MenuItemButton(
+              menuChildren: [
+                MenuItemButton(
                   onPressed: () async {
-                    await gUser?.deleteWorkspace(space);
-                    func(space, owned);
+                    await showDialog(
+                      useSafeArea: false,
+                      context: context,
+                      builder: (context) {
+                        return EditWorkspaceDialog(
+                          workspace: widget.space,
+                          func: (String name, String desc) async {
+                            Workspace space = gOwnedSpaces.firstWhere((element) => widget.space.id == element.id);
+                            int index = gOwnedSpaces.indexWhere((element) => widget.space.id == element.id);
+                            print(space.title);
+                            gOwnedSpaces[index] = await gUser!.updateWorkspaceDetails(space, name, desc);
+                            setState(() {
+                              widget.space = gOwnedSpaces[index];
+                            });
+                            for(Workspace space in gOwnedSpaces) {
+                              print(space.title);
+                            }
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: const Text('Edit Workspace'),
+                ),
+                MenuItemButton(
+                  onPressed: () async {
+                    await gUser?.deleteWorkspace(widget.space);
+                    widget.func(widget.space, widget.owned);
                   },
                   child: const Text('Delete'),
                 ),
-              ),
+              ]
             ),
           ),
         ),

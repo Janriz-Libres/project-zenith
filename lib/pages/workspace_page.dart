@@ -376,7 +376,7 @@ class _TaskPageState extends State<TaskPage> {
               IconButton(
                 onPressed: disabled ? null : 
                 () async {
-                  Workspace space = await widget.workspace.updateSpaceDesc(newDesc.text);
+                  Workspace space = await gUser!.updateSpaceDesc(widget.workspace, newDesc.text);
                   widget.callback(space);
                   setState(() {
                     workspace = space;

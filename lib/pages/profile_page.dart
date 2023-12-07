@@ -45,7 +45,8 @@ class _ProfileViewState extends State<ProfileView> {
   final newName = TextEditingController();
   bool editable = false;
   bool disabled = true;
-  bool edit = false;
+  bool editName = false;
+  bool editBg = false;
   Color color = Colors.grey;
 
   @override
@@ -63,19 +64,31 @@ class _ProfileViewState extends State<ProfileView> {
           width: double.maxFinite,
           child: Stack(
             children: [
-              Container(
-                height: 0.23*MediaQuery.of(context).size.height,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
+              MouseRegion(
+                onEnter: (event) => setState(() {
+                  editBg = true;
+                }),
+                onExit: (event) => setState(() {
+                  editBg = false;
+                }),
+                child: Container(
+                  height: 0.23*MediaQuery.of(context).size.height,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                    ),
+                    color: Color.fromARGB(255, 152, 147, 147),
                   ),
-                  color: Color.fromARGB(255, 152, 147, 147),
-                ),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    onPressed: () {}, 
-                    icon: const Icon(Icons.add_a_photo)),
+                  child: AnimatedOpacity(
+                    opacity: editBg ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 500),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: IconButton(
+                        onPressed: () {}, 
+                        icon: const Icon(Icons.add_a_photo)),
+                    ),
+                  ),
                 ),
               ),
               Align(
@@ -151,10 +164,10 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   MouseRegion(
                     onEnter: (event) => setState(() {
-                      edit = true;
+                      editName = true;
                     }),
                     onExit: (event) => setState(() {
-                      edit = false;
+                      editName = false;
                     }),
                     child: Container(
                       width: double.maxFinite,
@@ -177,7 +190,7 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                           const Spacer(),
                           AnimatedOpacity(
-                            opacity: edit ? 1.0 : 0.0,
+                            opacity: editName ? 1.0 : 0.0,
                             duration: const Duration(milliseconds: 500),
                             child: IconButton(
                               onPressed: () {
@@ -222,7 +235,7 @@ class _ProfileViewState extends State<ProfileView> {
                               setState(() {
                                 editable = false;
                                 disabled = true;
-                                edit = false;
+                                editName = false;
                                 color = Colors.grey;
                               });
                             }, 
@@ -230,13 +243,13 @@ class _ProfileViewState extends State<ProfileView> {
                           IconButton(
                             onPressed: disabled ? null : 
                             () async {
-                              gUser = await gUser?.updateUser(newName.text);
+                              gUser = await gUser?.updateUsername(newName.text);
                               widget.func(newName.text);
                               newName.clear();
                               setState(() {
                                 editable = false;
                                 disabled = true;
-                                edit = false;
+                                editName = false;
                                 color = Colors.grey;
                               });
                             }, 

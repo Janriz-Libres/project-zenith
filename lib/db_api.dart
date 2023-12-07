@@ -207,7 +207,37 @@ class User {
     await reference.delete();
   }
 
-  Future<User> updateUser (String newName) async {
+  Future<Workspace> updateWorkspaceDetails(Workspace space, String title, String desc) async {
+    var reference = Firestore.instance.collection('workspaces').document(space.id);
+    await reference.update({'title': title, 'description': desc});
+
+    Document userDoc = await reference.get();
+
+    return Workspace(
+      id: space.id,
+      title: userDoc['title'],
+      description: userDoc['description'],
+      owner: space.owner,
+      members: space.members,
+    );
+  }
+
+  Future<Workspace> updateSpaceDesc(Workspace space, String desc) async {
+    var reference = Firestore.instance.collection('workspaces').document(space.id);
+    await reference.update({'description': desc});
+    
+    Document userDoc = await reference.get();
+
+    return Workspace(
+      id: space.id,
+      title: space.title,
+      description: userDoc['description'],
+      owner: space.owner,
+      members: space.members,
+    );
+  }
+
+  Future<User> updateUsername (String newName) async {
     var reference = Firestore.instance.collection('users').document(id);
     await reference.update({'username': newName});
     
@@ -288,21 +318,6 @@ class Workspace {
     }
 
     await reference.delete();
-  }
-
-  Future<Workspace> updateSpaceDesc(String desc) async {
-    var reference = Firestore.instance.collection('workspaces').document(id);
-    await reference.update({'description': desc});
-    
-    Document userDoc = await reference.get();
-
-    return Workspace(
-      id: id,
-      title: title,
-      description: userDoc['description'],
-      owner: owner,
-      members: members,
-    );
   }
 }
 
