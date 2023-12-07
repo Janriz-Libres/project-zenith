@@ -6,6 +6,7 @@ import 'package:project_zenith/pages/attendance_page.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/fresh_page.dart';
 import 'package:project_zenith/pages/profile_page.dart';
+import 'package:project_zenith/pages/rendertime_page.dart';
 import 'package:project_zenith/pages/workspace_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -79,6 +80,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       name = newName;
     });
+  }
+
+  Future<void> updateSharedWorkspaces(String code) async {
+    Workspace? space = await gUser?.addSharedWorkspace(code);
+
+    if (space == null && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Workspace does not exist.")),
+      );
+      return;
+    }
+
+    setState(() => gSharedSpaces.add(space!));
   }
 
   @override
@@ -189,6 +203,15 @@ class _HomePageState extends State<HomePage> {
                                       });
                                     });
                                   },
+                                ),
+                                DrawOption(
+                                  imgPath: 'assets/later_icon.png',
+                                  text: "Render Times",
+                                  func: () {
+                                    setState(() {
+                                      initAdminPage = const RenderTimePage();
+                                    });
+                                  },
                                 )
                               ]),
                             ),
@@ -218,18 +241,6 @@ class _HomePageState extends State<HomePage> {
                                   );
                                 },
                               ),
-                              DrawOption(
-                                imgPath: 'assets/join_icon.png',
-                                text: "Attendance",
-                                func: () {
-                                  setState(
-                                    () {
-                                      initAdminPage = const AttendancePage();
-                                      initUserPage = const AttendancePage();
-                                    },
-                                  );
-                                },
-                              )
                             ],
                           ),
                         ),
@@ -324,6 +335,7 @@ class _HomePageState extends State<HomePage> {
                                       
                                       return JoinWorkspaceDialog(
                                         codeController: workspaceNameController,
+                                        updateFunc: updateSharedWorkspaces,
                                       );
                                     },
                                   );
@@ -430,10 +442,10 @@ class _WorkspaceTileState extends State<WorkspaceTile> {
         Align(
           alignment: Alignment.centerRight,
           child: Transform.translate(
-            offset: const Offset(-20,5),
+            offset: const Offset(-20, 5),
             child: MenuAnchor(
-              builder:
-                  (BuildContext context, MenuController controller, Widget? child) {
+              builder: (BuildContext context, MenuController controller,
+                  Widget? child) {
                 return IconButton(
                   onPressed: () {
                     if (controller.isOpen) {
@@ -486,7 +498,7 @@ class _WorkspaceTileState extends State<WorkspaceTile> {
         ),
       ],
     );
-    
+
     // GestureDetector(
     //   onSecondaryTapDown: (details) => controller.show(
     //     context: context,

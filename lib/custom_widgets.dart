@@ -509,9 +509,11 @@ class JoinWorkspaceDialog extends StatelessWidget {
   const JoinWorkspaceDialog({
     super.key,
     required this.codeController,
+    required this.updateFunc,
   });
 
   final TextEditingController codeController;
+  final Function(String) updateFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -539,10 +541,11 @@ class JoinWorkspaceDialog extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(Icons.close))
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(Icons.close),
+                    )
                   ],
                 ),
               ),
@@ -591,7 +594,9 @@ class JoinWorkspaceDialog extends StatelessWidget {
                     text: "Enter",
                     gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
                     minSize: const Size(200, 50),
-                    func: () async {},
+                    func: () async {
+                      await updateFunc(codeController.text);
+                    },
                   ),
                 ),
               ),

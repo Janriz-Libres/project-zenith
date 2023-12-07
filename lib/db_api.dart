@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firedart/firedart.dart';
 import 'package:project_zenith/globals.dart';
 
@@ -69,6 +71,30 @@ class Authenticator {
   }
 }
 
+Future<List<User>> getAllUsers() async {
+  List<User> allUsers = <User>[];
+  var temp = await Firestore.instance.collection('users').get();
+
+  for (var element in temp) {
+    if (element.id == "rISCknyu5dlIrfGrKyCp") {
+      continue;
+    }
+
+    allUsers.add(User(
+      authId: await element['auth_id'],
+      email: await element['email'],
+      hasCheckedIn: await element['has_checked_in'],
+      id: await element['id'],
+      password: await element['password'],
+      timeStarted: await element['time_started'],
+      totalMinutes: await element['total_minutes'],
+      username: await element['username'],
+    ));
+  }
+
+  return allUsers;
+}
+
 class User {
   final String id;
   final String authId;
@@ -90,15 +116,30 @@ class User {
     required this.totalMinutes,
   });
 
+  final chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+
+  String _getRandomString(int length) {
+    Random rnd = Random();
+
+    return String.fromCharCodes(Iterable.generate(
+      length,
+      (_) => chars.codeUnitAt(rnd.nextInt(chars.length)),
+    ));
+  }
+
   /// Adds a workspace for the user.
   ///
   /// Returns the Workspace instance after successful creation.
   Future<Workspace> addWorkspace(String title, String desc) async {
+    String code = _getRandomString(15);
+
     var docReference = await Firestore.instance.collection('workspaces').add({
       'title': title,
       'description': desc,
       'owner': Firestore.instance.collection('users').document(id),
       'members': <DocumentReference>[],
+      'code': code,
     });
 
     await Firestore.instance.collection('lists').add({
@@ -120,11 +161,59 @@ class User {
       description: desc,
       owner: this,
       members: [],
+      code: code,
+    );
+  }
+
+  Future<Workspace?> addSharedWorkspace(String code) async {
+    List<Document> query = await Firestore.instance
+        .collection('workspaces')
+        .where('code', isEqualTo: code)
+        .get();
+
+    Document spaceDoc = query.first;
+    List<dynamic> members = await spaceDoc['members'];
+    var thisUser = Firestore.instance.collection('users').document(id);
+
+    if (query.isEmpty ||
+        await spaceDoc['owner'] == thisUser ||
+        members.contains(thisUser)) {
+      return null;
+    }
+
+    List<dynamic> newMembers = <dynamic>[];
+    newMembers.addAll(members);
+    newMembers.add(thisUser);
+    await spaceDoc.reference.update({'members': newMembers});
+
+    List<User> users = <User>[];
+
+    for (DocumentReference ref in newMembers) {
+      var userDoc = await ref.get();
+      users.add(User(
+        authId: await userDoc['auth_id'],
+        email: await userDoc['email'],
+        hasCheckedIn: await userDoc['has_checked_in'],
+        id: await userDoc['id'],
+        password: await userDoc['password'],
+        timeStarted: await userDoc['time_started'],
+        totalMinutes: await userDoc['total_minutes'],
+        username: await userDoc['username'],
+      ));
+    }
+
+    return Workspace(
+      id: spaceDoc.id,
+      title: await spaceDoc['title'],
+      description: await spaceDoc['description'],
+      owner: await spaceDoc['owner'],
+      members: users,
+      code: code,
     );
   }
 
   Future<List<Workspace>> _getWorkspaces(List<Document> docs) async {
-    List<Workspace> workspaces = [];
+    List<Workspace> workspaces = <Workspace>[];
 
     for (final Document workspace in docs) {
       List<User> members = [];
@@ -145,12 +234,25 @@ class User {
         ));
       }
 
+      DocumentReference ownerRef = await workspace['owner'];
+      Document ownerDoc = await ownerRef.get();
+
       Workspace newWorkspace = Workspace(
         id: workspace.id,
-        title: workspace['title'],
-        description: workspace['description'],
-        owner: this,
+        title: await workspace['title'],
+        description: await workspace['description'],
+        owner: User(
+          authId: await ownerDoc['auth_id'],
+          email: await ownerDoc['email'],
+          hasCheckedIn: await ownerDoc['has_checked_in'],
+          id: await ownerDoc['id'],
+          password: await ownerDoc['password'],
+          timeStarted: await ownerDoc['time_started'],
+          totalMinutes: await ownerDoc['total_minutes'],
+          username: await ownerDoc['username'],
+        ),
         members: members,
+        code: await workspace['code'],
       );
       workspaces.add(newWorkspace);
     }
@@ -183,27 +285,6 @@ class User {
 
   Future<void> deleteWorkspace(Workspace space) async {
     var reference = Firestore.instance.collection('workspaces').document(space.id);
-
-    var lists = await Firestore.instance
-        .collection('lists')
-        .where('workspace', isEqualTo: reference)
-        .get();
-
-    for (final Document list in lists) {
-      var listreference = Firestore.instance.collection('lists').document(list.id);
-      var tasks = await Firestore.instance
-        .collection('tasks')
-        .where('list', isEqualTo: listreference)
-        .get();
-
-      for (final Document task in tasks) {
-        var taskreference = Firestore.instance.collection('tasks').document(task.id);
-        await taskreference.delete();
-      }
-
-      await listreference.delete();
-    }
-
     await reference.delete();
   }
 
@@ -218,7 +299,8 @@ class User {
       title: userDoc['title'],
       description: userDoc['description'],
       owner: space.owner,
-      members: space.members,
+      members: space.members, 
+      code: space.code,
     );
   }
 
@@ -233,14 +315,15 @@ class User {
       title: space.title,
       description: userDoc['description'],
       owner: space.owner,
-      members: space.members,
+      members: space.members, 
+      code: space.code,
     );
   }
 
   Future<User> updateUsername (String newName) async {
     var reference = Firestore.instance.collection('users').document(id);
     await reference.update({'username': newName});
-    
+
     Document userDoc = await reference.get();
     return User(
       authId: await userDoc['auth_id'],
@@ -261,6 +344,7 @@ class Workspace {
   final String description;
   final User owner;
   final List<User> members;
+  final String code;
 
   const Workspace({
     required this.id,
@@ -268,6 +352,7 @@ class Workspace {
     required this.description,
     required this.owner,
     required this.members,
+    required this.code,
   });
 
   Future<WorkList> addList(String name) async {

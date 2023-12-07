@@ -1,3 +1,4 @@
+import 'package:firedart/auth/exceptions.dart';
 import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
@@ -377,15 +378,15 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       }
-    } catch (e) {
+    } on AuthException {
       if (context.mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red.shade800,
-            content: Row(
+            content: const Row(
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(right: 8.0),
                   child: Icon(
                     Icons.error_outline,
@@ -393,8 +394,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Text(
-                  'Oh snap! ${e.toString()}',
-                  style: const TextStyle(fontSize: 16),
+                  'Oh snap! Authentication Error.',
+                  style: TextStyle(fontSize: 16),
                 ),
               ],
             ),
