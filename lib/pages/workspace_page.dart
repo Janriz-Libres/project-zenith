@@ -7,10 +7,12 @@ import 'package:project_zenith/pages/members_page.dart';
 
 class WorkspacePage extends StatefulWidget {
   final Workspace workspace;
+  final Function(Workspace) callback;
 
   const WorkspacePage({
     super.key,
-    required this.workspace,
+    required this.workspace, 
+    required this.callback,
   });
 
   @override
@@ -24,6 +26,8 @@ class _WorkspacePageState extends State<WorkspacePage> {
 
   final boardNameController = TextEditingController();
   final tasklistNameController = TextEditingController();
+
+  late Workspace workspace = widget.workspace;
 
   void _changeContent(ContentWidget cw) {
     setState(() {
@@ -84,16 +88,6 @@ class _WorkspacePageState extends State<WorkspacePage> {
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 20,
-                                  fontFamily: 'Rubik',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                              Text(
-                                widget.workspace.description,
-                                style: const TextStyle(
-                                  color: Color(0xFF636769),
-                                  fontSize: 15,
                                   fontFamily: 'Rubik',
                                   fontWeight: FontWeight.w400,
                                   height: 0,
@@ -198,13 +192,19 @@ class _WorkspacePageState extends State<WorkspacePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                        left: 30, right: 30, top: 70, bottom: 30),
+                        left: 30, right: 30, top: 80, bottom: 30),
                     child: LayoutBuilder(
                       builder: (context, constraints) {
                         switch (contentWidget) {
                           case ContentWidget.task:
                             return TaskPage(
-                              workspace: widget.workspace,
+                              workspace: workspace, 
+                              callback: (Workspace tempspace) {
+                                Workspace space = widget.callback(tempspace);
+                                setState(() {
+                                  workspace = space;
+                                });
+                              }
                             );
                           case ContentWidget.members:
                             return MembersPage(space: widget.workspace);
@@ -226,10 +226,12 @@ class _WorkspacePageState extends State<WorkspacePage> {
 
 class TaskPage extends StatefulWidget {
   final Workspace workspace;
+  final Function(Workspace) callback;
 
   const TaskPage({
     super.key,
-    required this.workspace,
+    required this.workspace, 
+    required this.callback,
   });
 
   @override
@@ -239,6 +241,12 @@ class TaskPage extends StatefulWidget {
 class _TaskPageState extends State<TaskPage> {
   final tasklistNameController = TextEditingController();
   List<WorkList>? worklists;
+  final newDesc = TextEditingController();
+  bool editable = false;
+  bool disabled = true;
+  bool edit = false;
+  Color color = Colors.grey;
+  late Workspace workspace = widget.workspace;
 
   Future<void> _addWorklist() async {
     WorkList list = await widget.workspace.addList(tasklistNameController.text);
@@ -264,9 +272,16 @@ class _TaskPageState extends State<TaskPage> {
     }
   }
 
+  void _removeList(WorkList list) {
+    setState(() {
+      worklists?.remove(list);
+    });
+  }
+
   @override
   void dispose() {
     tasklistNameController.dispose();
+    newDesc.dispose();
     super.dispose();
   }
 
@@ -275,6 +290,108 @@ class _TaskPageState extends State<TaskPage> {
     _initWorklists();
 
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      !editable ? MouseRegion(
+        onEnter: (event) => setState(() {
+          edit = true;
+        }),
+        onExit: (event) => setState(() {
+          edit = false;
+        }),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Text(
+                workspace.description,
+                style: const TextStyle(
+                  color: Color(0xFF636769),
+                  fontSize: 15,
+                  fontFamily: 'Rubik',
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            AnimatedOpacity(
+              opacity: edit ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 500),
+              child: Transform.translate(
+                offset: const Offset(0, -10),
+                child: IconButton(
+                  iconSize: 20,
+                  onPressed: () {
+                    setState(() {
+                      editable = true;
+                    });
+                  }, 
+                  icon: const Icon(Icons.edit, color: Colors.black87,)),
+              ),
+            )
+          ],
+        ),
+      ) : Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: TextField(
+                  minLines: 1,
+                  maxLines: 5,
+                  controller: newDesc,
+                  decoration: const InputDecoration(
+                    hintText: "Description"
+                  ),
+                  style: const TextStyle(
+                    color: Color(0xFF636769),
+                    fontFamily: "Rubik",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15
+                  ),
+                  onChanged: (text) {
+                    if (text.isEmpty) {
+                      setState(() {
+                        disabled = true;
+                        color = Colors.grey;
+                      });
+                    } else {
+                      setState(() {
+                        disabled = false;
+                        color = Colors.black87;
+                      });
+                    }
+                  },
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  newDesc.clear();
+                  setState(() {
+                    editable = false;
+                    disabled = true;
+                    edit = false;
+                    color = Colors.grey;
+                  });
+                }, 
+                icon: const Icon(Icons.close, color: Colors.black87)),
+              IconButton(
+                onPressed: disabled ? null : 
+                () async {
+                  Workspace space = await widget.workspace.updateSpaceDesc(newDesc.text);
+                  widget.callback(space);
+                  setState(() {
+                    workspace = space;
+                    editable = false;
+                    disabled = true;
+                    edit = false;
+                    color = Colors.grey;
+                  });
+                  newDesc.clear();
+                }, 
+                icon: Icon(Icons.subdirectory_arrow_left, color: color)
+              )
+            ],
+          ),
+      const SizedBox(height: 10,),
       Row(
         children: [
           const SelectableText("Team Tasks",
@@ -321,7 +438,7 @@ class _TaskPageState extends State<TaskPage> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: worklists!.map((e) => TaskList(list: e)).toList(),
+                    children: worklists!.map((e) => TaskList(list: e, worklists: worklists!, func: _removeList)).toList(),
                   ),
                 ),
               ),
@@ -335,10 +452,14 @@ class _TaskPageState extends State<TaskPage> {
 
 class TaskList extends StatefulWidget {
   final WorkList list;
+  final List<WorkList> worklists;
+  final Function(WorkList list) func;
 
   const TaskList({
     super.key,
-    required this.list,
+    required this.list, 
+    required this.worklists, 
+    required this.func,
   });
 
   @override
@@ -365,6 +486,7 @@ class _TaskListState extends State<TaskList> {
     setState(() {
       tasks?.remove(task);
     });
+    gTasks.remove(task);
   }
   
   Future<void> _completeTask(Task task) async {
@@ -380,6 +502,19 @@ class _TaskListState extends State<TaskList> {
 
     await data.func();
     await data.task.changeParentList(widget.list);
+  }
+
+  Future<void> _deleteList(WorkList list) async {
+    tasks = await list.getTasks();
+
+    for (Task task in tasks!) {
+      await _removeTask(task);
+    }
+
+    widget.func(list);
+    gLists.remove(list);
+
+    await list.workspace.deleteList(list);
   }
 
   void initTasks() {
@@ -445,7 +580,7 @@ class _TaskListState extends State<TaskList> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.check, color: Colors.green,),
-                            onPressed: () {},
+                            onPressed: () async {await _deleteList(widget.list);},
                           )
                         ],
                       ),

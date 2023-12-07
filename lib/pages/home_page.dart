@@ -24,9 +24,11 @@ class _HomePageState extends State<HomePage> {
   final codeController = TextEditingController();
 
   Widget initAdminPage = FreshPage();
-  Widget initUserPage = const ProfilePage();
+  late Widget initUserPage = ProfilePage(func: updateUsername,);
 
   final _cmController = ContextMenuController();
+
+  late String name;
 
   Future<void> logoutFunc() async {
     await Authenticator.logout();
@@ -53,6 +55,11 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       gOwnedSpaces.add(space!);
     });
+
+    
+    for (Workspace workspace in gOwnedSpaces) {
+      gLists.addAll(await workspace.getLists());
+    }
   }
 
   void reflectDeletedSpaces(Workspace space, bool owned) {
@@ -66,8 +73,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void updateUsername(String name) async {
+    gUser = await gUser?.updateUser(name);
+    var newName = gUser!.username;
+    setState(() {
+      name = newName;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    name = gUser!.username;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F7F4),
       body: Row(
@@ -108,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  gUser!.username,
+                                  name.toUpperCase(),
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
@@ -196,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                                 func: () {
                                   setState(
                                     () {
-                                      initUserPage = const ProfilePage();
+                                      initUserPage = ProfilePage(func: updateUsername,);
                                     },
                                   );
                                 },
@@ -272,6 +289,13 @@ class _HomePageState extends State<HomePage> {
                                       controller: _cmController,
                                       owned: true,
                                       func: reflectDeletedSpaces,
+                                      callback: (Workspace space) {
+                                        gOwnedSpaces[index] = space;
+                                        setState(() {
+                                          thisSpace = gOwnedSpaces[index];
+                                        });
+                                        return thisSpace;
+                                      }
                                     );
                                   }),
                         ),
@@ -326,6 +350,12 @@ class _HomePageState extends State<HomePage> {
                                       controller: _cmController,
                                       owned: false,
                                       func: reflectDeletedSpaces,
+                                      callback: (Workspace space) async {
+                                        gSharedSpaces[index] = space;
+                                        setState(() {
+                                          thisSpace = gSharedSpaces[index];
+                                        });
+                                      }
                                     );
                                   },
                                 ),
@@ -340,7 +370,7 @@ class _HomePageState extends State<HomePage> {
             child: SelectionArea(
               child: Padding(
                 padding: const EdgeInsets.only(
-                        left: 30, right: 30, top: 30, bottom: 30),
+                        left: 70, right: 70, top: 30, bottom: 30),
                 child: LayoutBuilder(builder: (context, constraints) {
                   if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
                     return initAdminPage;
@@ -362,13 +392,15 @@ class WorkspaceTile extends StatelessWidget {
   final Workspace space;
   final bool owned;
   final Function(Workspace, bool) func;
+  final Function(Workspace) callback;
 
   const WorkspaceTile({
     super.key,
     required this.space,
     required this.controller,
     required this.owned,
-    required this.func,
+    required this.func, 
+    required this.callback,
   });
 
   @override
@@ -383,7 +415,7 @@ class WorkspaceTile extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => WorkspacePage(workspace: space),
+                  builder: (context) => WorkspacePage(workspace: space, callback: callback,),
                 ),
               );
             }

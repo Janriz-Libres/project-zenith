@@ -101,6 +101,19 @@ class User {
       'members': <DocumentReference>[],
     });
 
+    await Firestore.instance.collection('lists').add({
+      'name': "FINISH",
+      'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
+    });
+    await Firestore.instance.collection('lists').add({
+      'name': "TODO",
+      'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
+    });
+    await Firestore.instance.collection('lists').add({
+      'name': "DOING",
+      'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
+    });
+
     return Workspace(
       id: docReference.id,
       title: title,
@@ -170,15 +183,36 @@ class User {
 
   Future<void> deleteWorkspace(Workspace space) async {
     var reference = Firestore.instance.collection('workspaces').document(space.id);
+
+    var lists = await Firestore.instance
+        .collection('lists')
+        .where('workspace', isEqualTo: reference)
+        .get();
+
+    for (final Document list in lists) {
+      var listreference = Firestore.instance.collection('lists').document(list.id);
+      var tasks = await Firestore.instance
+        .collection('tasks')
+        .where('list', isEqualTo: listreference)
+        .get();
+
+      for (final Document task in tasks) {
+        var taskreference = Firestore.instance.collection('tasks').document(task.id);
+        await taskreference.delete();
+      }
+
+      await listreference.delete();
+    }
+
     await reference.delete();
   }
 
-  Future<void> updateUser (String newName) async {
+  Future<User> updateUser (String newName) async {
     var reference = Firestore.instance.collection('users').document(id);
     await reference.update({'username': newName});
     
     Document userDoc = await reference.get();
-    gUser = User(
+    return User(
       authId: await userDoc['auth_id'],
       email: await userDoc['email'],
       id: await userDoc['id'],
@@ -243,7 +277,32 @@ class Workspace {
 
   Future<void> deleteList(WorkList list) async {
     var reference = Firestore.instance.collection('lists').document(list.id);
+    var tasks = await Firestore.instance
+        .collection('tasks')
+        .where('list', isEqualTo: reference)
+        .get();
+
+    for (final Document task in tasks) {
+      var taskreference = Firestore.instance.collection('tasks').document(task.id);
+      await taskreference.delete();
+    }
+
     await reference.delete();
+  }
+
+  Future<Workspace> updateSpaceDesc(String desc) async {
+    var reference = Firestore.instance.collection('workspaces').document(id);
+    await reference.update({'description': desc});
+    
+    Document userDoc = await reference.get();
+
+    return Workspace(
+      id: id,
+      title: title,
+      description: userDoc['description'],
+      owner: owner,
+      members: members,
+    );
   }
 }
 
