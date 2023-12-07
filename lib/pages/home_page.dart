@@ -6,6 +6,7 @@ import 'package:project_zenith/pages/attendance_page.dart';
 import 'package:project_zenith/pages/auth_page.dart';
 import 'package:project_zenith/pages/fresh_page.dart';
 import 'package:project_zenith/pages/profile_page.dart';
+import 'package:project_zenith/pages/rendertime_page.dart';
 import 'package:project_zenith/pages/workspace_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -168,6 +169,15 @@ class _HomePageState extends State<HomePage> {
                                         .difference(key.timeStarted.toUtc());
                                     checkedInUsers[key] = interval;
                                   });
+                                });
+                              },
+                            ),
+                            DrawOption(
+                              imgPath: 'assets/later_icon.png',
+                              text: "Render Times",
+                              func: () {
+                                setState(() {
+                                  initAdminPage = const RenderTimePage();
                                 });
                               },
                             )

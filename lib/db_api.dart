@@ -69,6 +69,27 @@ class Authenticator {
   }
 }
 
+Future<List<User>> getAllUsers() async {
+  List<User> allUsers = <User>[];
+  var temp = Firestore.instance.collection('users');
+
+  await temp.stream.forEach((element) async {
+    var user = element.first;
+    allUsers.add(User(
+      authId: await user['auth_id'],
+      email: await user['email'],
+      hasCheckedIn: await user['has_checked_in'],
+      id: await user['id'],
+      password: await user['password'],
+      timeStarted: await user['time_started'],
+      totalMinutes: await user['total_minutes'],
+      username: await user['username'],
+    ));
+  });
+
+  return allUsers;
+}
+
 class User {
   final String id;
   final String authId;
@@ -169,14 +190,15 @@ class User {
   }
 
   Future<void> deleteWorkspace(Workspace space) async {
-    var reference = Firestore.instance.collection('workspaces').document(space.id);
+    var reference =
+        Firestore.instance.collection('workspaces').document(space.id);
     await reference.delete();
   }
 
-  Future<void> updateUser (String newName) async {
+  Future<void> updateUser(String newName) async {
     var reference = Firestore.instance.collection('users').document(id);
     await reference.update({'username': newName});
-    
+
     Document userDoc = await reference.get();
     gUser = User(
       authId: await userDoc['auth_id'],
