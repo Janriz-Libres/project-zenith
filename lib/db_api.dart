@@ -534,6 +534,30 @@ class Role {
     required this.listPerms,
     required this.taskPerms,
   });
+
+  Future<Role> update(bool invite, bool changeRoles, String spacePerms,
+      String listPerms, String taskPerms) async {
+    var ref = Firestore.instance.collection('roles').document(id);
+    await ref.update({
+      'invite': invite,
+      'change_roles': changeRoles,
+      'space_perms': spacePerms,
+      'list_perms': listPerms,
+      'task_perms': taskPerms,
+    });
+
+    var doc = await ref.get();
+
+    return Role(
+      changeRoles: await doc['change_roles'],
+      id: ref.id,
+      invite: await doc['invite'],
+      listPerms: await doc['list_perms'],
+      name: await doc['name'],
+      spacePerms: await doc['space_perms'],
+      taskPerms: await doc['task_perms'],
+    );
+  }
 }
 
 class Workspace {

@@ -17,6 +17,22 @@ class RolesPage extends StatefulWidget {
 
 class _RolesPageState extends State<RolesPage> {
   RolesWidget rolesWidget = RolesWidget.view;
+  Role? roleToEdit;
+
+  void toEditMode(Role role) {
+    setState(() {
+      rolesWidget = RolesWidget.edit;
+      roleToEdit = role;
+    });
+  }
+
+  void toViewMode(Role oldRole, Role newRole) {
+    setState(() {
+      rolesWidget = RolesWidget.view;
+      widget.space.roles.remove(oldRole);
+      widget.space.roles.add(newRole);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +40,15 @@ class _RolesPageState extends State<RolesPage> {
       builder: (context, constraints) {
         switch (rolesWidget) {
           case RolesWidget.view:
-            return ViewRolesPage(space: widget.space);
+            return ViewRolesPage(
+              space: widget.space,
+              toEditModeCopy: toEditMode,
+            );
           case RolesWidget.edit:
-            return const EditRolesPage();
+            return EditRolePage(
+              role: roleToEdit!,
+              toViewModeFunc: toViewMode,
+            );
           default:
             throw Exception();
         }
@@ -37,10 +59,12 @@ class _RolesPageState extends State<RolesPage> {
 
 class ViewRolesPage extends StatefulWidget {
   final Workspace space;
+  final Function(Role) toEditModeCopy;
 
   const ViewRolesPage({
     super.key,
     required this.space,
+    required this.toEditModeCopy,
   });
 
   @override
@@ -132,7 +156,9 @@ class _ViewRolesPageState extends State<ViewRolesPage> {
                 const SizedBox(width: 20),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    widget.toEditModeCopy(e);
+                  },
                   child: const Text("Edit Permissions"),
                 ),
                 ElevatedButton(
@@ -150,11 +176,204 @@ class _ViewRolesPageState extends State<ViewRolesPage> {
   }
 }
 
-class EditRolesPage extends StatelessWidget {
-  const EditRolesPage({super.key});
+class EditRolePage extends StatefulWidget {
+  final Role role;
+  final Function(Role, Role) toViewModeFunc;
+
+  const EditRolePage({
+    super.key,
+    required this.role,
+    required this.toViewModeFunc,
+  });
+
+  @override
+  State<EditRolePage> createState() => _EditRolePageState();
+}
+
+class _EditRolePageState extends State<EditRolePage> {
+  String? spacePerms;
+  String? listPerms;
+  String? taskPerms;
+  bool? invite;
+  bool? changeRoles;
+
+  Future<void> updateRole() async {
+    Role newRole = await widget.role
+        .update(invite!, changeRoles!, spacePerms!, listPerms!, taskPerms!);
+
+    widget.toViewModeFunc(widget.role, newRole);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    spacePerms ??= widget.role.spacePerms;
+    listPerms ??= widget.role.listPerms;
+    taskPerms ??= widget.role.taskPerms;
+    invite ??= widget.role.invite;
+    changeRoles ??= widget.role.changeRoles;
+
+    return Column(
+      children: [
+        Text('Role Name: ${widget.role.name}'),
+        const Divider(),
+        Container(
+          decoration: const ShapeDecoration(
+            color: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 2,
+                color: Colors.grey,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+            ),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Checkbox(
+                    value: spacePerms?.contains('u'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (spacePerms!.contains('u')) {
+                          spacePerms = spacePerms?.replaceAll(RegExp(r'u'), '');
+                        } else {
+                          spacePerms = '${spacePerms}u';
+                        }
+                      });
+                    },
+                  ),
+                  const Text("Edit Workspace Details"),
+                ],
+              ),
+              const Divider(),
+              Row(
+                children: [
+                  Checkbox(
+                    value: spacePerms?.contains('d'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (spacePerms!.contains('d')) {
+                          spacePerms = spacePerms?.replaceAll(RegExp(r'd'), '');
+                        } else {
+                          spacePerms = '${spacePerms}d';
+                        }
+                      });
+                    },
+                  ),
+                  const Text("Delete Workspace"),
+                ],
+              ),
+              const Divider(),
+              Row(
+                children: [
+                  Checkbox(
+                    value: listPerms?.contains('cu'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (listPerms!.contains('cu')) {
+                          listPerms = listPerms?.replaceAll(RegExp(r'cu'), '');
+                        } else {
+                          listPerms = '${listPerms}cu';
+                        }
+                      });
+                    },
+                  ),
+                  const Text("Create and Edit Lists"),
+                ],
+              ),
+              const Divider(),
+              Row(
+                children: [
+                  Checkbox(
+                    value: listPerms?.contains('d'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (listPerms!.contains('d')) {
+                          listPerms = listPerms?.replaceAll(RegExp(r'd'), '');
+                        } else {
+                          listPerms = '${listPerms}d';
+                        }
+                      });
+                    },
+                  ),
+                  const Text("Delete Lists"),
+                ],
+              ),
+              const Divider(),
+              Row(
+                children: [
+                  Checkbox(
+                    value: taskPerms?.contains('cu'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (taskPerms!.contains('cu')) {
+                          taskPerms = taskPerms?.replaceAll(RegExp(r'cu'), '');
+                        } else {
+                          taskPerms = '${taskPerms}cu';
+                        }
+                      });
+                    },
+                  ),
+                  const Text("Create and Edit Tasks"),
+                ],
+              ),
+              const Divider(),
+              Row(
+                children: [
+                  Checkbox(
+                    value: taskPerms?.contains('d'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (taskPerms!.contains('d')) {
+                          taskPerms = taskPerms?.replaceAll(RegExp(r'd'), '');
+                        } else {
+                          taskPerms = '${taskPerms}d';
+                        }
+                      });
+                    },
+                  ),
+                  const Text("Delete Tasks"),
+                ],
+              ),
+              const Divider(),
+              Row(
+                children: [
+                  Checkbox(
+                    value: invite,
+                    onChanged: (value) {
+                      setState(() {
+                        invite = value;
+                      });
+                    },
+                  ),
+                  const Text("Invite Members"),
+                ],
+              ),
+              const Divider(),
+              Row(
+                children: [
+                  Checkbox(
+                    value: changeRoles,
+                    onChanged: (value) {
+                      setState(() {
+                        changeRoles = value;
+                      });
+                    },
+                  ),
+                  const Text("Change Member Roles"),
+                ],
+              ),
+            ],
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            await updateRole();
+          },
+          child: const Text("Save"),
+        ),
+      ],
+    );
   }
 }
