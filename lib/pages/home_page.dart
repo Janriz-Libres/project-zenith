@@ -307,6 +307,13 @@ class _HomePageState extends State<HomePage> {
                                       controller: _cmController,
                                       owned: true,
                                       func: reflectDeletedSpaces,
+                                      callback: (Workspace space) {
+                                        gOwnedSpaces[index] = space;
+                                        setState(() {
+                                          thisSpace = gOwnedSpaces[index];
+                                        });
+                                        return thisSpace;
+                                      }
                                     );
                                   }),
                         ),
@@ -362,6 +369,12 @@ class _HomePageState extends State<HomePage> {
                                       controller: _cmController,
                                       owned: false,
                                       func: reflectDeletedSpaces,
+                                      callback: (Workspace space) {
+                                        gSharedSpaces[index] = space;
+                                        setState(() {
+                                          thisSpace = gSharedSpaces[index];
+                                        });
+                                      }
                                     );
                                   },
                                 ),
@@ -391,16 +404,18 @@ class _HomePageState extends State<HomePage> {
 
 class WorkspaceTile extends StatefulWidget {
   final ContextMenuController controller;
-  final Workspace space;
+  Workspace space;
   final bool owned;
   final Function(Workspace, bool) func;
+  final Function(Workspace) callback;
 
-  const WorkspaceTile({
+  WorkspaceTile({
     super.key,
     required this.space,
     required this.controller,
     required this.owned,
-    required this.func,
+    required this.func, 
+    required this.callback,
   });
 
   @override
@@ -456,7 +471,11 @@ class _WorkspaceTileState extends State<WorkspaceTile> {
                         return EditWorkspaceDialog(
                           workspace: widget.space,
                           func: (String name, String desc) async {
-                            await widget.space.updateWorkspaceDetails(name, desc);
+                            int index = gOwnedSpaces.indexWhere((element) => widget.space.id == element.id);
+                            await gOwnedSpaces[index].updateWorkspaceDetails(name, desc);
+                            setState(() {
+                              widget.space = gOwnedSpaces[index];
+                            });
                           },
                         );
                       },
