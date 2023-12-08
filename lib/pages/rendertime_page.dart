@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
@@ -81,7 +78,7 @@ class _RenderTimePageState extends State<RenderTimePage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        attendance.user!.username.toUpperCase(),
+                                        attendance.user.username.toUpperCase(),
                                         style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 20,
@@ -91,7 +88,7 @@ class _RenderTimePageState extends State<RenderTimePage> {
                                         ),
                                       ),
                                       Text(
-                                        attendance.user!.email,
+                                        attendance.user.email,
                                         style: const TextStyle(
                                           color: Color(0xFF636769),
                                           fontSize: 15,

@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:math';
 
 import 'package:firedart/firedart.dart';
@@ -417,7 +416,6 @@ class User {
   }
 
   Future<Attendance> checkout(Attendance attendance, DateTime date) async {
-    print(attendance.id);
     var docReference = Firestore.instance.collection('attendances').document(attendance.id);
     await docReference.update({
       'checked_out': date,

@@ -799,7 +799,7 @@ class _TaskListState extends State<TaskList> {
   }
 }
 
-class TaskCard extends StatelessWidget {
+class TaskCard extends StatefulWidget {
   final TaskFuncPair data;
 
   const TaskCard({
@@ -807,7 +807,36 @@ class TaskCard extends StatelessWidget {
   });
 
   @override
+  State<TaskCard> createState() => _TaskCardState();
+}
+
+class _TaskCardState extends State<TaskCard> {
+  User? dropdownValue;
+  List<User>? assignees;
+
+  void init() {
+    if (assignees != null) {
+      return;
+    }
+
+    assignees = <User>[];
+
+    setState(() {
+      assignees?.add(widget.data.task.list.workspace.owner);
+
+      for (User member in widget.data.task.list.workspace.members) {
+        assignees?.add(member);
+      }
+    });
+
+    for (User user in assignees!) {
+      print(user.username);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    init();
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Card(
@@ -817,39 +846,72 @@ class TaskCard extends StatelessWidget {
             //set border radius more than 50% of height and width to make circle
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(left: 8, right: 8, top: 10, bottom: 10),
           child: SizedBox(
             width: 250,
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    data.task.description.isEmpty ? Container() : Text(
-                      data.task.description,
-                      style: const TextStyle(
-                        fontFamily: "Rubik",
-                        fontSize: 12,
-                        color: Colors.black87
-                      ),
+                DropdownButtonFormField<User>(
+                  hint: const Text("assignee"),
+                  value: dropdownValue,
+                  onChanged: (User? user) {
+                    // This is called when the user selects an item.
+                    setState(() {
+                      dropdownValue = user!;
+                    });
+                  },
+                  items: assignees!.map<DropdownMenuItem<User>>((User user) {
+                    return DropdownMenuItem<User>(value: user, child: Text(user.username));
+                  }).toList(),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(40),
                     ),
-                    Text(
-                      data.task.title,
-                      style: const TextStyle(
-                        fontFamily: "Rubik",
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black87
-                      ),
-                    ),
-                  ],
+                    isCollapsed: true
+                  ),
+                  borderRadius: BorderRadius.circular(40),
                 ),
-                const Spacer(),
-                IconButton(
-                  onPressed: data.func,
-                  icon: const Icon(Icons.check, 
-                  color: Colors.green,)
-                )
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          widget.data.task.description.isEmpty ? Container() : SizedBox(
+                            width: 180,
+                            child: Text(
+                              widget.data.task.description,
+                              style: const TextStyle(
+                                fontFamily: "Rubik",
+                                fontSize: 12,
+                                color: Colors.black87
+                              ),
+                            ),
+                          ),
+                          Text(
+                            widget.data.task.title,
+                            style: const TextStyle(
+                              fontFamily: "Rubik",
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: widget.data.func,
+                        icon: const Icon(Icons.check, 
+                        color: Colors.green,)
+                      )
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
