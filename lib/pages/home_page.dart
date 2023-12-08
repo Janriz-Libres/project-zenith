@@ -362,7 +362,7 @@ class _HomePageState extends State<HomePage> {
                                       controller: _cmController,
                                       owned: false,
                                       func: reflectDeletedSpaces,
-                                      callback: (Workspace space) async {
+                                      callback: (Workspace space) {
                                         gSharedSpaces[index] = space;
                                         setState(() {
                                           thisSpace = gSharedSpaces[index];
@@ -470,14 +470,10 @@ class _WorkspaceTileState extends State<WorkspaceTile> {
                           func: (String name, String desc) async {
                             Workspace space = gOwnedSpaces.firstWhere((element) => widget.space.id == element.id);
                             int index = gOwnedSpaces.indexWhere((element) => widget.space.id == element.id);
-                            print(space.title);
                             gOwnedSpaces[index] = await gUser!.updateWorkspaceDetails(space, name, desc);
                             setState(() {
                               widget.space = gOwnedSpaces[index];
                             });
-                            for(Workspace space in gOwnedSpaces) {
-                              print(space.title);
-                            }
                           },
                         );
                       },

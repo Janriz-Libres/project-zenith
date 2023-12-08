@@ -300,10 +300,21 @@ class _TaskPageState extends State<TaskPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Flexible(
+            workspace.description.isNotEmpty ? Flexible(
               child: Text(
                 workspace.description,
                 style: const TextStyle(
+                  color: Color(0xFF636769),
+                  fontSize: 15,
+                  fontFamily: 'Rubik',
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              ),
+            ) : const Flexible(
+              child: Text(
+                "Description",
+                style: TextStyle(
                   color: Color(0xFF636769),
                   fontSize: 15,
                   fontFamily: 'Rubik',
@@ -372,7 +383,7 @@ class _TaskPageState extends State<TaskPage> {
                     color = Colors.grey;
                   });
                 }, 
-                icon: const Icon(Icons.close, color: Colors.black87)),
+                icon: const Icon(Icons.close, color: Colors.red)),
               IconButton(
                 onPressed: disabled ? null : 
                 () async {
@@ -438,7 +449,28 @@ class _TaskPageState extends State<TaskPage> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: worklists!.map((e) => TaskList(list: e, worklists: worklists!, func: _removeList)).toList(),
+                    children: worklists!.map((e) => TaskList(
+                      list: e, 
+                      worklists: worklists!, 
+                      func: _removeList,
+                      callback: (String name) async {
+                        WorkList list = gLists.firstWhere((element) => e.id == element.id);
+                        int index = gLists.indexWhere((element) => e.id == element.id);
+                        gLists[index] = await widget.workspace.updateListName(e, name);
+                        int indexWorkList = gLists.indexWhere((element) => gLists[index].id == element.id);
+                        worklists![indexWorkList] = gLists[index];
+                        setState(() {
+                          e = list;
+                        });
+                      },
+                      deleteFunc: (WorkList list) {
+                        setState(() {
+                          worklists!.remove(list);
+                        });
+                        gLists.remove(list);
+                      },
+                      )
+                    ).toList(),
                   ),
                 ),
               ),
@@ -451,15 +483,19 @@ class _TaskPageState extends State<TaskPage> {
 }
 
 class TaskList extends StatefulWidget {
-  final WorkList list;
+  WorkList list;
   final List<WorkList> worklists;
-  final Function(WorkList list) func;
+  final Function(WorkList) func;
+  final Function(String) callback;
+  final Function(WorkList) deleteFunc;
 
-  const TaskList({
+  TaskList({
     super.key,
     required this.list, 
     required this.worklists, 
-    required this.func,
+    required this.func, 
+    required this.callback, 
+    required this.deleteFunc,
   });
 
   @override
@@ -470,6 +506,12 @@ class _TaskListState extends State<TaskList> {
   List<Task>? tasks;
   final titleController = TextEditingController();
   final descController = TextEditingController();
+  final newName = TextEditingController();
+  bool editable = false;
+  bool disabled = true;
+  bool editName = false;
+  bool editBg = false;
+  Color color = Colors.grey;
 
   Future<void> _addTask() async {
     Task newTask =
@@ -482,7 +524,7 @@ class _TaskListState extends State<TaskList> {
     gTasks.add(newTask);
   }
 
-  Future<void> _removeTask(Task task) async {
+  void _removeTask(Task task) {
     setState(() {
       tasks?.remove(task);
     });
@@ -490,9 +532,8 @@ class _TaskListState extends State<TaskList> {
   }
   
   Future<void> _completeTask(Task task) async {
+    await widget.list.deleteTask(task);
     _removeTask(task);
-    gTasks.remove(task);
-    widget.list.deleteTask(task);
   }
 
   Future<void> _moveTask(TaskFuncPair data) async {
@@ -504,17 +545,10 @@ class _TaskListState extends State<TaskList> {
     await data.task.changeParentList(widget.list);
   }
 
-  Future<void> _deleteList(WorkList list) async {
-    tasks = await list.getTasks();
-
+  void _deleteTasks() {
     for (Task task in tasks!) {
-      await _removeTask(task);
+      _completeTask(task);
     }
-
-    widget.func(list);
-    gLists.remove(list);
-
-    await list.workspace.deleteList(list);
   }
 
   void initTasks() {
@@ -535,6 +569,7 @@ class _TaskListState extends State<TaskList> {
   void dispose() {
     titleController.dispose();
     descController.dispose();
+    newName.dispose();
     super.dispose();
   }
 
@@ -564,27 +599,117 @@ class _TaskListState extends State<TaskList> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
+                    !editable ? Padding(
                       padding: const EdgeInsets.only(left: 10, bottom: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            widget.list.name.toUpperCase(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Rubik",
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18,
+                          Flexible(
+                            child: Text(
+                              widget.list.name.toUpperCase(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Rubik",
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                          MenuAnchor(
+                            builder: (BuildContext context, MenuController controller,
+                                Widget? child) {
+                              return IconButton(
+                                onPressed: () {
+                                  if (controller.isOpen) {
+                                    controller.close();
+                                  } else {
+                                    controller.open();
+                                  }
+                                },
+                                icon: const Icon(Icons.more_horiz),
+                                tooltip: 'Show menu',
+                              );
+                            },
+                            menuChildren: [
+                              MenuItemButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    editable = true;
+                                  });
+                                },
+                                child: const Text('Edit Worklist'),
+                              ),
+                              MenuItemButton(
+                                onPressed: () async {
+                                  _deleteTasks();
+                                  await widget.list.workspace.deleteList(widget.list);
+                                  widget.deleteFunc(widget.list);
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ]
+                          ),
+                        ],
+                      ),
+                    ) : Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: newName,
+                              decoration: InputDecoration(
+                                hintText: widget.list.name.toUpperCase(),
+                                hintStyle: const TextStyle(
+                                  color: Colors.grey
+                                )
+                              ),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Rubik",
+                                fontWeight: FontWeight.w500
+                              ),
+                              onChanged: (text) {
+                                if (text == widget.list.name || text.isEmpty) {
+                                  setState(() {
+                                    disabled = true;
+                                    color = Colors.grey;
+                                  });
+                                } else {
+                                  setState(() {
+                                    disabled = false;
+                                    color = Colors.white;
+                                  });
+                                }
+                              },
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.check, color: Colors.green,),
-                            onPressed: () async {await _deleteList(widget.list);},
+                            onPressed: () {
+                              newName.clear();
+                              setState(() {
+                                editable = false;
+                                disabled = true;
+                                editName = false;
+                                color = Colors.grey;
+                              });
+                            }, 
+                            icon: const Icon(Icons.close, color: Colors.red)),
+                          IconButton(
+                            onPressed: disabled ? null : 
+                            () async {
+                              widget.list = await widget.list.workspace.updateListName(widget.list, newName.text);
+                              widget.callback(newName.text);
+                              newName.clear();
+                              setState(() {
+                                editable = false;
+                                disabled = true;
+                                editName = false;
+                                color = Colors.grey;
+                              });
+                            }, 
+                            icon: Icon(Icons.subdirectory_arrow_left, color: color)
                           )
                         ],
                       ),
-                    ),
                     const Divider(),
                     Flexible(
                       child: SingleChildScrollView(

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:firedart/firedart.dart';
-import 'package:project_zenith/globals.dart';
 
 class Authenticator {
   /// Signs the user in using the provided email and password.
@@ -147,11 +146,11 @@ class User {
       'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
     });
     await Firestore.instance.collection('lists').add({
-      'name': "TODO",
+      'name': "DOING",
       'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
     });
     await Firestore.instance.collection('lists').add({
-      'name': "DOING",
+      'name': "TODO",
       'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
     });
 
@@ -285,6 +284,27 @@ class User {
 
   Future<void> deleteWorkspace(Workspace space) async {
     var reference = Firestore.instance.collection('workspaces').document(space.id);
+
+    var lists = await Firestore.instance
+        .collection('lists')
+        .where('workspace', isEqualTo: reference)
+        .get();
+
+    for (final Document list in lists) {
+      var listreference = Firestore.instance.collection('lists').document(list.id);
+      var tasks = await Firestore.instance
+        .collection('tasks')
+        .where('list', isEqualTo: listreference)
+        .get();
+
+      for (final Document task in tasks) {
+        var taskreference = Firestore.instance.collection('tasks').document(task.id);
+        await taskreference.delete();
+      }
+
+      await listreference.delete();
+    }
+
     await reference.delete();
   }
 
@@ -392,17 +412,19 @@ class Workspace {
 
   Future<void> deleteList(WorkList list) async {
     var reference = Firestore.instance.collection('lists').document(list.id);
-    var tasks = await Firestore.instance
-        .collection('tasks')
-        .where('list', isEqualTo: reference)
-        .get();
-
-    for (final Document task in tasks) {
-      var taskreference = Firestore.instance.collection('tasks').document(task.id);
-      await taskreference.delete();
-    }
-
     await reference.delete();
+  }
+
+  Future<WorkList> updateListName(WorkList list, String name) async {
+    var reference = Firestore.instance.collection('lists').document(list.id);
+    await reference.update({'name': name});
+
+    Document userDoc = await reference.get();
+    return WorkList(
+      id: list.id, 
+      name: userDoc['name'], 
+      workspace: list.workspace,
+    );
   }
 }
 

@@ -42,33 +42,58 @@ class MembersPage extends StatelessWidget {
                     body: AlertDialog(
                       content: SizedBox(
                         width: 350,
-                        child: Column(
+                        child: Wrap(
                           children: [
-                            Row(
-                              children: [
-                                const Text("Tada! Here's the code."),
-                                IconButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  icon: const Icon(Icons.close),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(space.code.toString()),
-                                IconButton(
-                                  onPressed: () => Clipboard.setData(
-                                    ClipboardData(text: space.code.toString()),
-                                  ).then(
-                                    (value) => ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content: Text('Copied!'),
-                                    )),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 25, bottom: 35, left: 25, right: 25),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const SizedBox(
+                                    width: 250,
+                                    child: Text(
+                                      "Tada! Here's the code",
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          fontFamily: "Rubik",
+                                          fontWeight: FontWeight.w700),
+                                    ),
                                   ),
-                                  icon: const Icon(Icons.copy),
-                                ),
-                              ],
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    icon: const Icon(Icons.close),
+                                  )
+                                ],
+                              ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 25, left: 25, right: 25),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    space.code.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: "Rubik",
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () => Clipboard.setData(
+                                      ClipboardData(text: space.code.toString()),
+                                    ).then(
+                                      (value) => ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text('Copied!'),
+                                      )),
+                                    ),
+                                    icon: const Icon(Icons.copy),
+                                  ),
+                                ],  
+                              ),
+                            )
                           ],
                         ),
                       ),
