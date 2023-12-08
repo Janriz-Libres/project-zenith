@@ -4,6 +4,9 @@ import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/globals.dart';
 import 'package:project_zenith/pages/members_page.dart';
+import 'package:project_zenith/pages/roles_page.dart';
+
+enum ContentWidget { task, members, roles }
 
 class WorkspacePage extends StatefulWidget {
   final Workspace workspace;
@@ -16,8 +19,6 @@ class WorkspacePage extends StatefulWidget {
   @override
   State<WorkspacePage> createState() => _WorkspacePageState();
 }
-
-enum ContentWidget { task, members }
 
 class _WorkspacePageState extends State<WorkspacePage> {
   ContentWidget contentWidget = ContentWidget.task;
@@ -109,7 +110,12 @@ class _WorkspacePageState extends State<WorkspacePage> {
                     DrawOption(
                       imgPath: "assets/build_icon.png",
                       text: "Members",
-                      func:  () => _changeContent(ContentWidget.members),
+                      func: () => _changeContent(ContentWidget.members),
+                    ),
+                    DrawOption(
+                      imgPath: "assets/later_icon.png",
+                      text: "Roles",
+                      func: () => _changeContent(ContentWidget.roles),
                     ),
                   ]),
                   const SizedBox(height: 10),
@@ -141,11 +147,11 @@ class _WorkspacePageState extends State<WorkspacePage> {
                                     builder: (context) {
                                       boardNameController.clear();
                                       return CreateBoardDialog(
-                                          boardNameController:
-                                              boardNameController,
-                                          tasklistNameController:
-                                              tasklistNameController,
-                                        );
+                                        boardNameController:
+                                            boardNameController,
+                                        tasklistNameController:
+                                            tasklistNameController,
+                                      );
                                     },
                                   );
                                 },
@@ -198,6 +204,8 @@ class _WorkspacePageState extends State<WorkspacePage> {
                             );
                           case ContentWidget.members:
                             return MembersPage(space: widget.workspace);
+                          case ContentWidget.roles:
+                            return RolesPage(space: widget.workspace);
                           default:
                             throw Exception();
                         }
@@ -502,7 +510,7 @@ class _TaskListState extends State<TaskList> {
       tasks?.remove(task);
     });
   }
-  
+
   Future<void> _completeTask(Task task) async {
     await widget.list.deleteTask(task);
     _removeTask(task);
@@ -803,7 +811,8 @@ class TaskCard extends StatefulWidget {
   final TaskFuncPair data;
 
   const TaskCard({
-    super.key, required this.data,
+    super.key,
+    required this.data,
   });
 
   @override

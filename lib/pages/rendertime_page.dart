@@ -14,68 +14,52 @@ class _RenderTimePageState extends State<RenderTimePage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-                        left: 30, right: 30, top: 30, bottom: 30),
+      padding: const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Text(
-                "Render Hours",
-                textAlign: TextAlign.left,
+              const Text("Render Hours",
+                  textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
                     fontFamily: 'Rubik',
                     fontWeight: FontWeight.w700,
                     height: 0,
-                  )
-              ),
+                  )),
               const Spacer(),
               SubmitButton(
                 text: "Export Attendances",
                 gradient: const [Color(0xFF06BCC1), Color(0xFF047679)],
                 minSize: const Size(200, 75),
-                func: () async {
-                  
-                },
+                func: () async {},
               )
             ],
           ),
           const Divider(),
-          gAttendances.isEmpty ? const Column(
-              mainAxisSize: MainAxisSize.min,
-            ) : Flexible(
-              child: ListView.builder(
-                itemCount: gAttendances.length,
-                itemBuilder: (context, index) {
-                  Attendance attendance = gAttendances.elementAt(index);
-              
-                  return SizedBox(
-                    height: 75,
-                    child: Card(
-                      color: const Color(0xFF06BCC1),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 35,
-                                    height: 35,
-                                    decoration: const ShapeDecoration(
-                                      color: Color(0xFF313638),
-                                      shape: OvalBorder(),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 20,),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
+          gAttendances.isEmpty
+              ? const Column(
+                  mainAxisSize: MainAxisSize.min,
+                )
+              : Flexible(
+                  child: ListView.builder(
+                    itemCount: gAttendances.length,
+                    itemBuilder: (context, index) {
+                      Attendance attendance = gAttendances.elementAt(index);
+
+                      return SizedBox(
+                        height: 75,
+                        child: Card(
+                          color: const Color(0xFF06BCC1),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20, right: 20),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 4,
+                                  child: Row(
                                     children: [
                                       Text(
                                         attendance.user.username.toUpperCase(),
@@ -99,23 +83,31 @@ class _RenderTimePageState extends State<RenderTimePage> {
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                const Spacer(),
+                                Expanded(
+                                    flex: 2,
+                                    child: Text("${attendance.checkedin}")),
+                                const Spacer(),
+                                attendance.checkedout == null
+                                    ? const Spacer(flex: 2)
+                                    : Expanded(
+                                        flex: 2,
+                                        child:
+                                            Text("${attendance.checkedout}")),
+                                const Spacer(),
+                                attendance.duration == null
+                                    ? const Spacer()
+                                    : Expanded(
+                                        child: Text("${attendance.duration}")),
+                              ],
                             ),
-                            const Spacer(),
-                            Expanded(flex: 2, child: Text("${attendance.checkedin}")),
-                            const Spacer(),
-                            attendance.checkedout == null ? const Spacer(flex: 2) : Expanded(flex: 2, child: Text("${attendance.checkedout}")),
-                            const Spacer(),
-                            attendance.duration == null ? const Spacer() : Expanded(child: Text("${attendance.duration}")),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-          ),
+                      );
+                    },
+                  ),
+                ),
         ],
       ),
     );

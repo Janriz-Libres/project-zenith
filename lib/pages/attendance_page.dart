@@ -38,29 +38,26 @@ class _AttendancePageState extends State<AttendancePage> {
     });
 
     return Padding(
-      padding: const EdgeInsets.only(
-                        left: 30, right: 30, top: 30, bottom: 30),
+      padding: const EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Duty Hours",
-            textAlign: TextAlign.left,
+          const Text("Duty Hours",
+              textAlign: TextAlign.left,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 24,
                 fontFamily: 'Rubik',
                 fontWeight: FontWeight.w700,
                 height: 0,
-              )
-          ),
+              )),
           const Divider(),
           Flexible(
             child: ListView.builder(
               itemCount: checkedInUsers.length,
               itemBuilder: (context, index) {
                 User user = checkedInUsers.keys.elementAt(index);
-            
+
                 return SizedBox(
                   height: 75,
                   child: Card(
@@ -79,7 +76,9 @@ class _AttendancePageState extends State<AttendancePage> {
                                   shape: OvalBorder(),
                                 ),
                               ),
-                              const SizedBox(width: 20,),
+                              const SizedBox(
+                                width: 20,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -112,59 +111,61 @@ class _AttendancePageState extends State<AttendancePage> {
                           Text(checkedInUsers[user].toString().substring(0, 7)),
                           const SizedBox(width: 50),
                           ElevatedButton(
-                            onPressed: () async {
-                              DocumentReference userRef = Firestore.instance
-                                  .collection('users')
-                                  .document(user.id);
-                                      
-                              Document userDoc = await userRef.get();
-                              int totalMins = await userDoc['total_minutes'];
-                              totalMins += checkedInUsers[user]!.inMinutes;
-                                 
-                              await userRef.update({
-                                'has_checked_in': false,
-                                'total_minutes': totalMins,
-                              });
-                                      
-                              setState(() {
-                                checkedInUsers.remove(user);
-                              });
+                              onPressed: () async {
+                                DocumentReference userRef = Firestore.instance
+                                    .collection('users')
+                                    .document(user.id);
+
+                                Document userDoc = await userRef.get();
+                                int totalMins = await userDoc['total_minutes'];
+                                totalMins += checkedInUsers[user]!.inMinutes;
+
+                                await userRef.update({
+                                  'has_checked_in': false,
+                                  'total_minutes': totalMins,
+                                });
+
+                                setState(() {
+                                  checkedInUsers.remove(user);
+                                });
 
                               await userAttendance[user]!.checkout(DateTime.now().toUtc());
 
-                              setState(() {
-                                userAttendance.remove(user);
-                              });
-      
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.green.shade400,
-                                  content: const Row(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(right: 8.0),
-                                        child: Icon(Icons.check_circle, color: Colors.white,),
-                                      ),
-                                      Text(
-                                        'Checked out successfully.',
-                                        style: TextStyle(
-                                          fontSize: 16
+                                setState(() {
+                                  userAttendance.remove(user);
+                                });
+
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: Colors.green.shade400,
+                                    content: const Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Icon(
+                                            Icons.check_circle,
+                                            color: Colors.white,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  action: SnackBarAction(
-                                    label: 'Hide',
-                                    textColor: Colors.white,
-                                    onPressed: () {
-                                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                    },
-                                  ),
-                                )
-                              );
-                            },
-                            child: const Text("Check Out")
-                          )
+                                        Text(
+                                          'Checked out successfully.',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ],
+                                    ),
+                                    action: SnackBarAction(
+                                      label: 'Hide',
+                                      textColor: Colors.white,
+                                      onPressed: () {
+                                        ScaffoldMessenger.of(context)
+                                            .hideCurrentSnackBar();
+                                      },
+                                    ),
+                                  ));
+                                }
+                              },
+                              child: const Text("Check Out"))
                         ],
                       ),
                     ),

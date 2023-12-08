@@ -32,8 +32,6 @@ Future<void> initDataModels() async {
   for (WorkList list in gLists) {
     gTasks.addAll(await list.getTasks());
   }
-
-
 }
 
 void clearAllData() {
