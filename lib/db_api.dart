@@ -398,43 +398,6 @@ class User {
     await reference.delete();
   }
 
-  Future<Workspace> updateWorkspaceDetails(
-      Workspace space, String title, String desc) async {
-    var reference =
-        Firestore.instance.collection('workspaces').document(space.id);
-    await reference.update({'title': title, 'description': desc});
-
-    Document userDoc = await reference.get();
-
-    return Workspace(
-      id: space.id,
-      title: userDoc['title'],
-      description: userDoc['description'],
-      owner: space.owner,
-      members: space.members,
-      code: space.code,
-      roles: space.roles,
-    );
-  }
-
-  Future<Workspace> updateSpaceDesc(Workspace space, String desc) async {
-    var reference =
-        Firestore.instance.collection('workspaces').document(space.id);
-    await reference.update({'description': desc});
-
-    Document userDoc = await reference.get();
-
-    return Workspace(
-      id: space.id,
-      title: space.title,
-      description: userDoc['description'],
-      owner: space.owner,
-      members: space.members,
-      code: space.code,
-      roles: space.roles,
-    );
-  }
-
   Future<User> updateUsername(String newName) async {
     var reference = Firestore.instance.collection('users').document(id);
     await reference.update({'username': newName});
@@ -562,14 +525,14 @@ class Role {
 
 class Workspace {
   final String id;
-  final String title;
-  final String description;
+  String title;
+  String description;
   final User owner;
   final List<User> members;
   final String code;
   final List<Role> roles;
 
-  const Workspace({
+  Workspace({
     required this.id,
     required this.title,
     required this.description,
@@ -578,6 +541,16 @@ class Workspace {
     required this.code,
     required this.roles,
   });
+
+  Future<void> updateDescription(String desc) async {
+    var reference = Firestore.instance.collection('workspaces').document(id);
+    await reference.update({'description': desc});
+  }
+
+  Future<void> updateWorkspaceDetails(String title, String desc) async {
+    var reference = Firestore.instance.collection('workspaces').document(id);
+    await reference.update({'title': title, 'description': desc});
+  }
 
   Future<WorkList> addList(String name) async {
     var docReference = await Firestore.instance.collection('lists').add({

@@ -10,12 +10,10 @@ enum ContentWidget { task, members, roles }
 
 class WorkspacePage extends StatefulWidget {
   final Workspace workspace;
-  final Function(Workspace) callback;
 
   const WorkspacePage({
     super.key,
     required this.workspace,
-    required this.callback,
   });
 
   @override
@@ -27,8 +25,6 @@ class _WorkspacePageState extends State<WorkspacePage> {
 
   final boardNameController = TextEditingController();
   final tasklistNameController = TextEditingController();
-
-  late Workspace workspace = widget.workspace;
 
   void _changeContent(ContentWidget cw) {
     setState(() {
@@ -203,14 +199,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
                       builder: (context, constraints) {
                         switch (contentWidget) {
                           case ContentWidget.task:
-                            return TaskPage(
-                                workspace: workspace,
-                                callback: (Workspace tempspace) {
-                                  Workspace space = widget.callback(tempspace);
-                                  setState(() {
-                                    workspace = space;
-                                  });
-                                });
+                            return TaskPage(workspace: widget.workspace);
                           case ContentWidget.members:
                             return MembersPage(space: widget.workspace);
                           case ContentWidget.roles:
@@ -233,12 +222,10 @@ class _WorkspacePageState extends State<WorkspacePage> {
 
 class TaskPage extends StatefulWidget {
   final Workspace workspace;
-  final Function(Workspace) callback;
 
   const TaskPage({
     super.key,
     required this.workspace,
-    required this.callback,
   });
 
   @override
@@ -246,14 +233,15 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  final tasklistNameController = TextEditingController();
   List<WorkList>? worklists;
+
+  final tasklistNameController = TextEditingController();
   final newDesc = TextEditingController();
+
   bool editable = false;
   bool disabled = true;
   bool edit = false;
   Color color = Colors.grey;
-  late Workspace workspace = widget.workspace;
 
   Future<void> _addWorklist() async {
     WorkList list = await widget.workspace.addList(tasklistNameController.text);
@@ -265,7 +253,7 @@ class _TaskPageState extends State<TaskPage> {
     gLists.add(list);
   }
 
-  void _initWorklists() {
+  void _init() {
     if (worklists != null) {
       return;
     }
@@ -294,7 +282,7 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    _initWorklists();
+    _init();
 
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       !editable
@@ -308,10 +296,10 @@ class _TaskPageState extends State<TaskPage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  workspace.description.isNotEmpty
+                  widget.workspace.description.isNotEmpty
                       ? Flexible(
                           child: Text(
-                            workspace.description,
+                            widget.workspace.description,
                             style: const TextStyle(
                               color: Color(0xFF636769),
                               fontSize: 15,
@@ -399,11 +387,9 @@ class _TaskPageState extends State<TaskPage> {
                     onPressed: disabled
                         ? null
                         : () async {
-                            Workspace space = await gUser!.updateSpaceDesc(
-                                widget.workspace, newDesc.text);
-                            widget.callback(space);
+                            widget.workspace.updateDescription(newDesc.text);
                             setState(() {
-                              workspace = space;
+                              widget.workspace.description = newDesc.text;
                               editable = false;
                               disabled = true;
                               edit = false;

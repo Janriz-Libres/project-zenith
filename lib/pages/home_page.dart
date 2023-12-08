@@ -25,7 +25,9 @@ class _HomePageState extends State<HomePage> {
   final codeController = TextEditingController();
 
   Widget initAdminPage = FreshPage();
-  late Widget initUserPage = ProfilePage(func: updateUsername,);
+  late Widget initUserPage = ProfilePage(
+    func: updateUsername,
+  );
 
   final _cmController = ContextMenuController();
 
@@ -64,7 +66,6 @@ class _HomePageState extends State<HomePage> {
       gOwnedSpaces.add(space!);
     });
 
-    
     for (Workspace workspace in gOwnedSpaces) {
       gLists.addAll(await workspace.getLists());
     }
@@ -125,263 +126,261 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
-              child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 29),
-                      child: Row(
+              child: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 29),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 35,
+                        height: 35,
+                        decoration: const ShapeDecoration(
+                          color: Color(0xFF313638),
+                          shape: OvalBorder(),
+                        ),
+                      ),
+                      const Spacer(),
+                      Expanded(
+                        flex: 18,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              name.toUpperCase(),
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontFamily: 'Rubik',
+                                fontWeight: FontWeight.w400,
+                                height: 0,
+                              ),
+                            ),
+                            Text(
+                              gUser!.email,
+                              style: const TextStyle(
+                                color: Color(0xFF636769),
+                                fontSize: 15,
+                                fontFamily: 'Rubik',
+                                fontWeight: FontWeight.w400,
+                                height: 0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                LayoutBuilder(builder: (context, constraints) {
+                  if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
+                    return SidebarList(
+                      children: [
+                        SizedBox(
+                          child: Column(children: [
+                            const Divider(),
+                            DrawOption(
+                              imgPath: "assets/white_logo.png",
+                              text: "Logout",
+                              func: () async {
+                                await logoutFunc();
+                              },
+                            ),
+                            DrawOption(
+                              imgPath: 'assets/build_icon.png',
+                              text: "Home",
+                              func: () {
+                                setState(() {
+                                  initAdminPage = FreshPage();
+                                });
+                              },
+                            ),
+                            DrawOption(
+                              imgPath: 'assets/join_icon.png',
+                              text: "Attendance",
+                              func: () {
+                                setState(() {
+                                  initAdminPage = const AttendancePage();
+                                  checkedInUsers.forEach((key, value) {
+                                    Duration interval = DateTime.now()
+                                        .toUtc()
+                                        .difference(key.timeStarted.toUtc());
+                                    checkedInUsers[key] = interval;
+                                  });
+                                });
+                              },
+                            ),
+                            DrawOption(
+                              imgPath: 'assets/later_icon.png',
+                              text: "Render Times",
+                              func: () {
+                                setState(() {
+                                  initAdminPage = const RenderTimePage();
+                                });
+                              },
+                            )
+                          ]),
+                        ),
+                      ],
+                    );
+                  }
+
+                  return SidebarList(children: [
+                    SizedBox(
+                      width: double.maxFinite,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            width: 35,
-                            height: 35,
-                            decoration: const ShapeDecoration(
-                              color: Color(0xFF313638),
-                              shape: OvalBorder(),
-                            ),
+                          DrawOption(
+                            imgPath: "assets/white_logo.png",
+                            text: "Logout",
+                            func: () async => await logoutFunc(),
                           ),
-                          const Spacer(),
-                          Expanded(
-                            flex: 18,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  name.toUpperCase(),
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontFamily: 'Rubik',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0,
-                                  ),
-                                ),
-                                Text(
-                                  gUser!.email,
-                                  style: const TextStyle(
-                                    color: Color(0xFF636769),
-                                    fontSize: 15,
-                                    fontFamily: 'Rubik',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0,
-                                  ),
-                                ),
-                              ],
-                            ),
+                          DrawOption(
+                            imgPath: "assets/build_icon.png",
+                            text: "Profile",
+                            func: () {
+                              setState(
+                                () {
+                                  initUserPage = ProfilePage(
+                                    func: updateUsername,
+                                  );
+                                },
+                              );
+                            },
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    LayoutBuilder(builder: (context, constraints) {
-                      if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
-                        return SidebarList(
-                          children: [
-                            SizedBox(
-                              child: Column(children: [
-                                const Divider(),
-                                DrawOption(
-                                  imgPath: "assets/white_logo.png",
-                                  text: "Logout",
-                                  func: () async {
-                                    await logoutFunc();
-                                  },
-                                ),
-                                DrawOption(
-                                  imgPath: 'assets/build_icon.png',
-                                  text: "Home",
-                                  func: () {
-                                    setState(() {
-                                      initAdminPage = FreshPage();
-                                    });
-                                  },
-                                ),
-                                DrawOption(
-                                  imgPath: 'assets/join_icon.png',
-                                  text: "Attendance",
-                                  func: () {
-                                    setState(() {
-                                      initAdminPage = const AttendancePage();
-                                      checkedInUsers.forEach((key, value) {
-                                        Duration interval = DateTime.now()
-                                            .toUtc()
-                                            .difference(
-                                                key.timeStarted.toUtc());
-                                        checkedInUsers[key] = interval;
-                                      });
-                                    });
-                                  },
-                                ),
-                                DrawOption(
-                                  imgPath: 'assets/later_icon.png',
-                                  text: "Render Times",
-                                  func: () {
-                                    setState(() {
-                                      initAdminPage = const RenderTimePage();
-                                    });
-                                  },
-                                )
-                              ]),
-                            ),
-                          ],
-                        );
-                      }
-                        
-                      return SidebarList(children: [
-                        SizedBox(
-                          width: double.maxFinite,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              DrawOption(
-                                imgPath: "assets/white_logo.png",
-                                text: "Logout",
-                                func: () async => await logoutFunc(),
-                              ),
-                              DrawOption(
-                                imgPath: "assets/build_icon.png",
-                                text: "Profile",
-                                func: () {
-                                  setState(
-                                    () {
-                                      initUserPage = ProfilePage(func: updateUsername,);
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 24),
+                      child: Row(children: [
+                        const Text(
+                          'WORKSPACE',
+                          style: TextStyle(
+                            color: Color(0xFF959A9C),
+                            fontSize: 16,
+                            fontFamily: 'Rubik',
+                            fontWeight: FontWeight.w700,
+                            height: 0,
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 24),
-                          child: Row(children: [
-                            const Text(
-                              'WORKSPACE',
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () async {
+                            await showDialog(
+                              useSafeArea: false,
+                              context: context,
+                              builder: (context) {
+                                workspaceNameController.clear();
+                                workspaceDescriptionController.clear();
+
+                                return CreateWorkspaceDialog(
+                                  workspaceNameController:
+                                      workspaceNameController,
+                                  workspaceDescriptionController:
+                                      workspaceDescriptionController,
+                                  func: updateWorkspaces,
+                                );
+                              },
+                            );
+                          },
+                        )
+                      ]),
+                    ),
+                    Container(
+                      constraints: const BoxConstraints(maxHeight: 150),
+                      child: gOwnedSpaces.isEmpty
+                          ? const Column(
+                              mainAxisSize: MainAxisSize.min,
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: gOwnedSpaces.length,
+                              itemBuilder: (context, index) {
+                                Workspace thisSpace =
+                                    gOwnedSpaces.elementAt(index);
+
+                                return WorkspaceTile(
+                                    space: thisSpace,
+                                    controller: _cmController,
+                                    owned: true,
+                                    func: reflectDeletedSpaces,
+                                    callback: (Workspace space) {
+                                      gOwnedSpaces[index] = space;
+                                      setState(() {
+                                        thisSpace = gOwnedSpaces[index];
+                                      });
+                                      return thisSpace;
+                                    });
+                              }),
+                    ),
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 24),
+                      child: Row(
+                        children: [
+                          const Text('SHARED',
                               style: TextStyle(
                                 color: Color(0xFF959A9C),
                                 fontSize: 16,
                                 fontFamily: 'Rubik',
                                 fontWeight: FontWeight.w700,
                                 height: 0,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            IconButton(
-                              icon: const Icon(Icons.add),
-                              onPressed: () async {
-                                await showDialog(
-                                  useSafeArea: false,
-                                  context: context,
-                                  builder: (context) {
-                                    workspaceNameController.clear();
-                                    workspaceDescriptionController.clear();
-                                    
-                                    return CreateWorkspaceDialog(
-                                      workspaceNameController:
-                                          workspaceNameController,
-                                      workspaceDescriptionController:
-                                          workspaceDescriptionController,
-                                      func: updateWorkspaces,
-                                    );
-                                  },
-                                );
-                              },
-                            )
-                          ]),
-                        ),
-                        Container(
-                          constraints: const BoxConstraints(maxHeight: 150),
-                          child: gOwnedSpaces.isEmpty
-                              ? const Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                )
-                              : ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: gOwnedSpaces.length,
-                                  itemBuilder: (context, index) {
-                                    Workspace thisSpace =
-                                        gOwnedSpaces.elementAt(index);
+                              )),
+                          const SizedBox(width: 10),
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () async {
+                              await showDialog(
+                                useSafeArea: false,
+                                context: context,
+                                builder: (context) {
+                                  workspaceNameController.clear();
 
-                                    return WorkspaceTile(
-                                      space: thisSpace,
-                                      controller: _cmController,
-                                      owned: true,
-                                      func: reflectDeletedSpaces,
-                                      callback: (Workspace space) {
-                                        gOwnedSpaces[index] = space;
-                                        setState(() {
-                                          thisSpace = gOwnedSpaces[index];
-                                        });
-                                        return thisSpace;
-                                      }
-                                    );
-                                  }),
-                        ),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 24),
-                          child: Row(
-                            children: [
-                              const Text('SHARED',
-                                  style: TextStyle(
-                                    color: Color(0xFF959A9C),
-                                    fontSize: 16,
-                                    fontFamily: 'Rubik',
-                                    fontWeight: FontWeight.w700,
-                                    height: 0,
-                                  )),
-                              const SizedBox(width: 10),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () async {
-                                  await showDialog(
-                                    useSafeArea: false,
-                                    context: context,
-                                    builder: (context) {
-                                      workspaceNameController.clear();
-                                      
-                                      return JoinWorkspaceDialog(
-                                        codeController: workspaceNameController,
-                                        updateFunc: updateSharedWorkspaces,
-                                      );
-                                    },
+                                  return JoinWorkspaceDialog(
+                                    codeController: workspaceNameController,
+                                    updateFunc: updateSharedWorkspaces,
                                   );
                                 },
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          constraints: const BoxConstraints(maxHeight: 150),
-                          child: gSharedSpaces.isEmpty
-                              ? const Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                )
-                              : ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: gSharedSpaces.length,
-                                  itemBuilder: (context, index) {
-                                    Workspace thisSpace =
-                                        gSharedSpaces.elementAt(index);
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      constraints: const BoxConstraints(maxHeight: 150),
+                      child: gSharedSpaces.isEmpty
+                          ? const Column(
+                              mainAxisSize: MainAxisSize.min,
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: gSharedSpaces.length,
+                              itemBuilder: (context, index) {
+                                Workspace thisSpace =
+                                    gSharedSpaces.elementAt(index);
 
-                                    return WorkspaceTile(
-                                      space: thisSpace,
-                                      controller: _cmController,
-                                      owned: false,
-                                      func: reflectDeletedSpaces,
-                                      callback: (Workspace space) {
-                                        gSharedSpaces[index] = space;
-                                        setState(() {
-                                          thisSpace = gSharedSpaces[index];
-                                        });
-                                      }
-                                    );
-                                  },
-                                ),
-                        ),
-                      ]);
-                    }),
-                  ]),
+                                return WorkspaceTile(
+                                    space: thisSpace,
+                                    controller: _cmController,
+                                    owned: false,
+                                    func: reflectDeletedSpaces,
+                                    callback: (Workspace space) {
+                                      gSharedSpaces[index] = space;
+                                      setState(() {
+                                        thisSpace = gSharedSpaces[index];
+                                      });
+                                    });
+                              },
+                            ),
+                    ),
+                  ]);
+                }),
+              ]),
             ),
           ),
           Expanded(
@@ -391,7 +390,7 @@ class _HomePageState extends State<HomePage> {
                 if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
                   return initAdminPage;
                 }
-              
+
                 return initUserPage;
               }),
             ),
@@ -404,17 +403,17 @@ class _HomePageState extends State<HomePage> {
 
 class WorkspaceTile extends StatefulWidget {
   final ContextMenuController controller;
-  Workspace space;
+  final Workspace space;
   final bool owned;
   final Function(Workspace, bool) func;
   final Function(Workspace) callback;
 
-  WorkspaceTile({
+  const WorkspaceTile({
     super.key,
     required this.space,
     required this.controller,
     required this.owned,
-    required this.func, 
+    required this.func,
     required this.callback,
   });
 
@@ -425,7 +424,6 @@ class WorkspaceTile extends StatefulWidget {
 class _WorkspaceTileState extends State<WorkspaceTile> {
   @override
   Widget build(BuildContext context) {
-    
     return Stack(
       children: [
         DrawOption(
@@ -436,7 +434,7 @@ class _WorkspaceTileState extends State<WorkspaceTile> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => WorkspacePage(workspace: widget.space, callback: widget.callback,),
+                  builder: (context) => WorkspacePage(workspace: widget.space),
                 ),
               );
             }
@@ -447,52 +445,51 @@ class _WorkspaceTileState extends State<WorkspaceTile> {
           child: Transform.translate(
             offset: const Offset(-20, 5),
             child: MenuAnchor(
-              builder: (BuildContext context, MenuController controller,
-                  Widget? child) {
-                return IconButton(
-                  onPressed: () {
-                    if (controller.isOpen) {
-                      controller.close();
-                    } else {
-                      controller.open();
-                    }
-                  },
-                  icon: const Icon(Icons.more_vert),
-                  tooltip: 'Show menu',
-                );
-              },
-              menuChildren: [
-                MenuItemButton(
-                  onPressed: () async {
-                    await showDialog(
-                      useSafeArea: false,
-                      context: context,
-                      builder: (context) {
-                        return EditWorkspaceDialog(
-                          workspace: widget.space,
-                          func: (String name, String desc) async {
-                            Workspace space = gOwnedSpaces.firstWhere((element) => widget.space.id == element.id);
-                            int index = gOwnedSpaces.indexWhere((element) => widget.space.id == element.id);
-                            gOwnedSpaces[index] = await gUser!.updateWorkspaceDetails(space, name, desc);
-                            setState(() {
-                              widget.space = gOwnedSpaces[index];
-                            });
-                          },
-                        );
-                      },
-                    );
-                  },
-                  child: const Text('Edit Workspace'),
-                ),
-                MenuItemButton(
-                  onPressed: () async {
-                    await gUser?.deleteWorkspace(widget.space);
-                    widget.func(widget.space, widget.owned);
-                  },
-                  child: const Text('Delete'),
-                ),
-              ]
-            ),
+                builder: (BuildContext context, MenuController controller,
+                    Widget? child) {
+                  return IconButton(
+                    onPressed: () {
+                      if (controller.isOpen) {
+                        controller.close();
+                      } else {
+                        controller.open();
+                      }
+                    },
+                    icon: const Icon(Icons.more_vert),
+                    tooltip: 'Show menu',
+                  );
+                },
+                menuChildren: [
+                  MenuItemButton(
+                    onPressed: () async {
+                      await showDialog(
+                        useSafeArea: false,
+                        context: context,
+                        builder: (context) {
+                          return EditWorkspaceDialog(
+                            workspace: widget.space,
+                            func: (String name, String desc) async {
+                              await widget.space
+                                  .updateWorkspaceDetails(name, desc);
+                              setState(() {
+                                widget.space.title = name;
+                                widget.space.description = desc;
+                              });
+                            },
+                          );
+                        },
+                      );
+                    },
+                    child: const Text('Edit Workspace'),
+                  ),
+                  MenuItemButton(
+                    onPressed: () async {
+                      await gUser?.deleteWorkspace(widget.space);
+                      widget.func(widget.space, widget.owned);
+                    },
+                    child: const Text('Delete'),
+                  ),
+                ]),
           ),
         ),
       ],
