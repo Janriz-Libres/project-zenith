@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:project_zenith/db_api.dart';
-import 'package:project_zenith/globals.dart';
 
 Map<User, Duration> checkedInUsers = <User, Duration>{};
 Map<User, Attendance> userAttendance = <User, Attendance>{};

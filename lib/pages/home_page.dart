@@ -483,13 +483,19 @@ class _WorkspaceTileState extends State<WorkspaceTile> {
                   },
                   child: const Text('Edit Workspace'),
                 ),
-                MenuItemButton(
+                gUser!.id == widget.space.owner.id ? MenuItemButton(
                   onPressed: () async {
                     await gUser?.deleteWorkspace(widget.space);
                     widget.func(widget.space, widget.owned);
                   },
                   child: const Text('Delete'),
-                ),
+                ) : MenuItemButton(
+                  onPressed: () async {
+                    await gUser?.leaveWorkspace(widget.space);
+                    widget.func(widget.space, widget.owned);
+                  },
+                  child: const Text('Leave'),
+                )
               ]
             ),
           ),

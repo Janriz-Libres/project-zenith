@@ -337,6 +337,37 @@ class User {
     await reference.delete();
   }
 
+  Future<void> leaveWorkspace (Workspace space) async {
+    var reference = Firestore.instance.collection('workspaces').document(space.id);
+    var thisUser = Firestore.instance.collection('users').document(id);
+
+    Document spaceDoc = await reference.get();
+    List<dynamic> oldMembers = await spaceDoc['members'];
+    List<dynamic> newMembers = <dynamic>[];
+    newMembers.addAll(oldMembers);
+    newMembers.remove(thisUser);
+
+    await spaceDoc.reference.update({'members': newMembers});
+
+    List<User> users = <User>[];
+
+    for (DocumentReference ref in newMembers) {
+      var userDoc = await ref.get();
+      users.add(User(
+        authId: await userDoc['auth_id'],
+        email: await userDoc['email'],
+        hasCheckedIn: await userDoc['has_checked_in'],
+        id: await userDoc['id'],
+        password: await userDoc['password'],
+        timeStarted: await userDoc['time_started'],
+        totalMinutes: await userDoc['total_minutes'],
+        username: await userDoc['username'],
+      ));
+    }
+
+    space.members = users;
+  }
+
   Future<void> updateUsername(String newName) async {
     var reference = Firestore.instance.collection('users').document(id);
     await reference.update({'username': newName});
@@ -392,7 +423,7 @@ class Attendance {
   Future<void> checkout(DateTime date) async {
     var docReference = Firestore.instance.collection('attendances').document(id);
     duration = date.difference(checkedin!).inMinutes / 60;
-    
+
     await docReference.update({
       'checked_out': date,
       'duration': duration
