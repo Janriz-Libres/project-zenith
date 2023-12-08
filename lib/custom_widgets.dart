@@ -595,7 +595,41 @@ class JoinWorkspaceDialog extends StatelessWidget {
                     gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
                     minSize: const Size(200, 50),
                     func: () async {
-                      await updateFunc(codeController.text);
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      if (codeController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red.shade800,
+                            content: const Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.error_outline,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  'Oh snap! Invalid code.',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                            action: SnackBarAction(
+                              label: 'Hide',
+                              textColor: Colors.white,
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              },
+                            ),
+                          ),
+                        );
+                      } else {
+                        await updateFunc(codeController.text);
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
+                      }
                     },
                   ),
                 ),
@@ -834,10 +868,40 @@ class CreateTaskListDialog extends StatelessWidget {
                     gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
                     minSize: const Size(200, 50),
                     func: () async {
-                      await func();
-
-                      if (context.mounted) {
-                        Navigator.pop(context);
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      if (tasklistNameController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red.shade800,
+                            content: const Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.error_outline,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  'Oh snap! Empty task list name',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                            action: SnackBarAction(
+                              label: 'Hide',
+                              textColor: Colors.white,
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              },
+                            ),
+                          ),
+                        );
+                      } else {
+                        await func();
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
                       }
                     },
                   ),
@@ -981,6 +1045,7 @@ class CreateWorkspaceDialog extends StatelessWidget {
                     gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
                     minSize: const Size(200, 50),
                     func: () async {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       if (workspaceNameController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -1141,7 +1206,7 @@ class EditWorkspaceDialog extends StatelessWidget {
                     ),
                     contentPadding:
                         const EdgeInsets.only(top: 30, left: 20, right: 20),
-                    hintText: workspace.description,
+                    hintText: workspace.description.isEmpty ? "Description" : workspace.description,
                     hintStyle: const TextStyle(
                         color: Color.fromARGB(255, 144, 142, 142),
                         fontWeight: FontWeight.normal),
@@ -1318,9 +1383,40 @@ class CreateTaskDialog extends StatelessWidget {
                     gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
                     minSize: const Size(200, 50),
                     func: () async {
-                      await func();
-                      if (context.mounted) {
-                        Navigator.pop(context);
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      if (taskNameController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red.shade800,
+                            content: const Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.error_outline,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  'Oh snap! Empty task name',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                            action: SnackBarAction(
+                              label: 'Hide',
+                              textColor: Colors.white,
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              },
+                            ),
+                          ),
+                        );
+                      } else {
+                        await func();
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
                       }
                     },
                   ),

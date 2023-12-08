@@ -274,6 +274,37 @@ class _CheckInDialogState extends State<CheckInDialog> {
                     gradient: const [Color(0xFF06BCC1), Color(0xFF168285)],
                     minSize: const Size(200, 50),
                     func: () async {
+                      if (DateTime.now().toUtc().hour < 8 || DateTime.now().toUtc().hour > 17) {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.red.shade800,
+                          content: const Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.error_outline,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                'Oh snap! It\'s closing hours.',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          action: SnackBarAction(
+                            label: 'Hide',
+                            textColor: Colors.white,
+                            onPressed: () {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                            },
+                          ),
+                        ));
+                        return;
+                      }
+
                       List<Document> docs = await Firestore.instance
                           .collection('users')
                           .where('email', isEqualTo: widget.emailController.text)

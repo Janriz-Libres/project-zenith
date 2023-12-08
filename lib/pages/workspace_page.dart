@@ -602,17 +602,31 @@ class _TaskListState extends State<TaskList> {
                     !editable ? Padding(
                       padding: const EdgeInsets.only(left: 10, bottom: 10),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
-                            child: Text(
-                              widget.list.name.toUpperCase(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.list.name.toUpperCase(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Rubik",
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                Text(
+                                  tasks!.isEmpty ? '${tasks!.length} task' : '${tasks!.length} tasks',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: "Rubik",
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           MenuAnchor(
@@ -710,7 +724,6 @@ class _TaskListState extends State<TaskList> {
                           )
                         ],
                       ),
-                    const Divider(),
                     Flexible(
                       child: SingleChildScrollView(
                         child: Column(
