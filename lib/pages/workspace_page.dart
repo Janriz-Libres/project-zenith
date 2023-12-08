@@ -566,7 +566,6 @@ class _TaskListState extends State<TaskList> {
         index == tasks!.length;
       },
       child: DragTarget<TaskFuncPair>(
-        onWillAccept: (data) => !(tasks!.contains(data?.task)),
         onAccept: (data) async {
           await _moveTask(data);
         },
@@ -731,6 +730,7 @@ class _TaskListState extends State<TaskList> {
                                     child: MouseRegion(
                                       onEnter: (event) {
                                         index = tasks!.indexWhere((element) => e.id == element.id);
+                                        print(index);
                                       },
                                       onExit: (event) {
                                         index == tasks!.length;
