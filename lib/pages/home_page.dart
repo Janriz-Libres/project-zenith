@@ -4,6 +4,7 @@ import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/globals.dart';
 import 'package:project_zenith/pages/attendance_page.dart';
 import 'package:project_zenith/pages/auth_page.dart';
+import 'package:project_zenith/pages/duties_page.dart';
 import 'package:project_zenith/pages/fresh_page.dart';
 import 'package:project_zenith/pages/profile_page.dart';
 import 'package:project_zenith/pages/rendertime_page.dart';
@@ -244,6 +245,17 @@ class _HomePageState extends State<HomePage> {
                                   setState(
                                     () {
                                       initUserPage = ProfilePage(func: updateUsername,);
+                                    },
+                                  );
+                                },
+                              ),
+                              DrawOption(
+                                imgPath: "assets/join_icon.png",
+                                text: "Duties",
+                                func: () {
+                                  setState(
+                                    () {
+                                      initUserPage = const DutiesPage();
                                     },
                                   );
                                 },

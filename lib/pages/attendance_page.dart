@@ -129,7 +129,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                   checkedInUsers.remove(user);
                                 });
 
-                              await userAttendance[user]!.checkout(DateTime.now().toUtc());
+                                await userAttendance[user]!.checkout(DateTime.now().toUtc());
 
                                 setState(() {
                                   userAttendance.remove(user);

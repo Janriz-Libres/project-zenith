@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/globals.dart';
 
-class RenderTimePage extends StatefulWidget {
-  const RenderTimePage({super.key});
+class DutiesPage extends StatefulWidget {
+  const DutiesPage({super.key});
 
   @override
-  State<RenderTimePage> createState() => _RenderTimePageState();
+  State<DutiesPage> createState() => _DutiesPageState();
 }
 
-class _RenderTimePageState extends State<RenderTimePage> {
+class _DutiesPageState extends State<DutiesPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -18,9 +17,9 @@ class _RenderTimePageState extends State<RenderTimePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
-              const Text("Render Hours",
+              Text("Render Hours",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     color: Colors.black,
@@ -29,25 +28,18 @@ class _RenderTimePageState extends State<RenderTimePage> {
                     fontWeight: FontWeight.w700,
                     height: 0,
                   )),
-              const Spacer(),
-              SubmitButton(
-                text: "Export Attendances",
-                gradient: const [Color(0xFF06BCC1), Color(0xFF047679)],
-                minSize: const Size(200, 75),
-                func: () async {},
-              )
             ],
           ),
           const Divider(),
-          gAttendances.isEmpty
+          userAttendances.isEmpty
               ? const Column(
                   mainAxisSize: MainAxisSize.min,
                 )
               : Flexible(
                   child: ListView.builder(
-                    itemCount: gAttendances.length,
+                    itemCount: userAttendances.length,
                     itemBuilder: (context, index) {
-                      Attendance attendance = gAttendances.elementAt(index);
+                      Attendance attendance = userAttendances.elementAt(index);
 
                       return SizedBox(
                         height: 75,

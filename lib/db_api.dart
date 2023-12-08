@@ -291,6 +291,28 @@ class User {
     );
   }
 
+  Future<List<Attendance>> getAttendances() async {
+    var userReference = Firestore.instance.collection('users').document(id);
+
+    var userQuery = await Firestore.instance
+        .collection('attendances')
+        .where('user', isEqualTo: userReference)
+        .get();
+
+    List<Attendance> attendances = <Attendance>[];
+
+    for (Document ref in userQuery) {
+      attendances.add(Attendance(
+        id: ref.id, 
+        checkedin: await ref['checked_in'], 
+        checkedout: await ref['checked_out'], 
+        duration: await ref['duration'], 
+        user: this));
+    }
+
+    return attendances;
+  }
+
   Future<List<Workspace>> _getWorkspaces(List<Document> docs) async {
     List<Workspace> workspaces = <Workspace>[];
 
@@ -676,6 +698,18 @@ class Workspace {
   Future<void> deleteList(WorkList list) async {
     var reference = Firestore.instance.collection('lists').document(list.id);
     await reference.delete();
+  }
+
+  Future<WorkList> updateListName(WorkList list, String name) async {
+    var reference = Firestore.instance.collection('lists').document(list.id);
+    await reference.update({'name': name});
+
+    Document userDoc = await reference.get();
+    return WorkList(
+      id: list.id, 
+      name: userDoc['name'], 
+      workspace: list.workspace,
+    );
   }
 }
 

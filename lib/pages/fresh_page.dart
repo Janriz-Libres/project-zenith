@@ -363,6 +363,7 @@ class _CheckInDialogState extends State<CheckInDialog> {
 
                       Attendance? newAttendance = await gUser?.checkin(u, DateTime.now().toUtc());
                       gAttendances.add(newAttendance!);
+                      userAttendances.add(newAttendance);
 
                       userAttendance[u] = newAttendance;
 

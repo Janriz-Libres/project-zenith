@@ -837,10 +837,6 @@ class _TaskCardState extends State<TaskCard> {
         assignees?.add(member);
       }
     });
-
-    for (User user in assignees!) {
-      print(user.username);
-    }
   }
 
   @override
