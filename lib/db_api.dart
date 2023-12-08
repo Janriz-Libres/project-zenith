@@ -164,9 +164,6 @@ class User {
     List<DocumentReference> initRoles = <DocumentReference>[];
     initRoles.add(Firestore.instance
         .collection('roles')
-        .document('Oo6d7x6Qb9xTmpv7VWKS'));
-    initRoles.add(Firestore.instance
-        .collection('roles')
         .document('xojbQYX9dtYRxmY1K9KU'));
 
     var docReference = await Firestore.instance.collection('workspaces').add({
@@ -569,6 +566,62 @@ class Workspace {
       name: name,
       workspace: this,
     );
+  }
+
+  Future<Role> addRole(String name, String desc) async {
+    var doc = await Firestore.instance.collection('roles').add({
+      'name': name,
+      'change_roles': false,
+      'invite': false,
+      'list_perms': "",
+      'space_perms': "",
+      'task_perms': "",
+    });
+
+    DocumentReference thisSpace =
+        Firestore.instance.collection('workspaces').document(id);
+    Document spaceDoc = await thisSpace.get();
+    List<dynamic> roles = await spaceDoc['roles'];
+
+    List<dynamic> newRoles = <dynamic>[];
+    newRoles.addAll(roles);
+    newRoles.add(doc.reference);
+
+    await thisSpace.update({
+      'roles': newRoles,
+    });
+
+    return Role(
+      changeRoles: await doc['change_roles'],
+      id: doc.id,
+      invite: await doc['invite'],
+      listPerms: await doc['list_perms'],
+      name: await doc['name'],
+      spacePerms: await doc['space_perms'],
+      taskPerms: await doc['task_perms'],
+    );
+  }
+
+  Future<void> removeRole(Role role) async {
+    var roleDoc = Firestore.instance.collection('roles').document(role.id);
+    await roleDoc.delete();
+
+    var thisSpace = Firestore.instance.collection('workspaces').document(id);
+    var spaceDoc = await thisSpace.get();
+    List<dynamic> roles = await spaceDoc['roles'];
+
+    List<DocumentReference> newRoles = <DocumentReference>[];
+
+    for (DocumentReference ref in roles) {
+      if (ref.id == role.id) {
+        continue;
+      }
+      newRoles.add(ref);
+    }
+
+    await thisSpace.update({
+      'roles': newRoles,
+    });
   }
 
   Future<List<WorkList>> getLists() async {
