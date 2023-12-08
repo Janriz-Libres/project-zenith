@@ -230,11 +230,21 @@ class User {
       ));
     }
 
+    Document ownerDoc = await spaceDoc['owner'].get();
     return Workspace(
       id: spaceDoc.id,
       title: await spaceDoc['title'],
       description: await spaceDoc['description'],
-      owner: await spaceDoc['owner'],
+      owner: User(
+        authId: await ownerDoc['auth_id'],
+        email: await ownerDoc['email'],
+        hasCheckedIn: await ownerDoc['has_checked_in'],
+        id: await ownerDoc['id'],
+        password: await ownerDoc['password'],
+        timeStarted: await ownerDoc['time_started'],
+        totalMinutes: await ownerDoc['total_minutes'],
+        username: await ownerDoc['username'],
+      ),
       members: users,
       code: code,
     );
