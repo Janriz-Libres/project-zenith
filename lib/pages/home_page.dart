@@ -48,6 +48,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> updateWorkspaces() async {
+    if (workspaceNameController.text.length > 30) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Title must not exceed 30 chars.")),
+      );
+      return;
+    }
+
     Workspace? space = await gUser?.addWorkspace(
         workspaceNameController.text, workspaceDescriptionController.text);
 
