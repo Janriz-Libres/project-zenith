@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:firedart/firedart.dart';
+import 'package:project_zenith/globals.dart';
 import 'package:project_zenith/pages/attendance_page.dart';
 
 class FreshPage extends StatelessWidget {
@@ -12,17 +13,21 @@ class FreshPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      heightFactor: 0.9,
-      widthFactor: 0.6,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 50),
-        child: AestheticBorder(
-          borderColor: Colors.black,
-          mainColor: const Color(0xFFF8F7F4),
-          child: Content(
-            emailController: emailController,
-            passController: passController,
+    return Padding(
+      padding: const EdgeInsets.only(
+                        left: 30, right: 30, top: 30, bottom: 30),
+      child: FractionallySizedBox(
+        heightFactor: 0.9,
+        widthFactor: 0.6,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 50),
+          child: AestheticBorder(
+            borderColor: Colors.black,
+            mainColor: const Color(0xFFF8F7F4),
+            child: Content(
+              emailController: emailController,
+              passController: passController,
+            ),
           ),
         ),
       ),
@@ -325,6 +330,11 @@ class _CheckInDialogState extends State<CheckInDialog> {
 
                       checkedInUsers[u] = Duration.zero;
 
+                      Attendance? newAttendance = await gUser?.checkin(u, DateTime.now().toUtc());
+                      gAttendances.add(newAttendance!);
+
+                      userAttendance[u] = newAttendance;
+
                       if (context.mounted) {
                         showDialog(
                           context: context, 
@@ -355,7 +365,7 @@ class _CheckInDialogState extends State<CheckInDialog> {
                             );
                           },
                         );
-                        Future.delayed(const Duration(milliseconds: 1500), () {
+                        Future.delayed(const Duration(milliseconds: 1000), () {
                           Navigator.pop(context);
                         });
                         widget.emailController.clear();

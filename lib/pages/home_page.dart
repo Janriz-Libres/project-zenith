@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                                   },
                                 ),
                                 DrawOption(
-                                  imgPath: 'assets/join_icon.png',
+                                  imgPath: 'assets/build_icon.png',
                                   text: "Home",
                                   func: () {
                                     setState(() {
@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                                   },
                                 ),
                                 DrawOption(
-                                  imgPath: 'assets/later_icon.png',
+                                  imgPath: 'assets/join_icon.png',
                                   text: "Attendance",
                                   func: () {
                                     setState(() {
@@ -380,17 +380,13 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             flex: 3,
             child: SelectionArea(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                        left: 70, right: 70, top: 30, bottom: 30),
-                child: LayoutBuilder(builder: (context, constraints) {
-                  if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
-                    return initAdminPage;
-                  }
-
-                  return initUserPage;
-                }),
-              ),
+              child: LayoutBuilder(builder: (context, constraints) {
+                if (gUser?.id == 'rISCknyu5dlIrfGrKyCp') {
+                  return initAdminPage;
+                }
+              
+                return initUserPage;
+              }),
             ),
           ),
         ],
