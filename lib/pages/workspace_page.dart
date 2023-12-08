@@ -510,9 +510,17 @@ class _TaskListState extends State<TaskList> {
   }
 
   Future<void> _moveTask(TaskFuncPair data) async {
-    setState(() {
-      tasks?.add(data.task);
-    });
+    if(tasks!.isEmpty) {
+      setState(() {
+        tasks?.add(data.task);
+      });
+    } else {
+      setState(() {
+        tasks?.insert(index!, data.task);
+      });
+    }
+
+    index == tasks!.length;
 
     await data.func();
     await data.task.changeParentList(widget.list);
@@ -550,223 +558,239 @@ class _TaskListState extends State<TaskList> {
   Widget build(BuildContext context) {
     initTasks();
 
-    return DragTarget<TaskFuncPair>(
-      onWillAccept: (data) => !(tasks!.contains(data?.task)),
-      onAccept: (data) async {
-        await _moveTask(data);
+    return MouseRegion(
+      onEnter: (event) {
+        index = tasks!.length;
       },
-      builder: (context, incoming, rejected) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
-          child: SizedBox(
-            width: 321,
-            child: Card(
-              color: Colors.black87,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-                //set border radius more than 50% of height and width to make circle
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 20, bottom: 15),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    !editable ? Padding(
-                      padding: const EdgeInsets.only(left: 10, bottom: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.list.name.toUpperCase(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "Rubik",
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 18,
+      onExit: (event) {
+        index == tasks!.length;
+      },
+      child: DragTarget<TaskFuncPair>(
+        onWillAccept: (data) => !(tasks!.contains(data?.task)),
+        onAccept: (data) async {
+          await _moveTask(data);
+        },
+        builder: (context, incoming, rejected) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            child: SizedBox(
+              width: 321,
+              child: Card(
+                color: Colors.black87,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  //set border radius more than 50% of height and width to make circle
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 20, bottom: 15),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      !editable ? Padding(
+                        padding: const EdgeInsets.only(left: 10, bottom: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.list.name.toUpperCase(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Rubik",
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  tasks!.isEmpty ? '${tasks!.length} task' : '${tasks!.length} tasks',
-                                  style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontFamily: "Rubik",
-                                    fontSize: 12,
+                                  Text(
+                                    tasks!.isEmpty ? '${tasks!.length} task' : '${tasks!.length} tasks',
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontFamily: "Rubik",
+                                      fontSize: 12,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          MenuAnchor(
-                            builder: (BuildContext context, MenuController controller,
-                                Widget? child) {
-                              return IconButton(
-                                onPressed: () {
-                                  if (controller.isOpen) {
-                                    controller.close();
+                            MenuAnchor(
+                              builder: (BuildContext context, MenuController controller,
+                                  Widget? child) {
+                                return IconButton(
+                                  onPressed: () {
+                                    if (controller.isOpen) {
+                                      controller.close();
+                                    } else {
+                                      controller.open();
+                                    }
+                                  },
+                                  icon: const Icon(Icons.more_horiz),
+                                  tooltip: 'Show menu',
+                                );
+                              },
+                              menuChildren: [
+                                MenuItemButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      editable = true;
+                                    });
+                                  },
+                                  child: const Text('Edit Worklist'),
+                                ),
+                                MenuItemButton(
+                                  onPressed: () async {
+                                    _deleteTasks();
+                                    await widget.list.workspace.deleteList(widget.list);
+                                    widget.deleteFunc(widget.list);
+                                  },
+                                  child: const Text('Delete'),
+                                ),
+                              ]
+                            ),
+                          ],
+                        ),
+                      ) : Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: newName,
+                                decoration: InputDecoration(
+                                  hintText: widget.list.name.toUpperCase(),
+                                  hintStyle: const TextStyle(
+                                    color: Colors.grey
+                                  )
+                                ),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w500
+                                ),
+                                onChanged: (text) {
+                                  if (text == widget.list.name || text.isEmpty) {
+                                    setState(() {
+                                      disabled = true;
+                                      color = Colors.grey;
+                                    });
                                   } else {
-                                    controller.open();
+                                    setState(() {
+                                      disabled = false;
+                                      color = Colors.white;
+                                    });
                                   }
                                 },
-                                icon: const Icon(Icons.more_horiz),
-                                tooltip: 'Show menu',
-                              );
-                            },
-                            menuChildren: [
-                              MenuItemButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    editable = true;
-                                  });
-                                },
-                                child: const Text('Edit Worklist'),
                               ),
-                              MenuItemButton(
-                                onPressed: () async {
-                                  _deleteTasks();
-                                  await widget.list.workspace.deleteList(widget.list);
-                                  widget.deleteFunc(widget.list);
-                                },
-                                child: const Text('Delete'),
-                              ),
-                            ]
-                          ),
-                        ],
-                      ),
-                    ) : Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: newName,
-                              decoration: InputDecoration(
-                                hintText: widget.list.name.toUpperCase(),
-                                hintStyle: const TextStyle(
-                                  color: Colors.grey
-                                )
-                              ),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w500
-                              ),
-                              onChanged: (text) {
-                                if (text == widget.list.name || text.isEmpty) {
-                                  setState(() {
-                                    disabled = true;
-                                    color = Colors.grey;
-                                  });
-                                } else {
-                                  setState(() {
-                                    disabled = false;
-                                    color = Colors.white;
-                                  });
-                                }
-                              },
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              newName.clear();
-                              setState(() {
-                                editable = false;
-                                disabled = true;
-                                editName = false;
-                                color = Colors.grey;
-                              });
-                            }, 
-                            icon: const Icon(Icons.close, color: Colors.red)),
-                          IconButton(
-                            onPressed: disabled ? null : 
-                            () async {
-                              await widget.list.updateListName(newName.text);
-                              newName.clear();
-                              setState(() {
-                                editable = false;
-                                disabled = true;
-                                editName = false;
-                                color = Colors.grey;
-                              });
-                            }, 
-                            icon: Icon(Icons.subdirectory_arrow_left, color: color)
-                          )
-                        ],
-                      ),
-                    Flexible(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: tasks!
-                              .map(
-                                (e) => Draggable<TaskFuncPair>(
-                                  data: TaskFuncPair(
-                                    task: e,
-                                    func: () {_removeTask(e);},
-                                  ),
-                                  feedback: TaskCard(
-                                    data: TaskFuncPair(
-                                      task: e,
-                                      func: () async {await _completeTask(e);},
-                                    )
-                                  ),
-                                  childWhenDragging: Container(),
-                                  child: TaskCard(
-                                    data: TaskFuncPair(
-                                      task: e,
-                                      func: () async {await _completeTask(e);},
-                                    )
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          foregroundColor: Colors.white,
-                          shadowColor: Colors.transparent,
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.add),
-                            Text(
-                              "Add a card",
-                              style:
-                                  TextStyle(fontFamily: "Rubik", fontSize: 16),
+                            IconButton(
+                              onPressed: () {
+                                newName.clear();
+                                setState(() {
+                                  editable = false;
+                                  disabled = true;
+                                  editName = false;
+                                  color = Colors.grey;
+                                });
+                              }, 
+                              icon: const Icon(Icons.close, color: Colors.red)),
+                            IconButton(
+                              onPressed: disabled ? null : 
+                              () async {
+                                await widget.list.updateListName(newName.text);
+                                newName.clear();
+                                setState(() {
+                                  editable = false;
+                                  disabled = true;
+                                  editName = false;
+                                  color = Colors.grey;
+                                });
+                              }, 
+                              icon: Icon(Icons.subdirectory_arrow_left, color: color)
                             )
                           ],
                         ),
-                        onPressed: () async {
-                          await showDialog(
-                            useSafeArea: false,
-                            context: context,
-                            builder: (context) {
-                              titleController.clear();
-                              descController.clear();
-                              return CreateTaskDialog(
-                                taskNameController: titleController,
-                                taskDescriptionController: descController, 
-                                func: _addTask
-                              );
-                            },
-                          );
-                        },
+                      Flexible(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: tasks!
+                                .map(
+                                  (e) => Draggable<TaskFuncPair>(
+                                    data: TaskFuncPair(
+                                      task: e,
+                                      func: () {_removeTask(e);},
+                                    ),
+                                    feedback: TaskCard(
+                                      data: TaskFuncPair(
+                                        task: e,
+                                        func: () async {await _completeTask(e);},
+                                      )
+                                    ),
+                                    childWhenDragging: Container(),
+                                    child: MouseRegion(
+                                      onEnter: (event) {
+                                        index = tasks!.indexWhere((element) => e.id == element.id);
+                                      },
+                                      onExit: (event) {
+                                        index == tasks!.length;
+                                      },
+                                      child: TaskCard(
+                                        data: TaskFuncPair(
+                                          task: e,
+                                          func: () async {await _completeTask(e);},
+                                        )
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
                       ),
-                    )
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: Colors.white,
+                            shadowColor: Colors.transparent,
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(Icons.add),
+                              Text(
+                                "Add a card",
+                                style:
+                                    TextStyle(fontFamily: "Rubik", fontSize: 16),
+                              )
+                            ],
+                          ),
+                          onPressed: () async {
+                            await showDialog(
+                              useSafeArea: false,
+                              context: context,
+                              builder: (context) {
+                                titleController.clear();
+                                descController.clear();
+                                return CreateTaskDialog(
+                                  taskNameController: titleController,
+                                  taskDescriptionController: descController, 
+                                  func: _addTask
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

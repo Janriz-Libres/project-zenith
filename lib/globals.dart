@@ -10,6 +10,7 @@ List<Workspace> gSharedSpaces = <Workspace>[];
 List<WorkList> gLists = <WorkList>[];
 List<Task> gTasks = <Task>[];
 List<Attendance> gAttendances = <Attendance>[];
+int? index;
 
 Future<void> initDataModels() async {
   if (gUser?.id == "rISCknyu5dlIrfGrKyCp") {
