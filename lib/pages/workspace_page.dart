@@ -4,6 +4,9 @@ import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/db_api.dart';
 import 'package:project_zenith/globals.dart';
 import 'package:project_zenith/pages/members_page.dart';
+import 'package:project_zenith/pages/roles_page.dart';
+
+enum ContentWidget { task, members, roles }
 
 class WorkspacePage extends StatefulWidget {
   final Workspace workspace;
@@ -11,15 +14,13 @@ class WorkspacePage extends StatefulWidget {
 
   const WorkspacePage({
     super.key,
-    required this.workspace, 
+    required this.workspace,
     required this.callback,
   });
 
   @override
   State<WorkspacePage> createState() => _WorkspacePageState();
 }
-
-enum ContentWidget { task, members }
 
 class _WorkspacePageState extends State<WorkspacePage> {
   ContentWidget contentWidget = ContentWidget.task;
@@ -113,7 +114,12 @@ class _WorkspacePageState extends State<WorkspacePage> {
                     DrawOption(
                       imgPath: "assets/build_icon.png",
                       text: "Members",
-                      func:  () => _changeContent(ContentWidget.members),
+                      func: () => _changeContent(ContentWidget.members),
+                    ),
+                    DrawOption(
+                      imgPath: "assets/later_icon.png",
+                      text: "Roles",
+                      func: () => _changeContent(ContentWidget.roles),
                     ),
                   ]),
                   const SizedBox(height: 10),
@@ -145,11 +151,11 @@ class _WorkspacePageState extends State<WorkspacePage> {
                                     builder: (context) {
                                       boardNameController.clear();
                                       return CreateBoardDialog(
-                                          boardNameController:
-                                              boardNameController,
-                                          tasklistNameController:
-                                              tasklistNameController,
-                                        );
+                                        boardNameController:
+                                            boardNameController,
+                                        tasklistNameController:
+                                            tasklistNameController,
+                                      );
                                     },
                                   );
                                 },
@@ -198,16 +204,17 @@ class _WorkspacePageState extends State<WorkspacePage> {
                         switch (contentWidget) {
                           case ContentWidget.task:
                             return TaskPage(
-                              workspace: workspace, 
-                              callback: (Workspace tempspace) {
-                                Workspace space = widget.callback(tempspace);
-                                setState(() {
-                                  workspace = space;
+                                workspace: workspace,
+                                callback: (Workspace tempspace) {
+                                  Workspace space = widget.callback(tempspace);
+                                  setState(() {
+                                    workspace = space;
+                                  });
                                 });
-                              }
-                            );
                           case ContentWidget.members:
                             return MembersPage(space: widget.workspace);
+                          case ContentWidget.roles:
+                            return RolesPage(space: widget.workspace);
                           default:
                             throw Exception();
                         }
@@ -230,7 +237,7 @@ class TaskPage extends StatefulWidget {
 
   const TaskPage({
     super.key,
-    required this.workspace, 
+    required this.workspace,
     required this.callback,
   });
 
@@ -290,119 +297,126 @@ class _TaskPageState extends State<TaskPage> {
     _initWorklists();
 
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      !editable ? MouseRegion(
-        onEnter: (event) => setState(() {
-          edit = true;
-        }),
-        onExit: (event) => setState(() {
-          edit = false;
-        }),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            workspace.description.isNotEmpty ? Flexible(
-              child: Text(
-                workspace.description,
-                style: const TextStyle(
-                  color: Color(0xFF636769),
-                  fontSize: 15,
-                  fontFamily: 'Rubik',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                ),
-              ),
-            ) : const Flexible(
-              child: Text(
-                "Description",
-                style: TextStyle(
-                  color: Color(0xFF636769),
-                  fontSize: 15,
-                  fontFamily: 'Rubik',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            AnimatedOpacity(
-              opacity: edit ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 500),
-              child: Transform.translate(
-                offset: const Offset(0, -10),
-                child: IconButton(
-                  iconSize: 20,
-                  onPressed: () {
-                    setState(() {
-                      editable = true;
-                    });
-                  }, 
-                  icon: const Icon(Icons.edit, color: Colors.black87,)),
+      !editable
+          ? MouseRegion(
+              onEnter: (event) => setState(() {
+                edit = true;
+              }),
+              onExit: (event) => setState(() {
+                edit = false;
+              }),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  workspace.description.isNotEmpty
+                      ? Flexible(
+                          child: Text(
+                            workspace.description,
+                            style: const TextStyle(
+                              color: Color(0xFF636769),
+                              fontSize: 15,
+                              fontFamily: 'Rubik',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                        )
+                      : const Flexible(
+                          child: Text(
+                            "Description",
+                            style: TextStyle(
+                              color: Color(0xFF636769),
+                              fontSize: 15,
+                              fontFamily: 'Rubik',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
+                            ),
+                          ),
+                        ),
+                  const SizedBox(width: 10),
+                  AnimatedOpacity(
+                    opacity: edit ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 500),
+                    child: Transform.translate(
+                      offset: const Offset(0, -10),
+                      child: IconButton(
+                          iconSize: 20,
+                          onPressed: () {
+                            setState(() {
+                              editable = true;
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.edit,
+                            color: Colors.black87,
+                          )),
+                    ),
+                  )
+                ],
               ),
             )
-          ],
-        ),
-      ) : Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: TextField(
-                  minLines: 1,
-                  maxLines: 5,
-                  controller: newDesc,
-                  decoration: const InputDecoration(
-                    hintText: "Description"
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: TextField(
+                    minLines: 1,
+                    maxLines: 5,
+                    controller: newDesc,
+                    decoration: const InputDecoration(hintText: "Description"),
+                    style: const TextStyle(
+                        color: Color(0xFF636769),
+                        fontFamily: "Rubik",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15),
+                    onChanged: (text) {
+                      if (text.isEmpty) {
+                        setState(() {
+                          disabled = true;
+                          color = Colors.grey;
+                        });
+                      } else {
+                        setState(() {
+                          disabled = false;
+                          color = Colors.black87;
+                        });
+                      }
+                    },
                   ),
-                  style: const TextStyle(
-                    color: Color(0xFF636769),
-                    fontFamily: "Rubik",
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15
-                  ),
-                  onChanged: (text) {
-                    if (text.isEmpty) {
+                ),
+                IconButton(
+                    onPressed: () {
+                      newDesc.clear();
                       setState(() {
+                        editable = false;
                         disabled = true;
+                        edit = false;
                         color = Colors.grey;
                       });
-                    } else {
-                      setState(() {
-                        disabled = false;
-                        color = Colors.black87;
-                      });
-                    }
-                  },
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  newDesc.clear();
-                  setState(() {
-                    editable = false;
-                    disabled = true;
-                    edit = false;
-                    color = Colors.grey;
-                  });
-                }, 
-                icon: const Icon(Icons.close, color: Colors.red)),
-              IconButton(
-                onPressed: disabled ? null : 
-                () async {
-                  Workspace space = await gUser!.updateSpaceDesc(widget.workspace, newDesc.text);
-                  widget.callback(space);
-                  setState(() {
-                    workspace = space;
-                    editable = false;
-                    disabled = true;
-                    edit = false;
-                    color = Colors.grey;
-                  });
-                  newDesc.clear();
-                }, 
-                icon: Icon(Icons.subdirectory_arrow_left, color: color)
-              )
-            ],
-          ),
-      const SizedBox(height: 10,),
+                    },
+                    icon: const Icon(Icons.close, color: Colors.red)),
+                IconButton(
+                    onPressed: disabled
+                        ? null
+                        : () async {
+                            Workspace space = await gUser!.updateSpaceDesc(
+                                widget.workspace, newDesc.text);
+                            widget.callback(space);
+                            setState(() {
+                              workspace = space;
+                              editable = false;
+                              disabled = true;
+                              edit = false;
+                              color = Colors.grey;
+                            });
+                            newDesc.clear();
+                          },
+                    icon: Icon(Icons.subdirectory_arrow_left, color: color))
+              ],
+            ),
+      const SizedBox(
+        height: 10,
+      ),
       Row(
         children: [
           const SelectableText("Team Tasks",
@@ -449,28 +463,34 @@ class _TaskPageState extends State<TaskPage> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: worklists!.map((e) => TaskList(
-                      list: e, 
-                      worklists: worklists!, 
-                      func: _removeList,
-                      callback: (String name) async {
-                        WorkList list = gLists.firstWhere((element) => e.id == element.id);
-                        int index = gLists.indexWhere((element) => e.id == element.id);
-                        gLists[index] = await widget.workspace.updateListName(e, name);
-                        int indexWorkList = gLists.indexWhere((element) => gLists[index].id == element.id);
-                        worklists![indexWorkList] = gLists[index];
-                        setState(() {
-                          e = list;
-                        });
-                      },
-                      deleteFunc: (WorkList list) {
-                        setState(() {
-                          worklists!.remove(list);
-                        });
-                        gLists.remove(list);
-                      },
-                      )
-                    ).toList(),
+                    children: worklists!
+                        .map((e) => TaskList(
+                              list: e,
+                              worklists: worklists!,
+                              func: _removeList,
+                              callback: (String name) async {
+                                WorkList list = gLists.firstWhere(
+                                    (element) => e.id == element.id);
+                                int index = gLists.indexWhere(
+                                    (element) => e.id == element.id);
+                                gLists[index] = await widget.workspace
+                                    .updateListName(e, name);
+                                int indexWorkList = gLists.indexWhere(
+                                    (element) =>
+                                        gLists[index].id == element.id);
+                                worklists![indexWorkList] = gLists[index];
+                                setState(() {
+                                  e = list;
+                                });
+                              },
+                              deleteFunc: (WorkList list) {
+                                setState(() {
+                                  worklists!.remove(list);
+                                });
+                                gLists.remove(list);
+                              },
+                            ))
+                        .toList(),
                   ),
                 ),
               ),
@@ -491,10 +511,10 @@ class TaskList extends StatefulWidget {
 
   TaskList({
     super.key,
-    required this.list, 
-    required this.worklists, 
-    required this.func, 
-    required this.callback, 
+    required this.list,
+    required this.worklists,
+    required this.func,
+    required this.callback,
     required this.deleteFunc,
   });
 
@@ -530,7 +550,7 @@ class _TaskListState extends State<TaskList> {
     });
     gTasks.remove(task);
   }
-  
+
   Future<void> _completeTask(Task task) async {
     await widget.list.deleteTask(task);
     _removeTask(task);
@@ -599,117 +619,124 @@ class _TaskListState extends State<TaskList> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    !editable ? Padding(
-                      padding: const EdgeInsets.only(left: 10, bottom: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              widget.list.name.toUpperCase(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
-                              ),
+                    !editable
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.only(left: 10, bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    widget.list.name.toUpperCase(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Rubik",
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                                MenuAnchor(
+                                    builder: (BuildContext context,
+                                        MenuController controller,
+                                        Widget? child) {
+                                      return IconButton(
+                                        onPressed: () {
+                                          if (controller.isOpen) {
+                                            controller.close();
+                                          } else {
+                                            controller.open();
+                                          }
+                                        },
+                                        icon: const Icon(Icons.more_horiz),
+                                        tooltip: 'Show menu',
+                                      );
+                                    },
+                                    menuChildren: [
+                                      MenuItemButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            editable = true;
+                                          });
+                                        },
+                                        child: const Text('Edit Worklist'),
+                                      ),
+                                      MenuItemButton(
+                                        onPressed: () async {
+                                          _deleteTasks();
+                                          await widget.list.workspace
+                                              .deleteList(widget.list);
+                                          widget.deleteFunc(widget.list);
+                                        },
+                                        child: const Text('Delete'),
+                                      ),
+                                    ]),
+                              ],
                             ),
-                          ),
-                          MenuAnchor(
-                            builder: (BuildContext context, MenuController controller,
-                                Widget? child) {
-                              return IconButton(
-                                onPressed: () {
-                                  if (controller.isOpen) {
-                                    controller.close();
-                                  } else {
-                                    controller.open();
-                                  }
-                                },
-                                icon: const Icon(Icons.more_horiz),
-                                tooltip: 'Show menu',
-                              );
-                            },
-                            menuChildren: [
-                              MenuItemButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    editable = true;
-                                  });
-                                },
-                                child: const Text('Edit Worklist'),
-                              ),
-                              MenuItemButton(
-                                onPressed: () async {
-                                  _deleteTasks();
-                                  await widget.list.workspace.deleteList(widget.list);
-                                  widget.deleteFunc(widget.list);
-                                },
-                                child: const Text('Delete'),
-                              ),
-                            ]
-                          ),
-                        ],
-                      ),
-                    ) : Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: newName,
-                              decoration: InputDecoration(
-                                hintText: widget.list.name.toUpperCase(),
-                                hintStyle: const TextStyle(
-                                  color: Colors.grey
-                                )
-                              ),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w500
-                              ),
-                              onChanged: (text) {
-                                if (text == widget.list.name || text.isEmpty) {
-                                  setState(() {
-                                    disabled = true;
-                                    color = Colors.grey;
-                                  });
-                                } else {
-                                  setState(() {
-                                    disabled = false;
-                                    color = Colors.white;
-                                  });
-                                }
-                              },
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              newName.clear();
-                              setState(() {
-                                editable = false;
-                                disabled = true;
-                                editName = false;
-                                color = Colors.grey;
-                              });
-                            }, 
-                            icon: const Icon(Icons.close, color: Colors.red)),
-                          IconButton(
-                            onPressed: disabled ? null : 
-                            () async {
-                              widget.list = await widget.list.workspace.updateListName(widget.list, newName.text);
-                              widget.callback(newName.text);
-                              newName.clear();
-                              setState(() {
-                                editable = false;
-                                disabled = true;
-                                editName = false;
-                                color = Colors.grey;
-                              });
-                            }, 
-                            icon: Icon(Icons.subdirectory_arrow_left, color: color)
                           )
-                        ],
-                      ),
+                        : Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: newName,
+                                  decoration: InputDecoration(
+                                      hintText: widget.list.name.toUpperCase(),
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey)),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Rubik",
+                                      fontWeight: FontWeight.w500),
+                                  onChanged: (text) {
+                                    if (text == widget.list.name ||
+                                        text.isEmpty) {
+                                      setState(() {
+                                        disabled = true;
+                                        color = Colors.grey;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        disabled = false;
+                                        color = Colors.white;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    newName.clear();
+                                    setState(() {
+                                      editable = false;
+                                      disabled = true;
+                                      editName = false;
+                                      color = Colors.grey;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.close,
+                                      color: Colors.red)),
+                              IconButton(
+                                  onPressed: disabled
+                                      ? null
+                                      : () async {
+                                          widget.list = await widget
+                                              .list.workspace
+                                              .updateListName(
+                                                  widget.list, newName.text);
+                                          widget.callback(newName.text);
+                                          newName.clear();
+                                          setState(() {
+                                            editable = false;
+                                            disabled = true;
+                                            editName = false;
+                                            color = Colors.grey;
+                                          });
+                                        },
+                                  icon: Icon(Icons.subdirectory_arrow_left,
+                                      color: color))
+                            ],
+                          ),
                     const Divider(),
                     Flexible(
                       child: SingleChildScrollView(
@@ -719,21 +746,25 @@ class _TaskListState extends State<TaskList> {
                                 (e) => Draggable<TaskFuncPair>(
                                   data: TaskFuncPair(
                                     task: e,
-                                    func: () {_removeTask(e);},
+                                    func: () {
+                                      _removeTask(e);
+                                    },
                                   ),
                                   feedback: TaskCard(
-                                    data: TaskFuncPair(
-                                      task: e,
-                                      func: () async {await _completeTask(e);},
-                                    )
-                                  ),
+                                      data: TaskFuncPair(
+                                    task: e,
+                                    func: () async {
+                                      await _completeTask(e);
+                                    },
+                                  )),
                                   childWhenDragging: Container(),
                                   child: TaskCard(
-                                    data: TaskFuncPair(
-                                      task: e,
-                                      func: () async {await _completeTask(e);},
-                                    )
-                                  ),
+                                      data: TaskFuncPair(
+                                    task: e,
+                                    func: () async {
+                                      await _completeTask(e);
+                                    },
+                                  )),
                                 ),
                               )
                               .toList(),
@@ -766,10 +797,9 @@ class _TaskListState extends State<TaskList> {
                               titleController.clear();
                               descController.clear();
                               return CreateTaskDialog(
-                                taskNameController: titleController,
-                                taskDescriptionController: descController, 
-                                func: _addTask
-                              );
+                                  taskNameController: titleController,
+                                  taskDescriptionController: descController,
+                                  func: _addTask);
                             },
                           );
                         },
@@ -790,7 +820,8 @@ class TaskCard extends StatelessWidget {
   final TaskFuncPair data;
 
   const TaskCard({
-    super.key, required this.data,
+    super.key,
+    required this.data,
   });
 
   @override
@@ -801,7 +832,7 @@ class TaskCard extends StatelessWidget {
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
-            //set border radius more than 50% of height and width to make circle
+          //set border radius more than 50% of height and width to make circle
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -812,31 +843,32 @@ class TaskCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    data.task.description.isEmpty ? Container() : Text(
-                      data.task.description,
-                      style: const TextStyle(
-                        fontFamily: "Rubik",
-                        fontSize: 12,
-                        color: Colors.black87
-                      ),
-                    ),
+                    data.task.description.isEmpty
+                        ? Container()
+                        : Text(
+                            data.task.description,
+                            style: const TextStyle(
+                                fontFamily: "Rubik",
+                                fontSize: 12,
+                                color: Colors.black87),
+                          ),
                     Text(
                       data.task.title,
                       style: const TextStyle(
-                        fontFamily: "Rubik",
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black87
-                      ),
+                          fontFamily: "Rubik",
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87),
                     ),
                   ],
                 ),
                 const Spacer(),
                 IconButton(
-                  onPressed: data.func,
-                  icon: const Icon(Icons.check, 
-                  color: Colors.green,)
-                )
+                    onPressed: data.func,
+                    icon: const Icon(
+                      Icons.check,
+                      color: Colors.green,
+                    ))
               ],
             ),
           ),

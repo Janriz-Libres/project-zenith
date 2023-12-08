@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:math';
 
 import 'package:firedart/firedart.dart';
@@ -97,28 +96,27 @@ Future<List<User>> getAllUsers() async {
 
 Future<List<Attendance>> getAllAttendances() async {
   List<Attendance> allAttendances = <Attendance>[];
-  var temp = await Firestore.instance.collection('attendances').get(); 
+  var temp = await Firestore.instance.collection('attendances').get();
 
   for (var element in temp) {
     DocumentReference ownerRef = await element['user'];
     Document ownerDoc = await ownerRef.get();
 
     allAttendances.add(Attendance(
-      id: element.id,
-      checkedin: await element['checked_in'], 
-      checkedout: await element['checked_out'], 
-      duration: await element['duration'], 
-      user: User(
-        authId: await ownerDoc['auth_id'],
-        email: await ownerDoc['email'],
-        hasCheckedIn: await ownerDoc['has_checked_in'],
-        id: await ownerDoc['id'],
-        password: await ownerDoc['password'],
-        timeStarted: await ownerDoc['time_started'],
-        totalMinutes: await ownerDoc['total_minutes'],
-        username: await ownerDoc['username'],
-      )
-    ));
+        id: element.id,
+        checkedin: await element['checked_in'],
+        checkedout: await element['checked_out'],
+        duration: await element['duration'],
+        user: User(
+          authId: await ownerDoc['auth_id'],
+          email: await ownerDoc['email'],
+          hasCheckedIn: await ownerDoc['has_checked_in'],
+          id: await ownerDoc['id'],
+          password: await ownerDoc['password'],
+          timeStarted: await ownerDoc['time_started'],
+          totalMinutes: await ownerDoc['total_minutes'],
+          username: await ownerDoc['username'],
+        )));
   }
 
   return allAttendances;
@@ -163,26 +161,53 @@ class User {
   Future<Workspace> addWorkspace(String title, String desc) async {
     String code = _getRandomString(15);
 
+    List<DocumentReference> initRoles = <DocumentReference>[];
+    initRoles.add(Firestore.instance
+        .collection('roles')
+        .document('Oo6d7x6Qb9xTmpv7VWKS'));
+    initRoles.add(Firestore.instance
+        .collection('roles')
+        .document('xojbQYX9dtYRxmY1K9KU'));
+
     var docReference = await Firestore.instance.collection('workspaces').add({
       'title': title,
       'description': desc,
       'owner': Firestore.instance.collection('users').document(id),
       'members': <DocumentReference>[],
       'code': code,
+      'roles': initRoles,
     });
 
     await Firestore.instance.collection('lists').add({
       'name': "FINISH",
-      'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
+      'workspace':
+          Firestore.instance.collection('workspaces').document(docReference.id),
     });
     await Firestore.instance.collection('lists').add({
       'name': "DOING",
-      'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
+      'workspace':
+          Firestore.instance.collection('workspaces').document(docReference.id),
     });
     await Firestore.instance.collection('lists').add({
       'name': "TODO",
-      'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
+      'workspace':
+          Firestore.instance.collection('workspaces').document(docReference.id),
     });
+
+    List<Role> roles = <Role>[];
+
+    for (DocumentReference ref in initRoles) {
+      Document doc = await ref.get();
+      roles.add(Role(
+        changeRoles: await doc['change_roles'],
+        id: ref.id,
+        invite: await doc['invite'],
+        listPerms: await doc['list_perms'],
+        name: await doc['name'],
+        spacePerms: await doc['space_perms'],
+        taskPerms: await doc['task_perms'],
+      ));
+    }
 
     return Workspace(
       id: docReference.id,
@@ -191,6 +216,7 @@ class User {
       owner: this,
       members: [],
       code: code,
+      roles: roles,
     );
   }
 
@@ -231,6 +257,22 @@ class User {
       ));
     }
 
+    List<dynamic> roleRefs = await spaceDoc['roles'];
+    List<Role> roles = <Role>[];
+
+    for (DocumentReference ref in roleRefs) {
+      var roleDoc = await ref.get();
+      roles.add(Role(
+        id: ref.id,
+        changeRoles: await roleDoc['change_roles'],
+        invite: await roleDoc['invite'],
+        listPerms: await roleDoc['list_perms'],
+        name: await roleDoc['name'],
+        spacePerms: await roleDoc['space_perms'],
+        taskPerms: await roleDoc['task_perms'],
+      ));
+    }
+
     return Workspace(
       id: spaceDoc.id,
       title: await spaceDoc['title'],
@@ -238,6 +280,7 @@ class User {
       owner: await spaceDoc['owner'],
       members: users,
       code: code,
+      roles: roles,
     );
   }
 
@@ -266,6 +309,22 @@ class User {
       DocumentReference ownerRef = await workspace['owner'];
       Document ownerDoc = await ownerRef.get();
 
+      List<dynamic> roleRefs = await workspace['roles'];
+      List<Role> roles = <Role>[];
+
+      for (DocumentReference ref in roleRefs) {
+        var roleDoc = await ref.get();
+        roles.add(Role(
+          id: ref.id,
+          changeRoles: await roleDoc['change_roles'],
+          invite: await roleDoc['invite'],
+          listPerms: await roleDoc['list_perms'],
+          name: await roleDoc['name'],
+          spacePerms: await roleDoc['space_perms'],
+          taskPerms: await roleDoc['task_perms'],
+        ));
+      }
+
       Workspace newWorkspace = Workspace(
         id: workspace.id,
         title: await workspace['title'],
@@ -282,6 +341,7 @@ class User {
         ),
         members: members,
         code: await workspace['code'],
+        roles: roles,
       );
       workspaces.add(newWorkspace);
     }
@@ -313,7 +373,8 @@ class User {
   }
 
   Future<void> deleteWorkspace(Workspace space) async {
-    var reference = Firestore.instance.collection('workspaces').document(space.id);
+    var reference =
+        Firestore.instance.collection('workspaces').document(space.id);
 
     var lists = await Firestore.instance
         .collection('lists')
@@ -321,14 +382,16 @@ class User {
         .get();
 
     for (final Document list in lists) {
-      var listreference = Firestore.instance.collection('lists').document(list.id);
+      var listreference =
+          Firestore.instance.collection('lists').document(list.id);
       var tasks = await Firestore.instance
-        .collection('tasks')
-        .where('list', isEqualTo: listreference)
-        .get();
+          .collection('tasks')
+          .where('list', isEqualTo: listreference)
+          .get();
 
       for (final Document task in tasks) {
-        var taskreference = Firestore.instance.collection('tasks').document(task.id);
+        var taskreference =
+            Firestore.instance.collection('tasks').document(task.id);
         await taskreference.delete();
       }
 
@@ -338,8 +401,10 @@ class User {
     await reference.delete();
   }
 
-  Future<Workspace> updateWorkspaceDetails(Workspace space, String title, String desc) async {
-    var reference = Firestore.instance.collection('workspaces').document(space.id);
+  Future<Workspace> updateWorkspaceDetails(
+      Workspace space, String title, String desc) async {
+    var reference =
+        Firestore.instance.collection('workspaces').document(space.id);
     await reference.update({'title': title, 'description': desc});
 
     Document userDoc = await reference.get();
@@ -349,15 +414,17 @@ class User {
       title: userDoc['title'],
       description: userDoc['description'],
       owner: space.owner,
-      members: space.members, 
+      members: space.members,
       code: space.code,
+      roles: space.roles,
     );
   }
 
   Future<Workspace> updateSpaceDesc(Workspace space, String desc) async {
-    var reference = Firestore.instance.collection('workspaces').document(space.id);
+    var reference =
+        Firestore.instance.collection('workspaces').document(space.id);
     await reference.update({'description': desc});
-    
+
     Document userDoc = await reference.get();
 
     return Workspace(
@@ -365,8 +432,9 @@ class User {
       title: space.title,
       description: userDoc['description'],
       owner: space.owner,
-      members: space.members, 
+      members: space.members,
       code: space.code,
+      roles: space.roles,
     );
   }
 
@@ -395,30 +463,31 @@ class User {
       'user': Firestore.instance.collection('users').document(user.id)
     });
 
-    DocumentReference ownerRef = Firestore.instance.collection('users').document(user.id);
+    DocumentReference ownerRef =
+        Firestore.instance.collection('users').document(user.id);
     Document ownerDoc = await ownerRef.get();
 
     return Attendance(
-      id: docReference.id,
-      checkedin: docReference['checked_in'], 
-      checkedout: docReference['checked_out'], 
-      duration: docReference['duration'], 
-      user: User(
-        authId: await ownerDoc['auth_id'],
-        email: await ownerDoc['email'],
-        hasCheckedIn: await ownerDoc['has_checked_in'],
-        id: await ownerDoc['id'],
-        password: await ownerDoc['password'],
-        timeStarted: await ownerDoc['time_started'],
-        totalMinutes: await ownerDoc['total_minutes'],
-        username: await ownerDoc['username'],
-      )
-    );
+        id: docReference.id,
+        checkedin: docReference['checked_in'],
+        checkedout: docReference['checked_out'],
+        duration: docReference['duration'],
+        user: User(
+          authId: await ownerDoc['auth_id'],
+          email: await ownerDoc['email'],
+          hasCheckedIn: await ownerDoc['has_checked_in'],
+          id: await ownerDoc['id'],
+          password: await ownerDoc['password'],
+          timeStarted: await ownerDoc['time_started'],
+          totalMinutes: await ownerDoc['total_minutes'],
+          username: await ownerDoc['username'],
+        ));
   }
 
   Future<Attendance> checkout(Attendance attendance, DateTime date) async {
     print(attendance.id);
-    var docReference = Firestore.instance.collection('attendances').document(attendance.id);
+    var docReference =
+        Firestore.instance.collection('attendances').document(attendance.id);
     await docReference.update({
       'checked_out': date,
       'duration': date.difference(attendance.checkedin!).inMinutes / 60
@@ -426,12 +495,11 @@ class User {
 
     Document attendanceDoc = await docReference.get();
     return Attendance(
-      id: attendance.id,
-      checkedin: attendance.checkedin, 
-      checkedout: attendanceDoc['checked_out'], 
-      duration: attendanceDoc['duration'], 
-      user: attendance.user
-    );
+        id: attendance.id,
+        checkedin: attendance.checkedin,
+        checkedout: attendanceDoc['checked_out'],
+        duration: attendanceDoc['duration'],
+        user: attendance.user);
   }
 }
 
@@ -445,9 +513,29 @@ class Attendance {
   const Attendance({
     required this.id,
     required this.checkedin,
-    required this.checkedout, 
-    required this.duration, 
-    required this.user, 
+    required this.checkedout,
+    required this.duration,
+    required this.user,
+  });
+}
+
+class Role {
+  final String id;
+  final String name;
+  final bool invite;
+  final bool changeRoles;
+  final String spacePerms;
+  final String listPerms;
+  final String taskPerms;
+
+  const Role({
+    required this.id,
+    required this.name,
+    required this.invite,
+    required this.changeRoles,
+    required this.spacePerms,
+    required this.listPerms,
+    required this.taskPerms,
   });
 }
 
@@ -458,6 +546,7 @@ class Workspace {
   final User owner;
   final List<User> members;
   final String code;
+  final List<Role> roles;
 
   const Workspace({
     required this.id,
@@ -466,6 +555,7 @@ class Workspace {
     required this.owner,
     required this.members,
     required this.code,
+    required this.roles,
   });
 
   Future<WorkList> addList(String name) async {
@@ -514,8 +604,8 @@ class Workspace {
 
     Document userDoc = await reference.get();
     return WorkList(
-      id: list.id, 
-      name: userDoc['name'], 
+      id: list.id,
+      name: userDoc['name'],
       workspace: list.workspace,
     );
   }

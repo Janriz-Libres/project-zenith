@@ -10,6 +10,7 @@ List<Workspace> gSharedSpaces = <Workspace>[];
 List<WorkList> gLists = <WorkList>[];
 List<Task> gTasks = <Task>[];
 List<Attendance> gAttendances = <Attendance>[];
+List<Role> gRoles = <Role>[];
 
 Future<void> initDataModels() async {
   if (gUser?.id == "rISCknyu5dlIrfGrKyCp") {
@@ -22,17 +23,27 @@ Future<void> initDataModels() async {
 
   for (Workspace space in gOwnedSpaces) {
     gLists.addAll(await space.getLists());
+
+    for (Role role in space.roles) {
+      if (!gRoles.contains(role)) {
+        gRoles.add(role);
+      }
+    }
   }
 
   for (Workspace space in gSharedSpaces) {
     gLists.addAll(await space.getLists());
+
+    for (Role role in space.roles) {
+      if (!gRoles.contains(role)) {
+        gRoles.add(role);
+      }
+    }
   }
 
   for (WorkList list in gLists) {
     gTasks.addAll(await list.getTasks());
   }
-
-
 }
 
 void clearAllData() {
@@ -42,6 +53,7 @@ void clearAllData() {
   gSharedSpaces.clear();
   gLists.clear();
   gTasks.clear();
+  gRoles.clear();
 }
 
 enum CustomIcon<String> {
