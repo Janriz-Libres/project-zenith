@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void updateUsername(String name) async {
-    gUser = await gUser?.updateUsername(name);
+    await gUser?.updateUsername(name);
     var newName = gUser!.username;
     setState(() {
       name = newName;
@@ -307,13 +307,6 @@ class _HomePageState extends State<HomePage> {
                                       controller: _cmController,
                                       owned: true,
                                       func: reflectDeletedSpaces,
-                                      callback: (Workspace space) {
-                                        gOwnedSpaces[index] = space;
-                                        setState(() {
-                                          thisSpace = gOwnedSpaces[index];
-                                        });
-                                        return thisSpace;
-                                      }
                                     );
                                   }),
                         ),
@@ -369,12 +362,6 @@ class _HomePageState extends State<HomePage> {
                                       controller: _cmController,
                                       owned: false,
                                       func: reflectDeletedSpaces,
-                                      callback: (Workspace space) {
-                                        gSharedSpaces[index] = space;
-                                        setState(() {
-                                          thisSpace = gSharedSpaces[index];
-                                        });
-                                      }
                                     );
                                   },
                                 ),
@@ -404,18 +391,16 @@ class _HomePageState extends State<HomePage> {
 
 class WorkspaceTile extends StatefulWidget {
   final ContextMenuController controller;
-  Workspace space;
+  final Workspace space;
   final bool owned;
   final Function(Workspace, bool) func;
-  final Function(Workspace) callback;
 
-  WorkspaceTile({
+  const WorkspaceTile({
     super.key,
     required this.space,
     required this.controller,
     required this.owned,
-    required this.func, 
-    required this.callback,
+    required this.func,
   });
 
   @override
@@ -436,7 +421,7 @@ class _WorkspaceTileState extends State<WorkspaceTile> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => WorkspacePage(workspace: widget.space, callback: widget.callback,),
+                  builder: (context) => WorkspacePage(workspace: widget.space),
                 ),
               );
             }
@@ -471,12 +456,7 @@ class _WorkspaceTileState extends State<WorkspaceTile> {
                         return EditWorkspaceDialog(
                           workspace: widget.space,
                           func: (String name, String desc) async {
-                            Workspace space = gOwnedSpaces.firstWhere((element) => widget.space.id == element.id);
-                            int index = gOwnedSpaces.indexWhere((element) => widget.space.id == element.id);
-                            gOwnedSpaces[index] = await gUser!.updateWorkspaceDetails(space, name, desc);
-                            setState(() {
-                              widget.space = gOwnedSpaces[index];
-                            });
+                            await widget.space.updateWorkspaceDetails(name, desc);
                           },
                         );
                       },

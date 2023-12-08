@@ -131,9 +131,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                 checkedInUsers.remove(user);
                               });
 
-                              Attendance? attendance = await gUser?.checkout(userAttendance[user]!, DateTime.now().toUtc());
-                              int index = gAttendances.indexWhere((element) => attendance!.id == element.id);
-                              gAttendances[index] = attendance!;
+                              await userAttendance[user]!.checkout(DateTime.now().toUtc());
 
                               setState(() {
                                 userAttendance.remove(user);

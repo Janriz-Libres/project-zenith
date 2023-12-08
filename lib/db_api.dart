@@ -128,12 +128,12 @@ class User {
   final String authId;
   final String email;
   final String password;
-  final String username;
-  final DateTime timeStarted;
-  final bool hasCheckedIn;
-  final int totalMinutes;
+  String username;
+  DateTime timeStarted;
+  bool hasCheckedIn;
+  int totalMinutes;
 
-  const User({
+  User({
     required this.id,
     required this.email,
     required this.password,
@@ -337,53 +337,11 @@ class User {
     await reference.delete();
   }
 
-  Future<Workspace> updateWorkspaceDetails(Workspace space, String title, String desc) async {
-    var reference = Firestore.instance.collection('workspaces').document(space.id);
-    await reference.update({'title': title, 'description': desc});
-
-    Document userDoc = await reference.get();
-
-    return Workspace(
-      id: space.id,
-      title: userDoc['title'],
-      description: userDoc['description'],
-      owner: space.owner,
-      members: space.members, 
-      code: space.code,
-    );
-  }
-
-  Future<Workspace> updateSpaceDesc(Workspace space, String desc) async {
-    var reference = Firestore.instance.collection('workspaces').document(space.id);
-    await reference.update({'description': desc});
-    
-    Document userDoc = await reference.get();
-
-    return Workspace(
-      id: space.id,
-      title: space.title,
-      description: userDoc['description'],
-      owner: space.owner,
-      members: space.members, 
-      code: space.code,
-    );
-  }
-
-  Future<User> updateUsername(String newName) async {
+  Future<void> updateUsername(String newName) async {
     var reference = Firestore.instance.collection('users').document(id);
     await reference.update({'username': newName});
 
-    Document userDoc = await reference.get();
-    return User(
-      authId: await userDoc['auth_id'],
-      email: await userDoc['email'],
-      id: await userDoc['id'],
-      password: await userDoc['password'],
-      username: await userDoc['username'],
-      timeStarted: await userDoc['time_started'],
-      hasCheckedIn: await userDoc['has_checked_in'],
-      totalMinutes: await userDoc['total_minutes'],
-    );
+    username = newName;
   }
 
   Future<Attendance> checkin(User user, DateTime date) async {
@@ -414,50 +372,45 @@ class User {
       )
     );
   }
-
-  Future<Attendance> checkout(Attendance attendance, DateTime date) async {
-    var docReference = Firestore.instance.collection('attendances').document(attendance.id);
-    await docReference.update({
-      'checked_out': date,
-      'duration': date.difference(attendance.checkedin!).inMinutes / 60
-    });
-
-    Document attendanceDoc = await docReference.get();
-    return Attendance(
-      id: attendance.id,
-      checkedin: attendance.checkedin, 
-      checkedout: attendanceDoc['checked_out'], 
-      duration: attendanceDoc['duration'], 
-      user: attendance.user
-    );
-  }
 }
 
 class Attendance {
   final String id;
   final DateTime? checkedin;
-  final DateTime? checkedout;
-  final double? duration;
+  DateTime? checkedout;
+  double? duration;
   final User user;
 
-  const Attendance({
+  Attendance({
     required this.id,
     required this.checkedin,
     required this.checkedout, 
     required this.duration, 
     required this.user, 
   });
+
+  Future<void> checkout(DateTime date) async {
+    var docReference = Firestore.instance.collection('attendances').document(id);
+    duration = date.difference(checkedin!).inMinutes / 60;
+    
+    await docReference.update({
+      'checked_out': date,
+      'duration': duration
+    });
+
+    checkedout = date;
+  }
 }
 
 class Workspace {
   final String id;
-  final String title;
-  final String description;
+  String title;
+  String description;
   final User owner;
-  final List<User> members;
+  List<User> members;
   final String code;
 
-  const Workspace({
+  Workspace({
     required this.id,
     required this.title,
     required this.description,
@@ -465,6 +418,21 @@ class Workspace {
     required this.members,
     required this.code,
   });
+
+  Future<void> updateSpaceDesc(String desc) async {
+    var reference = Firestore.instance.collection('workspaces').document(id);
+    await reference.update({'description': desc});
+    
+    description = desc;
+  }
+
+  Future<void> updateWorkspaceDetails(String title, String desc) async {
+    var reference = Firestore.instance.collection('workspaces').document(id);
+    await reference.update({'title': title, 'description': desc});
+
+    this.title = title;
+    description = desc;
+  }
 
   Future<WorkList> addList(String name) async {
     var docReference = await Firestore.instance.collection('lists').add({
@@ -505,30 +473,25 @@ class Workspace {
     var reference = Firestore.instance.collection('lists').document(list.id);
     await reference.delete();
   }
-
-  Future<WorkList> updateListName(WorkList list, String name) async {
-    var reference = Firestore.instance.collection('lists').document(list.id);
-    await reference.update({'name': name});
-
-    Document userDoc = await reference.get();
-    return WorkList(
-      id: list.id, 
-      name: userDoc['name'], 
-      workspace: list.workspace,
-    );
-  }
 }
 
 class WorkList {
   final String id;
-  final String name;
+  String name;
   final Workspace workspace;
 
-  const WorkList({
+  WorkList({
     required this.id,
     required this.name,
     required this.workspace,
   });
+
+  Future<void> updateListName(String name) async {
+    var reference = Firestore.instance.collection('lists').document(id);
+    await reference.update({'name': name});
+
+    this.name = name;
+  }
 
   Future<Task> addTask(String title, String desc) async {
     var docReference = await Firestore.instance.collection('tasks').add({

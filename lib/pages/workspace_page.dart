@@ -7,12 +7,10 @@ import 'package:project_zenith/pages/members_page.dart';
 
 class WorkspacePage extends StatefulWidget {
   final Workspace workspace;
-  final Function(Workspace) callback;
 
   const WorkspacePage({
     super.key,
     required this.workspace, 
-    required this.callback,
   });
 
   @override
@@ -26,8 +24,6 @@ class _WorkspacePageState extends State<WorkspacePage> {
 
   final boardNameController = TextEditingController();
   final tasklistNameController = TextEditingController();
-
-  late Workspace workspace = widget.workspace;
 
   void _changeContent(ContentWidget cw) {
     setState(() {
@@ -198,13 +194,7 @@ class _WorkspacePageState extends State<WorkspacePage> {
                         switch (contentWidget) {
                           case ContentWidget.task:
                             return TaskPage(
-                              workspace: workspace, 
-                              callback: (Workspace tempspace) {
-                                Workspace space = widget.callback(tempspace);
-                                setState(() {
-                                  workspace = space;
-                                });
-                              }
+                              workspace: widget.workspace
                             );
                           case ContentWidget.members:
                             return MembersPage(space: widget.workspace);
@@ -226,12 +216,10 @@ class _WorkspacePageState extends State<WorkspacePage> {
 
 class TaskPage extends StatefulWidget {
   final Workspace workspace;
-  final Function(Workspace) callback;
 
   const TaskPage({
     super.key,
     required this.workspace, 
-    required this.callback,
   });
 
   @override
@@ -246,7 +234,6 @@ class _TaskPageState extends State<TaskPage> {
   bool disabled = true;
   bool edit = false;
   Color color = Colors.grey;
-  late Workspace workspace = widget.workspace;
 
   Future<void> _addWorklist() async {
     WorkList list = await widget.workspace.addList(tasklistNameController.text);
@@ -300,9 +287,9 @@ class _TaskPageState extends State<TaskPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            workspace.description.isNotEmpty ? Flexible(
+            widget.workspace.description.isNotEmpty ? Flexible(
               child: Text(
-                workspace.description,
+                widget.workspace.description,
                 style: const TextStyle(
                   color: Color(0xFF636769),
                   fontSize: 15,
@@ -387,10 +374,8 @@ class _TaskPageState extends State<TaskPage> {
               IconButton(
                 onPressed: disabled ? null : 
                 () async {
-                  Workspace space = await gUser!.updateSpaceDesc(widget.workspace, newDesc.text);
-                  widget.callback(space);
+                  await widget.workspace.updateSpaceDesc(newDesc.text);
                   setState(() {
-                    workspace = space;
                     editable = false;
                     disabled = true;
                     edit = false;
@@ -453,16 +438,6 @@ class _TaskPageState extends State<TaskPage> {
                       list: e, 
                       worklists: worklists!, 
                       func: _removeList,
-                      callback: (String name) async {
-                        WorkList list = gLists.firstWhere((element) => e.id == element.id);
-                        int index = gLists.indexWhere((element) => e.id == element.id);
-                        gLists[index] = await widget.workspace.updateListName(e, name);
-                        int indexWorkList = gLists.indexWhere((element) => gLists[index].id == element.id);
-                        worklists![indexWorkList] = gLists[index];
-                        setState(() {
-                          e = list;
-                        });
-                      },
                       deleteFunc: (WorkList list) {
                         setState(() {
                           worklists!.remove(list);
@@ -483,18 +458,16 @@ class _TaskPageState extends State<TaskPage> {
 }
 
 class TaskList extends StatefulWidget {
-  WorkList list;
+ final WorkList list;
   final List<WorkList> worklists;
   final Function(WorkList) func;
-  final Function(String) callback;
   final Function(WorkList) deleteFunc;
 
-  TaskList({
+  const TaskList({
     super.key,
     required this.list, 
     required this.worklists, 
     required this.func, 
-    required this.callback, 
     required this.deleteFunc,
   });
 
@@ -710,8 +683,7 @@ class _TaskListState extends State<TaskList> {
                           IconButton(
                             onPressed: disabled ? null : 
                             () async {
-                              widget.list = await widget.list.workspace.updateListName(widget.list, newName.text);
-                              widget.callback(newName.text);
+                              await widget.list.updateListName(newName.text);
                               newName.clear();
                               setState(() {
                                 editable = false;
@@ -837,41 +809,49 @@ class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
     init();
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-            //set border radius more than 50% of height and width to make circle
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8, right: 8, top: 10, bottom: 10),
-          child: SizedBox(
-            width: 250,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 280),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Card(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+              //set border radius more than 50% of height and width to make circle
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8, top: 10, bottom: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DropdownButtonFormField<User>(
-                  hint: const Text("assignee"),
-                  value: dropdownValue,
-                  onChanged: (User? user) {
-                    // This is called when the user selects an item.
-                    setState(() {
-                      dropdownValue = user!;
-                    });
-                  },
-                  items: assignees!.map<DropdownMenuItem<User>>((User user) {
-                    return DropdownMenuItem<User>(value: user, child: Text(user.username));
-                  }).toList(),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    isCollapsed: true
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxWidth: 250
                   ),
-                  borderRadius: BorderRadius.circular(40),
+                  child: DropdownButtonFormField<User>(
+                    hint: const Text("assignee"),
+                    value: dropdownValue,
+                    onChanged: (User? user) {
+                      // This is called when the user selects an item.
+                      setState(() {
+                        dropdownValue = user!;
+                      });
+                    },
+                    items: assignees!.map<DropdownMenuItem<User>>((User user) {
+                      return DropdownMenuItem<User>(value: user, child: Text(user.username));
+                    }).toList(),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+                      fillColor: Color.fromARGB(255, 217, 211, 211),
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      isCollapsed: true
+                    ),
+                    borderRadius: BorderRadius.circular(40),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Padding(

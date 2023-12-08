@@ -246,7 +246,7 @@ class _ProfileViewState extends State<ProfileView> {
                           IconButton(
                             onPressed: disabled ? null : 
                             () async {
-                              gUser = await gUser?.updateUsername(newName.text);
+                              await gUser?.updateUsername(newName.text);
                               widget.func(newName.text);
                               newName.clear();
                               setState(() {
