@@ -3,37 +3,42 @@ import 'package:project_zenith/custom_widgets.dart';
 import 'package:project_zenith/globals.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  final Function(String name) func;
+  const ProfilePage({super.key, required this.func});
 
   @override
   Widget build(BuildContext context) {
-    return const SelectionArea(
-      child: Stack(
-        children: [
-          Text("Account Settings",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 24,
-              fontFamily: 'Rubik',
-              fontWeight: FontWeight.w700,
-              height: 0,
-            )
-          ),
-          AestheticBorder(
-            borderColor: Colors.black,
-            mainColor: Color(0xFFF8F7F4),
-            child: ProfileView(),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 70, right: 70, top: 30, bottom: 30),
+      child: SelectionArea(
+        child: Stack(
+          children: [
+            const Text("Account Settings",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 24,
+                fontFamily: 'Rubik',
+                fontWeight: FontWeight.w700,
+                height: 0,
+              )
+            ),
+            AestheticBorder(
+              borderColor: Colors.black,
+              mainColor: const Color(0xFFF8F7F4),
+              child: ProfileView(func: func,),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class ProfileView extends StatefulWidget {
+  final Function(String name) func;
   const ProfileView(
-      {super.key});
+      {super.key, required this.func});
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
@@ -43,7 +48,15 @@ class _ProfileViewState extends State<ProfileView> {
   final newName = TextEditingController();
   bool editable = false;
   bool disabled = true;
+  bool editName = false;
+  bool editBg = false;
   Color color = Colors.grey;
+
+  @override
+  void dispose() {
+    newName.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +67,31 @@ class _ProfileViewState extends State<ProfileView> {
           width: double.maxFinite,
           child: Stack(
             children: [
-              Container(
-                height: 0.23*MediaQuery.of(context).size.height,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
+              MouseRegion(
+                onEnter: (event) => setState(() {
+                  editBg = true;
+                }),
+                onExit: (event) => setState(() {
+                  editBg = false;
+                }),
+                child: Container(
+                  height: 0.23*MediaQuery.of(context).size.height,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                    ),
+                    color: Color.fromARGB(255, 152, 147, 147),
                   ),
-                  color: Color.fromARGB(255, 152, 147, 147),
-                ),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    onPressed: () {}, 
-                    icon: const Icon(Icons.add_a_photo)),
+                  child: AnimatedOpacity(
+                    opacity: editBg ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 500),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: IconButton(
+                        onPressed: () {}, 
+                        icon: const Icon(Icons.add_a_photo)),
+                    ),
+                  ),
                 ),
               ),
               Align(
@@ -90,7 +115,7 @@ class _ProfileViewState extends State<ProfileView> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 30),
+          padding: const EdgeInsets.only(left: 50, right: 50, top: 30),
           child: Column(
             children: [
               Column(
@@ -140,84 +165,102 @@ class _ProfileViewState extends State<ProfileView> {
                       height: 0,
                     ),
                   ),
-                  Container(
-                    width: double.maxFinite,
-                    padding: const EdgeInsets.all(15),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFD4515D),
-                      borderRadius: BorderRadius.all(Radius.circular(4)),
-                    ),
-                    child: !editable ? Row(
-                      children: [
-                        Text(
-                          gUser!.username,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontFamily: 'Rubik',
-                            fontWeight: FontWeight.w500,
-                            height: 0,
-                          ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              editable = true;
-                            });
-                          }, 
-                          icon: const Icon(Icons.edit, color: Colors.white,))
-                      ],
-                    ) : Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: newName,
+                  MouseRegion(
+                    onEnter: (event) => setState(() {
+                      editName = true;
+                    }),
+                    onExit: (event) => setState(() {
+                      editName = false;
+                    }),
+                    child: Container(
+                      width: double.maxFinite,
+                      padding: const EdgeInsets.all(15),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFD4515D),
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                      ),
+                      child: !editable ? Row(
+                        children: [
+                          Text(
+                            gUser!.username.toUpperCase(),
                             style: const TextStyle(
                               color: Colors.white,
-                              fontFamily: "Rubik",
-                              fontWeight: FontWeight.w500
+                              fontSize: 15,
+                              fontFamily: 'Rubik',
+                              fontWeight: FontWeight.w500,
+                              height: 0,
                             ),
-                            onChanged: (text) {
-                              if (text == gUser!.username || text.isEmpty) {
-                                setState(() {
-                                  disabled = true;
-                                  color = Colors.grey;
-                                });
-                              } else {
-                                setState(() {
-                                  disabled = false;
-                                  color = Colors.white;
-                                });
-                              }
-                            },
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            newName.clear();
-                            setState(() {
-                              editable = false;
-                              disabled = true;
-                              color = Colors.grey;
-                            });
-                          }, 
-                          icon: const Icon(Icons.close, color: Colors.white)),
-                        IconButton(
-                          onPressed: disabled ? null : 
-                          () async {
-                            await gUser?.updateUser(newName.text);
-                            newName.clear();
-                            setState(() {
-                              editable = false;
-                              disabled = true;
-                              color = Colors.grey;
-                            });
-                          }, 
-                          icon: Icon(Icons.subdirectory_arrow_left, color: color)
-                        )
-                      ],
-                    )
+                          const Spacer(),
+                          AnimatedOpacity(
+                            opacity: editName ? 1.0 : 0.0,
+                            duration: const Duration(milliseconds: 500),
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  editable = true;
+                                });
+                              }, 
+                              icon: const Icon(Icons.edit, color: Colors.white,)),
+                          )
+                        ],
+                      ) : Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: newName,
+                              decoration: InputDecoration(
+                                hintText: gUser!.username.toUpperCase()
+                              ),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Rubik",
+                                fontWeight: FontWeight.w500
+                              ),
+                              onChanged: (text) {
+                                if (text == gUser!.username || text.isEmpty) {
+                                  setState(() {
+                                    disabled = true;
+                                    color = Colors.grey;
+                                  });
+                                } else {
+                                  setState(() {
+                                    disabled = false;
+                                    color = Colors.white;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              newName.clear();
+                              setState(() {
+                                editable = false;
+                                disabled = true;
+                                editName = false;
+                                color = Colors.grey;
+                              });
+                            }, 
+                            icon: const Icon(Icons.close, color: Colors.white)),
+                          IconButton(
+                            onPressed: disabled ? null : 
+                            () async {
+                              gUser = await gUser?.updateUsername(newName.text);
+                              widget.func(newName.text);
+                              newName.clear();
+                              setState(() {
+                                editable = false;
+                                disabled = true;
+                                editName = false;
+                                color = Colors.grey;
+                              });
+                            }, 
+                            icon: Icon(Icons.subdirectory_arrow_left, color: color)
+                          )
+                        ],
+                      )
+                    ),
                   ),
                 ],
               ),

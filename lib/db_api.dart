@@ -1,7 +1,7 @@
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:firedart/firedart.dart';
-import 'package:project_zenith/globals.dart';
 
 class Authenticator {
   /// Signs the user in using the provided email and password.
@@ -95,6 +95,35 @@ Future<List<User>> getAllUsers() async {
   return allUsers;
 }
 
+Future<List<Attendance>> getAllAttendances() async {
+  List<Attendance> allAttendances = <Attendance>[];
+  var temp = await Firestore.instance.collection('attendances').get(); 
+
+  for (var element in temp) {
+    DocumentReference ownerRef = await element['user'];
+    Document ownerDoc = await ownerRef.get();
+
+    allAttendances.add(Attendance(
+      id: element.id,
+      checkedin: await element['checked_in'], 
+      checkedout: await element['checked_out'], 
+      duration: await element['duration'], 
+      user: User(
+        authId: await ownerDoc['auth_id'],
+        email: await ownerDoc['email'],
+        hasCheckedIn: await ownerDoc['has_checked_in'],
+        id: await ownerDoc['id'],
+        password: await ownerDoc['password'],
+        timeStarted: await ownerDoc['time_started'],
+        totalMinutes: await ownerDoc['total_minutes'],
+        username: await ownerDoc['username'],
+      )
+    ));
+  }
+
+  return allAttendances;
+}
+
 class User {
   final String id;
   final String authId;
@@ -140,6 +169,19 @@ class User {
       'owner': Firestore.instance.collection('users').document(id),
       'members': <DocumentReference>[],
       'code': code,
+    });
+
+    await Firestore.instance.collection('lists').add({
+      'name': "FINISH",
+      'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
+    });
+    await Firestore.instance.collection('lists').add({
+      'name': "DOING",
+      'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
+    });
+    await Firestore.instance.collection('lists').add({
+      'name': "TODO",
+      'workspace': Firestore.instance.collection('workspaces').document(docReference.id),
     });
 
     return Workspace(
@@ -271,17 +313,69 @@ class User {
   }
 
   Future<void> deleteWorkspace(Workspace space) async {
-    var reference =
-        Firestore.instance.collection('workspaces').document(space.id);
+    var reference = Firestore.instance.collection('workspaces').document(space.id);
+
+    var lists = await Firestore.instance
+        .collection('lists')
+        .where('workspace', isEqualTo: reference)
+        .get();
+
+    for (final Document list in lists) {
+      var listreference = Firestore.instance.collection('lists').document(list.id);
+      var tasks = await Firestore.instance
+        .collection('tasks')
+        .where('list', isEqualTo: listreference)
+        .get();
+
+      for (final Document task in tasks) {
+        var taskreference = Firestore.instance.collection('tasks').document(task.id);
+        await taskreference.delete();
+      }
+
+      await listreference.delete();
+    }
+
     await reference.delete();
   }
 
-  Future<void> updateUser(String newName) async {
+  Future<Workspace> updateWorkspaceDetails(Workspace space, String title, String desc) async {
+    var reference = Firestore.instance.collection('workspaces').document(space.id);
+    await reference.update({'title': title, 'description': desc});
+
+    Document userDoc = await reference.get();
+
+    return Workspace(
+      id: space.id,
+      title: userDoc['title'],
+      description: userDoc['description'],
+      owner: space.owner,
+      members: space.members, 
+      code: space.code,
+    );
+  }
+
+  Future<Workspace> updateSpaceDesc(Workspace space, String desc) async {
+    var reference = Firestore.instance.collection('workspaces').document(space.id);
+    await reference.update({'description': desc});
+    
+    Document userDoc = await reference.get();
+
+    return Workspace(
+      id: space.id,
+      title: space.title,
+      description: userDoc['description'],
+      owner: space.owner,
+      members: space.members, 
+      code: space.code,
+    );
+  }
+
+  Future<User> updateUsername(String newName) async {
     var reference = Firestore.instance.collection('users').document(id);
     await reference.update({'username': newName});
 
     Document userDoc = await reference.get();
-    gUser = User(
+    return User(
       authId: await userDoc['auth_id'],
       email: await userDoc['email'],
       id: await userDoc['id'],
@@ -292,6 +386,69 @@ class User {
       totalMinutes: await userDoc['total_minutes'],
     );
   }
+
+  Future<Attendance> checkin(User user, DateTime date) async {
+    var docReference = await Firestore.instance.collection('attendances').add({
+      'checked_in': date,
+      'checked_out': null,
+      'duration': null,
+      'user': Firestore.instance.collection('users').document(user.id)
+    });
+
+    DocumentReference ownerRef = Firestore.instance.collection('users').document(user.id);
+    Document ownerDoc = await ownerRef.get();
+
+    return Attendance(
+      id: docReference.id,
+      checkedin: docReference['checked_in'], 
+      checkedout: docReference['checked_out'], 
+      duration: docReference['duration'], 
+      user: User(
+        authId: await ownerDoc['auth_id'],
+        email: await ownerDoc['email'],
+        hasCheckedIn: await ownerDoc['has_checked_in'],
+        id: await ownerDoc['id'],
+        password: await ownerDoc['password'],
+        timeStarted: await ownerDoc['time_started'],
+        totalMinutes: await ownerDoc['total_minutes'],
+        username: await ownerDoc['username'],
+      )
+    );
+  }
+
+  Future<Attendance> checkout(Attendance attendance, DateTime date) async {
+    print(attendance.id);
+    var docReference = Firestore.instance.collection('attendances').document(attendance.id);
+    await docReference.update({
+      'checked_out': date,
+      'duration': date.difference(attendance.checkedin!).inMinutes / 60
+    });
+
+    Document attendanceDoc = await docReference.get();
+    return Attendance(
+      id: attendance.id,
+      checkedin: attendance.checkedin, 
+      checkedout: attendanceDoc['checked_out'], 
+      duration: attendanceDoc['duration'], 
+      user: attendance.user
+    );
+  }
+}
+
+class Attendance {
+  final String id;
+  final DateTime? checkedin;
+  final DateTime? checkedout;
+  final double? duration;
+  final User user;
+
+  const Attendance({
+    required this.id,
+    required this.checkedin,
+    required this.checkedout, 
+    required this.duration, 
+    required this.user, 
+  });
 }
 
 class Workspace {
@@ -349,6 +506,18 @@ class Workspace {
   Future<void> deleteList(WorkList list) async {
     var reference = Firestore.instance.collection('lists').document(list.id);
     await reference.delete();
+  }
+
+  Future<WorkList> updateListName(WorkList list, String name) async {
+    var reference = Firestore.instance.collection('lists').document(list.id);
+    await reference.update({'name': name});
+
+    Document userDoc = await reference.get();
+    return WorkList(
+      id: list.id, 
+      name: userDoc['name'], 
+      workspace: list.workspace,
+    );
   }
 }
 

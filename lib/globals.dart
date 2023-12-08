@@ -9,10 +9,12 @@ List<Workspace> gOwnedSpaces = <Workspace>[];
 List<Workspace> gSharedSpaces = <Workspace>[];
 List<WorkList> gLists = <WorkList>[];
 List<Task> gTasks = <Task>[];
+List<Attendance> gAttendances = <Attendance>[];
 
 Future<void> initDataModels() async {
   if (gUser?.id == "rISCknyu5dlIrfGrKyCp") {
     gAllUsers = await getAllUsers();
+    gAttendances = await getAllAttendances();
   }
 
   gOwnedSpaces = await gUser!.getOwnedWorkspaces();
@@ -29,6 +31,8 @@ Future<void> initDataModels() async {
   for (WorkList list in gLists) {
     gTasks.addAll(await list.getTasks());
   }
+
+
 }
 
 void clearAllData() {
