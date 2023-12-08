@@ -445,7 +445,6 @@ class User {
   }
 
   Future<Attendance> checkout(Attendance attendance, DateTime date) async {
-    print(attendance.id);
     var docReference =
         Firestore.instance.collection('attendances').document(attendance.id);
     await docReference.update({
@@ -647,30 +646,23 @@ class Workspace {
     var reference = Firestore.instance.collection('lists').document(list.id);
     await reference.delete();
   }
-
-  Future<WorkList> updateListName(WorkList list, String name) async {
-    var reference = Firestore.instance.collection('lists').document(list.id);
-    await reference.update({'name': name});
-
-    Document userDoc = await reference.get();
-    return WorkList(
-      id: list.id,
-      name: userDoc['name'],
-      workspace: list.workspace,
-    );
-  }
 }
 
 class WorkList {
   final String id;
-  final String name;
+  String name;
   final Workspace workspace;
 
-  const WorkList({
+  WorkList({
     required this.id,
     required this.name,
     required this.workspace,
   });
+
+  Future<void> updateName(String name) async {
+    var reference = Firestore.instance.collection('lists').document(id);
+    await reference.update({'name': name});
+  }
 
   Future<Task> addTask(String title, String desc) async {
     var docReference = await Firestore.instance.collection('tasks').add({
