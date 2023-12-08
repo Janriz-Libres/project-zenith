@@ -501,12 +501,13 @@ class _TaskListState extends State<TaskList> {
     setState(() {
       tasks?.remove(task);
     });
-    gTasks.remove(task);
   }
   
   Future<void> _completeTask(Task task) async {
     await widget.list.deleteTask(task);
     _removeTask(task);
+    
+    gTasks.remove(task);
   }
 
   Future<void> _moveTask(TaskFuncPair data) async {
@@ -561,9 +562,11 @@ class _TaskListState extends State<TaskList> {
     return MouseRegion(
       onEnter: (event) {
         index = tasks!.length;
+        print(index);
       },
       onExit: (event) {
         index == tasks!.length;
+        print(index);
       },
       child: DragTarget<TaskFuncPair>(
         onAccept: (data) async {
@@ -734,6 +737,7 @@ class _TaskListState extends State<TaskList> {
                                       },
                                       onExit: (event) {
                                         index == tasks!.length;
+                                        print(index);
                                       },
                                       child: TaskCard(
                                         data: TaskFuncPair(
