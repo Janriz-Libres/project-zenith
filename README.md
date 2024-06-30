@@ -29,8 +29,7 @@ This project is currently unfinished, and there are no immediate plans to comple
 [Appwrite-url]: https://appwrite.io/
 
 ## License
-This project is licensed under the [CC0 1.0 Universal](LICENSE.md)
-Creative Commons License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contact
 - Janriz Mathew Libres - [libres.janriz@gmail.com](mailto:libres.janriz@gmail.com)
